@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <!-- INTERFACE -->
+    
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    
+    <cc:implementation>
+        
+        <b:panel id="Auth" 
+                 look="primary" 
+                 title="Authentication Checker ( test users )"
+                 collapsible="true" >
+
+            <b:panelGrid columns="2" colSpans="4,8" id="panelGridChecker" >
+
+                <label class="input-group-addon" style="text-align: left">Login </label>                
+                <h:inputText class="form-control" 
+                             style="margin-bottom: 5px" 
+                             id="Login" 
+                             value="" />
+
+                <label class="input-group-addon" style="text-align: left" >Password </label>
+                <h:inputSecret class="form-control" 
+                               style="margin-bottom: 5px" 
+                               id="Password" 
+                               value="" />
+                
+                <h:form id="checkerForm" >
+
+                    <b:commandButton class="btn btn-primary" icon="send"
+                                       id="validat"
+                                       ajax="true"
+                                       onclick="hash( document.getElementById('#{cc.clientId}:Login').value,
+                                                      document.getElementById('#{cc.clientId}:Password').value,
+                                                      document.getElementById('#{cc.clientId}:hiddenAlgoSigneture').value,
+                                                      document.getElementById('#{cc.clientId}:hiddenLoginSignature').value,
+                                                      document.getElementById('#{cc.clientId}:hiddenPasswordSignature').value,
+                                                      document.getElementById('#{cc.clientId}:hiddenTimeStampSignature').value)"
+                                       value="Check" >
+                        
+                        <f:ajax execute="@form" render="@none" />
+                        
+                    </b:commandButton>
+
+                </h:form>
+
+                <h:form prependId="false" >
+
+                    <b:messages id="messages" 
+                                 showDetail="true" 
+                                 tooltipDelay="500"
+                                 style=" margin-bottom:0px ; margin-top:0px; height:33px; 
+                                         padding-left:20px; padding:10px " 
+                                 tooltip-delay-hide="200"  />
+
+                    <b:remoteCommand id="checkerCommand" name="checkAuth" 
+                                     actionListener="#{loginAuthenticator.checkAuth}" 
+                                     parameters="login, timestamp, token " 
+                                     update="#{cc.clientId}:messages" />
+                </h:form>
+
+            </b:panelGrid>
+
+            <h:inputHidden value="#{globalConf.getAlgoSigneture()}"      id="hiddenAlgoSigneture" /> 
+            <h:inputHidden value="#{globalConf.getLoginSignature()}"     id="hiddenLoginSignature" /> 
+            <h:inputHidden value="#{globalConf.getPasswordSignature()}"  id="hiddenPasswordSignature" /> 
+            <h:inputHidden value="#{globalConf.getTimeStampSignature()}" id="hiddenTimeStampSignature" /> 
+
+        </b:panel>
+
+    </cc:implementation>
+</html>

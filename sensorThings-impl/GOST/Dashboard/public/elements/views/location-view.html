@@ -1,0 +1,300 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../../bower_components/px-card/px-card.html">
+<link rel="import" href="../../bower_components/px-map/px-map.html">
+<link rel="import" href="../../bower_components/px-map/px-map-tile-layer.html">
+<link rel="import" href="../../bower_components/px-map/px-map-layer-geojson.html">
+<link rel="import" href="../../bower_components/px-map/px-map-control-zoom.html">
+<link rel="import" href="../../bower_components/st-core/st-entity-things.html">
+<link rel="import" href="../../bower_components/st-core/st-entity-location.html">
+<link rel="import" href="../../bower_components/st-core/st-entity-historicallocations.html">
+<link rel="import" href="../../bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/hardware-icons.html">
+
+<link rel="import" href="../controls/st-table.html">
+<link rel="import" href="../controls/st-entity-details.html">
+
+<link rel="import" href="../../css/globalstyle.html" />
+<link rel="import" href="location-view-styles.html" />
+
+<dom-module id="location-view">
+    <template>       
+        
+        <style>       
+            :host {
+                --px-card-background-color: #111F27;
+            }
+
+            body {
+                background-color: #111F27;
+            }
+
+            .card {
+                padding-top: 20px;
+                min-width: 400px;
+                padding-bottom: 2rem;
+            }
+
+        </style>   
+        <style include="location-view-styles"></style> 
+        <style include="globalstyle"></style> 
+        <div class="flex flex--row flex--spaced flex--wrap flex--top ">
+                              
+            <px-card class="card flex__item flex__item--top" header-text="Locations({{locationid}})" icon="maps:place">  
+                <st-entity-details details="{{locationdetails}}"></st-entity-details>
+            </px-card>   
+            <px-card class="card flex__item flex__item--top" header-text="Map" icon="maps:map">
+                <div class="flex flex--row flex--spaced flex--wrap flex--top ">
+                    <div class="flex__item flex__item--top" >
+                        <div id="mapwrapper" style="height:400px; width:100%; display:flex" >                
+                            <px-map id="map" zoom="0" lat="0" lng="0" attributionPrefix="" disableAttribution flex-to-size disable-scroll-zoom disable-dragging >
+                                <px-map-control-zoom position='bottomright'></px-map-control-zoom>
+                                <px-map-tile-layer
+                                    url='http://tile.stamen.com/toner/{z}/{x}/{y}.png'>
+                                </px-map-tile-layer>
+                                <px-map-layer-geojson 
+                                    data="[[mapdatahistoricallocation]]" 
+                                    feature-style='{"color":"#90C3D4", "fillColor": "#90C3D4", "weight": 3, "opacity": 0.6 , "fillOpacity": 0.6}' 
+                                    show-feature-properties>
+                                </px-map-layer-geojson>
+                                <px-map-layer-geojson 
+                                    data="[[mapdatalocation]]" 
+                                    feature-style='{"color":"#FA39DD", "fillColor": "#FA39DD", "weight": 8, "opacity": 0.8 , "fillOpacity": 0.8}' 
+                                    show-feature-properties>
+                                </px-map-layer-geojson>
+                            </px-map>
+                        </div>
+                    </div>
+                </div>
+            </px-card>   
+        </div>   
+
+        <px-card class="card" header-text="Locations({{locationid}})/HistoricalLocations" icon="maps:place">
+            <st-table 
+                id="table" 
+                arraytype="historicallocations" 
+                count="{{historicallocationcount}}" 
+                tabledata="[[historicallocations]]" 
+                top="{{historicallocationtop}}" 
+                skip="{{historicallocationskip}}" 
+                on-request="_tableDataRequestHl"
+                on-px-table-row-tap="_rowSelectedHl" >
+            <st-table>
+        </px-card> 
+
+        <px-card class="card" header-text="Locations({{locationid}})/Things" icon="hardware:toys">
+            <st-table 
+                id="table" 
+                arraytype="things" 
+                count="{{thingscount}}" 
+                tabledata="[[things]]" 
+                top="{{thingstop}}" 
+                skip="{{thingsskip}}" 
+                on-request="_tableDataRequestThings"
+                on-px-table-row-tap="_rowSelectedThing" >
+            <st-table>
+        </px-card> 
+          
+        <st-entity-location id="entity" rawreceived="{{location}}" gid="{{locationid}}"></st-entity-location>
+        <st-entity-historicallocations 
+            id="entityhistoricallocations" 
+            locationid="[[locationid]]" 
+            collection="{{historicallocations}}"
+            odata="[[historicallocationodata]]" 
+            count="{{historicallocationcount}}">
+        </st-entity-historicallocations>
+        <st-entity-things 
+            id="entitythings" 
+            locationid="[[locationid]]" 
+            collection="{{things}}" 
+            odata="[[thingsodata]]" 
+            count="{{thingscount}}">
+        </st-entity-things>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'location-view',
+            properties: {
+                location: {
+                    type: Object,
+                    notify: true,
+                    observer: '_locationSet'                 
+                },     
+                locationid: {
+                    type: String,
+                    notify: true
+                },    
+                locationdetails: {
+                    type: Array,
+                    notify: true,
+                    value: []
+                },
+                historicallocations: {
+                    type: Array,
+                    notify: true,
+                    value: [],
+                    observer: '_historicalLocationsReceived'
+                },
+                things: {
+                    type: Array,
+                    notify: true
+                },
+                mapdatalocation: {
+                    type: Object,
+                    notify: true
+                },
+                mapdatahistoricallocation: {
+                    type: Object,
+                    notify: true
+                },
+                historicallocationodata: {
+                    type: Object,
+                    value: function() { 
+                        return { skip: 0, count: true, top: 10, expand: ['Locations'] }; 
+                    } 
+                },
+                historicallocationcount: {
+                    type: Number,
+                    notify: true
+                },
+                historicallocationtop: {
+                    type: Number,
+                    value: 10,
+                    notify: true
+                },
+                historicallocationskip: {
+                    type: Number,
+                    value: 0,
+                    notify: true
+                },
+                thingsodata: {
+                    type: Object,
+                    value: function() { 
+                        return { skip: 0, count: true, top: 10 }; 
+                    } 
+                },
+                thingscount: {
+                    type: Number,
+                    notify: true
+                },
+                thingstop: {
+                    type: Number,
+                    value: 10,
+                    notify: true
+                },
+                thingsskip: {
+                    type: Number,
+                    value: 0,
+                    notify: true
+                },
+                selectedhistoricallocation: {
+                    type: Object,
+                    notify: true
+                },
+                selectedthing: {
+                    type: Object,
+                    notify: true
+                }
+            },
+            _locationSet(location){
+                if(!location){
+                    return;
+                }
+                
+                // create detail info for entity-detail-view
+                this.locationid = this._getID(location);
+                this.locationdetails = [
+                    { label: "id", value: this._getID(location), write: false, type: "text" },
+                    { label: "name", value: location.name, write: false, type: "text" },
+                    { label: "description", value: location.description, write: false, type: "text" },
+                    { label: "encoding type", value: location.encodingType, write: false, type: "text" },
+                    { label: "location", value: location.location, write: false, type: "object" },
+                ]
+
+                // show location on map
+                this._setLocationOnMap(location);
+                this._mapInit(); 
+
+                // get related entities
+                this.$.entityhistoricallocations.get();
+                this.$.entitythings.get();
+            },
+            _setLocationOnMap(location){
+                fc = {
+                    type: "FeatureCollection",
+                    features: [{
+                        type: "Feature",
+                        id: location['@iot.id'],
+                        properties: {},
+                        geometry: location.location
+                    }]
+                };
+
+                this.mapdatalocation = fc;                
+            },
+            _mapInit(){
+                coordinates = this.location.location.coordinates;
+                this.$.map.lng = coordinates[0];
+                this.$.map.lat = coordinates[1];
+                this.$.map.zoom = 16;
+                this.$.map.invalidateSize();
+            },
+            _getID(item){
+                return item['@iot.id'];
+            },
+            _tableDataRequestHl(event) {
+                this.historicallocationsodata.count = false;
+                this.historicallocationsodata.top = event.detail.top;
+                this.historicallocationsodata.skip = event.detail.skip;
+                this.$.entityhistoricallocations.get();
+            },  
+            _tableDataRequestThings(event) {
+                this.thingsodata.count = false;
+                this.thingsodata.top = event.detail.top;
+                this.thingsodata.skip = event.detail.skip;
+                this.$.entitythings.get();
+            },            
+            _historicalLocationsReceived(hls){   
+                if(!hls || hls.length == 0)     {
+                    return;
+                }
+
+                fc = {
+                    type: "FeatureCollection",
+                    features: []
+                };
+
+                for (var i = 0, len = hls.length; i < len; i++) {
+                    var location = hls[i];
+                    feature = {
+                        type: "Feature",
+                        id: location["@iot.id"],
+                        properties: { "time": location.time },
+                        geometry: location.Locations[i].location
+                    };
+
+                    fc.features.push(feature);
+                }
+
+                this.mapdatahistoricallocation = fc;
+                this._mapInit(); 
+            },
+            _rowSelectedHl(evt){
+                this.selectedhistoricallocation = null;                
+                this.selectedhistoricallocation = evt.srcElement;
+            },
+            _rowSelectedThing(evt) {
+                this.selectedthing = null;                
+                this.selectedthing = evt.srcElement;
+            },
+            load(id){
+                if(!this.location){
+                    this.locationid = id;
+                    this.$.entity.get();
+                }
+            }
+        });
+    </script>
+</dom-module>

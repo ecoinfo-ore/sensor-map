@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <!-- INTERFACE -->
+    
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    
+    <cc:implementation>
+        
+        <b:panel id="Auth" look="primary" title="Authentication SSO Checker ( Must Be in HTTPS Mode )" collapsible="true">
+
+            #{globalConf.getKeyCloakUrl()}
+            
+            <b:panelGrid columns="2" colSpans="4,8" id="panelGridChecker" style="margin-top: 15px;" >
+
+                
+                <label class="input-group-addon" style="text-align: left">UserName </label>
+                <h:inputText class="form-control" 
+                             style="margin-bottom: 5px" 
+                             id="Login" 
+                             value="" />
+
+                <label class="input-group-addon" style="text-align: left" >Password </label>
+                <h:inputSecret class="form-control" 
+                               style="margin-bottom: 5px" 
+                               id="Password" 
+                               value="" />
+                
+                <label class="input-group-addon" style="text-align: left" >ClientID </label>
+                <h:inputText class="form-control" 
+                             style="margin-bottom: 5px" 
+                             id="ClientID" 
+                             value="" />
+                
+                <label class="input-group-addon" style="text-align: left" >SecretID </label>
+                <h:inputSecret class="form-control" 
+                               style="margin-bottom: 5px" 
+                               id="SecretID" 
+                               value="" />
+                
+                <h:form id="checkerForm" >
+
+                    <b:commandButton class="btn btn-primary" icon="send"
+                                     id="validat"
+                                     ajax="true"
+                                     onclick="sso ( document.getElementById('#{cc.clientId}:Login').value    ,
+                                                    document.getElementById('#{cc.clientId}:Password').value ,
+                                                    document.getElementById('#{cc.clientId}:ClientID').value ,
+                                                    document.getElementById('#{cc.clientId}:SecretID').value )"
+                                     value="Check" >
+                        
+                        <f:ajax execute="@form" render="@none" />
+                        
+                    </b:commandButton>
+
+                </h:form>
+
+                <h:form prependId="false" >
+
+                    <b:messages id="messages" 
+                                 showDetail="true" 
+                                 tooltipDelay="500"
+                                 style=" margin-bottom:0px ; margin-top:0px; height:33px; 
+                                         padding-left:20px; padding:10px " 
+                                 tooltip-delay-hide="200"  />
+                    
+                     <b:remoteCommand id="checkerCommand" name="checkAuth"
+                                      actionListener="#{loginAuthenticator.checkAuth}" 
+                                      parameters="login, password, clientId, secretId " 
+                                      update="#{cc.clientId}:messages" />
+                </h:form>
+
+            </b:panelGrid>
+
+        </b:panel>
+
+    </cc:implementation>
+</html>

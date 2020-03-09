@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <!-- INTERFACE -->
+    
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    
+    <cc:implementation>
+        <b:well>
+
+            Global Technical Configuration 
+
+            <h:form prependId="false" id="formeDetailsGlobalConf" >
+
+                <br /> 
+
+                <b:panelGrid columns="2"  colSpans="8,4" >
+
+                    <label class="input-group-addon" style="text-align: left" >MaxConcurrentUsers</label>
+                    <h:outputText  class="form-control" 
+                                   id="MaxConcurrentUsers" 
+                                   style="margin-bottom: 5px"
+                                   value="#{globalConf.getMaxConcurrentUsers()}" />
+                    
+                    <label class="input-group-addon" style="text-align: left" >RejectConnectionsWhenLimitExceeded</label>
+                    <h:outputText  class="form-control" 
+                                   id="RejectConnectionsWhenLimitExceeded" 
+                                   style="margin-bottom: 5px"
+                                   value="#{globalConf.getRejectConnectionsWhenLimitExceeded() }" />
+
+                    <label class="input-group-addon" style="text-align: left">ThreadPoolSize</label>
+                    <h:outputText  class="form-control" 
+                                   id="ThreadPoolSize" 
+                                   style="margin-bottom: 5px"
+                                   value="#{globalConf.getThreadPoolSize()}" />
+
+                    <label class="input-group-addon" style="text-align: left">DefaultMaxThreadPerService</label>
+                    <h:outputText  class="form-control" 
+                                   id="DefaultMaxThread" 
+                                   style="margin-bottom: 5px"
+                                   value="#{globalConf.getDefaultMaxThread()}" />
+
+                    <label class="input-group-addon" style="text-align: left">SelectSize ( SQL LIMIT ) per Thread</label>
+                    <h:outputText  class="form-control" 
+                                   id="SelectSize" 
+                                   style="margin-bottom: 5px"
+                                   value="#{globalConf.getSelectSize()}" />
+
+                    <label class="input-group-addon" style="text-align: left">ResponseCacheSize</label>
+                    <h:outputText  class="form-control" 
+                                   id="ResponseCacheSize" 
+                                   style="margin-bottom: 5px"
+                                   value="#{globalConf.getResponseCacheSize()}" />
+
+                    <label class="input-group-addon" style="text-align: left">Ratio</label>
+                    <h:outputText  class="form-control"
+                                   id="Ratio" 
+                                   style="margin-bottom: 5px"
+                                   value="#{globalConf.getRatio()}" />
+
+                    <label class="input-group-addon" style="text-align: left">validRequestTimeout</label>
+                    <h:outputText  class="form-control btn-danger" 
+                                   id="validRequestTime" 
+                                   style="margin-bottom: 5px"
+                                   value="#{globalConf.getValidRequestTimeout()} ( s ) " />
+
+                    <label class="input-group-addon" style="text-align: left">WorkerQueue ( Thread Queue Size )</label>
+                    <h:outputText  class="form-control" 
+                                   id="WorkerQueue"
+                                   style="margin-bottom: 5px"
+                                   value="#{globalConf.getWorkerQueue()}" />
+
+                    <label class="input-group-addon" style="text-align: left">Worker_Thread_Keep_Alive ( mn )</label>
+                    <h:outputText  class="form-control" 
+                                   id="WorkerTimeOut" 
+                                   style="margin-bottom: 5px" 
+                                   value="#{globalConf.getWorkerThreadKeepAlive()}" />
+                    
+                    <label class="input-group-addon" style="text-align: left">SessionTimeOut ( mn )</label>
+                    <h:outputText  class="form-control" 
+                                   id="sessionTimeOut" 
+                                   style="margin-bottom: 5px" 
+                                   value="#{globalConf.getSessionTimeOut()}" />
+
+                </b:panelGrid>
+
+            </h:form>
+
+        </b:well>
+        
+    </cc:implementation>
+    
+</html>

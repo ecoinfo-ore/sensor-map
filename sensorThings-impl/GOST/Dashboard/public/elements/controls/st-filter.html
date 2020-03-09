@@ -1,0 +1,97 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/px-card/px-card.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/px-data-table/px-data-table.html" />
+
+<link rel="import" href="st-filter-styles.html" />
+
+<dom-module id="st-filter">
+    <template>
+        <style>
+            ul {
+                list-style-type: none;
+            }
+            
+            .searchlabel {
+                min-width: 90px;
+            }
+        </style>
+        <style include="st-filter-styles"></style>
+        <ul>
+            <template is="dom-if" if='{{_showFields(type, "thing")}}'>
+                <li>
+                    <input class="text-input input--small" id="thingid" type="text" placeholder="id">
+                </li>
+                <li>
+                    <!--<label class="searchlabel" for="thingname">name</label>-->
+                    <input class="text-input input--small" id="thingname" type="text" placeholder="name">
+                </li>
+                <li>
+                    <input class="text-input input--small" id="thingdescription" type="text" placeholder="description">
+                </li>
+            </template>
+    <li>
+        <button class="btn btn--small" on-click="_triggerGo">submit</button>
+        <button class="btn btn--small" on-click="_triggerClear">clear</button>
+    </li>
+    </ul>
+    </template>
+    <script>
+        Polymer({
+            is: 'st-filter',
+            properties: {
+                filter: {
+                    type: String,
+                    notify: true
+                },
+                /* 
+                /type options: thing, location, historicallocation, datastream, sensor, observedproperty, observation, featureofinterest
+                */
+                type: {
+                    type: String
+                }
+            },
+            _showFields(currentType, reqType) {
+                return currentType == reqType;
+            },
+            _triggerGo() {
+                var filter = "";
+
+                switch (this.type) {
+                    case "thing":
+                        var id = Polymer.dom(this.root).querySelector('#thingid');
+                        var name = Polymer.dom(this.root).querySelector('#thingname');
+                        var description = Polymer.dom(this.root).querySelector('#thingdescription');
+
+                        filter = this._combineFilter(filter, id.value ? "id eq '" + id.value + "'" : "");
+                        filter = this._combineFilter(filter, name.value ? "contains(tolower(name), '" + name.value.toLowerCase() + "')" : "");
+                        filter = this._combineFilter(filter, description.value ? "contains(tolower(description), '" + description.value.toLowerCase() + "')" : "");
+
+                        break;
+                }
+
+                this.filter = filter;
+                this._fireEvent();
+            },
+            _triggerClear() {
+                Polymer.dom(this.root).querySelector('#thingid').value = "";
+                Polymer.dom(this.root).querySelector('#thingname').value = "";
+                Polymer.dom(this.root).querySelector('#thingdescription').value = "";
+
+                this.filter = "";
+                this._fireEvent();
+            },
+            _fireEvent() {
+                this.dispatchEvent(new CustomEvent('filter', {
+                    detail: {
+                        filter: this.filter
+                    },
+                    bubbles: true
+                }));
+            },
+            _combineFilter(filter, toAdd) {
+                return toAdd ? filter ? filter + ' and ' + toAdd : toAdd : filter;
+            }
+        });
+    </script>
+</dom-module>

@@ -1,0 +1,235 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../../bower_components/px-card/px-card.html">
+<link rel="import" href="../../bower_components/px-map/px-map.html">
+<link rel="import" href="../../bower_components/px-map/px-map-tile-layer.html">
+<link rel="import" href="../../bower_components/px-map/px-map-layer-geojson.html">
+<link rel="import" href="../../bower_components/px-map/px-map-control-zoom.html">
+<link rel="import" href="../../bower_components/st-core/st-entity-thing.html">
+<link rel="import" href="../../bower_components/st-core/st-entity-locations.html">
+<link rel="import" href="../../bower_components/st-core/st-entity-datastreams.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/hardware-icons.html">
+
+<link rel="import" href="../controls/st-table.html">
+<link rel="import" href="../controls/st-entity-details.html">
+
+<link rel="import" href="../../css/globalstyle.html" />
+<link rel="import" href="thing-view-styles.html" />
+
+<dom-module id="thing-view">
+    <template>       
+        
+        <style>       
+            :host {
+                --px-card-background-color: #111F27;
+            }
+
+            body {
+                background-color: #111F27;
+            }
+
+            .card {
+                padding-top: 20px;
+                min-width: 400px;
+                padding-bottom: 2rem;
+            }
+
+        </style>   
+        <style include="thing-view-styles"></style> 
+        <style include="globalstyle"></style> 
+        <div class="flex flex--row flex--spaced flex--wrap flex--top ">
+                              
+            <px-card class="card flex__item flex__item--top" header-text="Things({{thingid}})" icon="hardware:toys">  
+                <st-entity-details details="{{thingdetails}}"></st-entity-details>
+            </px-card>
+            <px-card class="card flex__item flex__item--top" header-text="Things({{thingid}})/Locations" icon="maps:place">
+                <div class="flex flex--row flex--spaced flex--wrap flex--top ">
+                    <div class="flex__item flex__item--top" >
+                        <template is="dom-repeat" items="{{locationsdetails}}">  
+                            <st-entity-details details="{{item}}"></st-entity-details>               
+                        </template>
+                    </div>
+                </div>
+            </px-card>   
+        </div>   
+        <div id="mapwrapper" style="height:150px; width:100%; display:flex" >                
+            <px-map id="map" zoom="0" lat="0" lng="0" attributionPrefix="" disableAttribution flex-to-size disable-scroll-zoom disable-dragging >
+                <px-map-control-zoom position='bottomright'></px-map-control-zoom>
+                <px-map-tile-layer
+                    url='http://tile.stamen.com/toner/{z}/{x}/{y}.png'>
+                </px-map-tile-layer>
+                <px-map-layer-geojson 
+                    data="[[mapdata]]" 
+                    feature-style='{"color":"#FA39DD", "fillColor": "#FA39DD", "weight": 8, "opacity": 0.8 , "fillOpacity": 0.8}' 
+                    show-feature-properties>
+                </px-map-layer-geojson>
+            </px-map>
+        </div>
+        <px-card class="card" header-text="Things({{thingid}})/Datastreams" icon="icons:timeline">
+            <st-table 
+                id="table" 
+                arraytype="datastreams" 
+                count="{{datastreamcount}}" 
+                tabledata="[[datastreams]]" 
+                top="{{datastreamtop}}" 
+                skip="{{datastreamskip}}" 
+                on-request="_tableDataRequest" 
+                on-px-table-row-tap="_rowSelected"><st-table>
+        </px-card> 
+          
+        <st-entity-thing id="entity" rawreceived="{{thing}}" gid="{{thingid}}"></st-entity-thing>
+        <st-entity-locations id="entitylocations" thingid="[[thingid]]" collection="{{locations}}"></st-entity-locations>
+        <st-entity-datastreams id="entitydatastreams" thingid="[[thingid]]" collection="{{datastreams}}" odata="[[datastreamodata]]" count="{{datastreamcount}}"></st-entity-datastreams>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'thing-view',
+            properties: {
+                thing: {
+                    type: Object,
+                    notify: true,
+                    observer: '_thingSet'                 
+                },     
+                thingid: {
+                    type: String,
+                    notify: true
+                },    
+                thingdetails: {
+                    type: Array,
+                    notify: true,
+                    value: []
+                },
+                locationsdetails: {
+                    type: Array,
+                    notify: true,
+                    value: []
+                },
+                locations: {
+                    type: Array,
+                    notify: true,
+                    observer: '_locationsReceived'
+                },
+                selecteddatastream: {
+                    type: Object,
+                    notify: true
+                },
+                datastreams: {
+                    type: Array,
+                    notify: true
+                },
+                mapdata: {
+                    type: Object,
+                    notify: true
+                },
+                datastreamodata: {
+                    type: Object,
+                    value: function() { 
+                        return { skip: 0, count: true, top: 10, expand: ["Observations($top=1;$select=result)"] }; 
+                    } 
+                },
+                datastreamcount: {
+                    type: Number,
+                    notify: true
+                },
+                datastreamtop: {
+                    type: Number,
+                    value: 10,
+                    notify: true
+                },
+                datastreamskip: {
+                    type: Number,
+                    value: 0,
+                    notify: true
+                }
+            },
+            _thingSet(thing){
+                if(!thing){
+                    return;
+                }
+                
+                this.thingid = this._getID(thing);
+                this.thingdetails = [
+                    { label: "id", value: this._getID(thing), write: false, type: "text" },
+                    { label: "name", value: thing.name, write: false, type: "text" },
+                    { label: "description", value: thing.description, write: false, type: "text" },
+                    { label: "properties", value: thing.properties, write: false, type: "object" }
+                ]
+
+                this.$.entitylocations.get();
+                this.$.entitydatastreams.get();
+            },
+            _getID(item){
+                return item['@iot.id'];
+            },
+            _tableDataRequest(event) {
+                this.datastreamodata.count = false;
+                this.datastreamodata.top = event.detail.top;
+                this.datastreamodata.skip = event.detail.skip;
+                this.$.entitydatastreams.get();
+            },            
+            _locationsReceived(locations){   
+                if(!locations || locations.length == 0)     {
+                    return;
+                }
+
+                coordinates = locations[0].location.coordinates;
+                this.$.map.lng = coordinates[0];
+                this.$.map.lat = coordinates[1];
+                this.$.map.zoom = 16;
+
+                fc = {
+                    type: "FeatureCollection",
+                    features: []
+                };
+
+                for (var i = 0, len = locations.length; i < len; i++) {
+                    feature = {
+                        type: "Feature",
+                        id: locations[i]['@iot.id'],
+                        properties: {},
+                        geometry: locations[i].location
+                    };
+
+                    fc.features.push(feature);
+                }
+
+                this.mapdata = fc;
+                this.$.map.invalidateSize();
+                this._setLocationsDetails(locations);
+            },
+            // create details array to show using st-entity-details
+            _setLocationsDetails(locations){                
+                var locationsdetails = [];
+                for (var i = 0, len = locations.length; i < len; i++) {
+                    var location = locations[i];
+
+                    details = [
+                        { label: "id", value: this._getID(location), write: false, type: "text" },
+                        { label: "name", value: location.name, write: false, type: "text" },
+                        { label: "description", value: location.description, write: false, type: "text" },
+                        { label: "encoding", value: location.encodingType, write: false, type: "text" },
+                        { label: "location", value: location.location, write: false, type: "object" }
+                    ];
+
+                    locationsdetails.push(details);
+                }
+
+                this.locationsdetails = locationsdetails;   
+            },
+            _rowSelected(evt) {          
+                this.selecteddatastream = null;                
+                this.selecteddatastream = evt.srcElement;
+            },
+            load(id){
+                if(!this.thing){
+                    this.thingid = id;
+                    this.$.entity.get();
+                }
+            }
+        });
+    </script>
+</dom-module>

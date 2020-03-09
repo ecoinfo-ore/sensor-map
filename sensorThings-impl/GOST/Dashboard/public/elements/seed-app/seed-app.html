@@ -1,0 +1,178 @@
+<!-- import polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<!-- import page level css -->
+<link rel="import" href="seed-app-styles.html">
+
+<!-- app route -->
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/px-app-helpers/px-app-route/px-app-route.html">
+<link rel="import" href="../../bower_components/px-app-nav/px-app-nav.html">
+<link rel="import" href="../../bower_components/px-view/px-view.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/maps-icons.html">
+<!-- importing icons here, to fix icon flickering problem when loading asynchronously. -->
+<link rel="import" href="../../bower_components/px-icon-set/px-icon.html">
+<link rel="import" href="../../bower_components/px-icon-set/px-icon-set.html">
+
+<link rel="import" href="../../bower_components/st-core/st-settings.html">
+
+<link rel="import" href="../dashboard-header/dashboard-header.html">
+
+<dom-module id="seed-app">
+  <template>
+
+    <!-- apply imported seed app style module -->
+    <style include="seed-app-styles"></style>
+
+    <dashboard-header application-title="GOST dashboard"></dashboard-header>
+
+    <div class="viewport">
+      <app-location 
+        route="{{route}}"
+        use-hash-as-path>
+      </app-location>
+      <px-app-route
+        id="stRoute"
+        use-hash-as-path
+        update-nav-route
+        route="{{route}}"        
+        nav-route="{{navRoute}}">
+      </px-app-route>
+
+      <div class="flex flex--row flex--justify">
+        <div class="u-3/4-desk u-1/1-palm">
+          <px-app-nav
+            class="navbar"
+            items="{{navItems}}"
+            selected-route="{{appnav}}"
+            
+            >
+            <!-- selected-route="{{navRoute}}" -->
+          </px-app-nav>
+        </div>
+      </div>
+
+      <main role="main">
+        <px-view id="view" element-href="{{getHref(navRoute)}}" active load-async></px-view>
+      </main>
+    </div>
+    <st-settings></st-settings>
+  </template>
+  <script>
+    Polymer({
+      is: 'seed-app',
+
+      properties: {
+
+        appHeader: {
+          type: String
+        },
+
+        //Global application object
+        global: {
+          type: Object,
+          value: function() {
+            return {
+              version: '1.0',
+              name: 'GOST DASHBOARD'
+            }
+          }
+        },
+
+        navItems: {
+          type: Array,
+          value: function() {
+            return [
+              {
+                "label": "Home",
+                "id": "widget",
+                "icon": "icons:home"
+              },
+              {
+                "label": "Entity Browser",
+                "id": "entity-browser",
+                "icon": "icons:folder"           
+              },
+              {
+                "label": "Map",
+                "id": "map",
+                "icon": "maps:map"
+              }
+            ]
+          }
+        },
+
+        currentroute:{
+          type: Array
+        },
+        navRoute: {
+          type: Array,
+          observer: '_navRouteChanged'
+        },
+        appnav: {
+          type: Array,
+          observer: '_appNavChanged'
+        }
+      },
+
+      ready: function(){
+        if (!this.$.stRoute.navRoute) {
+          // set default route
+          this.$.stRoute.navRoute = ['widget'];
+        }
+      },
+
+      getHref: function(navRoute) {
+        var navRoute = this.$.stRoute.navRoute || ['widget'];
+        return '/elements/views/' + navRoute[0] + '-view.html';
+      },
+
+      _appNavChanged(nav){
+        if(nav != this.currentroute){
+          this.navRoute = nav;
+        }
+      },
+
+      _navRouteChanged(urlnav){
+        if(!urlnav){
+          return;
+        }
+
+        var route = [];
+
+        for(i = 0; i < this.navItems.length; i++){
+          if(urlnav[0] == this.navItems[i].id){
+            route.push(urlnav[0]);
+            urlnav.shift();
+            route = this._recursiveNavItemInChild(route, urlnav, this.navItems[i]);
+            break;
+          }          
+        }
+
+        this.currentroute = route;
+        this.appnav = route;
+      },
+
+      _recursiveNavItemInChild(route, nav, navItem){
+        if(navItem.children){
+          for(i = 0; i < navItem.children.length; i++){
+            if(navItem.children[i].id == nav[0]){
+              route.push(nav[0]);
+              nav.shift();
+
+              if(nav.length != 0){
+                route = _recursiveNavItemInChild(route, nav, navItem.children[i]);
+              }
+
+              break;
+            }
+          }
+        }
+
+        return route;
+      }
+
+    });
+  </script>
+</dom-module>

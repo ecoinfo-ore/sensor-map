@@ -1,0 +1,43 @@
+
+language: java
+
+sudo: false # faster builds
+
+jdk:
+  - openjdk8
+  
+script:
+  - cd /home/travis/build/rac021/Jaxy/src/dependencies/01_jaxy-api 
+  - mvn -q clean install
+  - cd /home/travis/build/rac021/Jaxy/src/dependencies/02_jaxy-security-provider
+  - mvn -q clean install
+  - cd /home/travis/build/rac021/Jaxy/src/dependencies/03_jaxy-service-discovery
+  - mvn -q clean install
+  - cd /home/travis/build/rac021/Jaxy/src/dependencies/04_certMe
+  - mvn -q clean install
+  - cd /home/travis/build/rac021/Jaxy/src/dependencies/05_jaxyClient
+  - mvn -q clean install
+  - cd /home/travis/build/rac021/Jaxy/src/jaxy
+  - mvn -q clean package 
+
+env:
+  global:
+    - secure: "B1PVjcoyruSZExjsJcTKN9oNvKXEG4Z4cwZd0fADx8oaLAsmjyUBbjp9MdewyFXQhye/MnHN4AJnlC0mKPaDkR7m8oXcLcZpVj7b8NEyDOgneSmMnUEdyn2KivpDonCMI0GUTB+8JSe+0G8fHk/8T0K9Xj1+s9WcVZZwmuQdQ2zznkbgCVweePp0D7tLaC0Yt7QBgPQdzqSkJd82YacV/gWH0nHLpt1qXTNGKbihiRP3dO6htU7LJKs4EH4km87oDsCgm6hJXPJHNpSMtTT90NuzrHY7b6+niJgO7hjyNmTkoeas9MsRFThGBc5durw5QEHX78g1wM9XCtNvO92WVKBr1zjJlIbPfod5C4bx2auA9b8tMANZ+CO0LOSgdAq6b/G+yFVO1ybsqKWUrPz91VZO0beSY7zEmL4jy3Ku5ZuJvtZH3QEaNWGgO/+EItk/jBcT1FN0kqHZS4xp7TuzLiEFAXFBuXqgDyi9V8+6MtC+K41iz45JEFFvKf8/ASqty56EmjGU+2I2HMLS/KiXv9y/7FOwZ2R9LRpDT6MwVuXJ+3Gvd8RiaSgsCe8DnGmBj/ub+TmQc4C3TjkTxTBL+Mdb9ARkL1yL3Eal2nr98w6aWMbM3o6MlHFCiXA8DdqqANeGLl0sCkapYrhaIorIKVjkXF4y3QiPoOaGIbRdlNE=" # DOCKER_USER
+    - secure: "Oi1HSQlG6e+QQuzwtWZidghOsVzt0gElTEx7bzFCUTyz2voh6JtcIhCmMb3Coz5WjzWwfWjsIvKR39vpd7A66OK6Qbh1Hldwrg6s8dx/sBXLUP5WL91d2s6vLHykg79xt/BJolgIIzw9uKZPmh98XPpUyOtv9Gqf75BqeDUzv6V9eNKlA1DPIFj0ii/49+u5cbID5fawK4dTxQON3A1n3n5yDg/TjsQ5fIQHRwCfiC5wU1TCVQD+myLcpLpwc0mfbjOI/5wDyRW8MbhMdXNKnWBW3Mb3cnx3quecskpqEgReKnW6sg0v5W2DyamLeLEQTMCWy4Dzpxy+8XzWCLMgs83/IxLiHdsWa2kC+QA6y1XzBglZ5jr1SjfyU9G5bwN/k5oeF+pxNxJstShgHOWHWdIP0XmDqIOLlW4LpqAFjw7b11FGsph7g2ppHI5Qz2hmowuM/Brcr4ZptWKrppKj/ch5MvgP9RgYcvRs5EGCC0+qFEDamn8YU1j/E5b/y6J42/ZH5Xgtrl982nQx24PWB2NUe5Qv++qrD5ph80iGNgEI5Xfzllw/bK1YfZC/bqaoPZ/JmzsIZMrg2NuxtU7VTBFIFkZ5wlL3jxdBD4D8MVMbmGjhiGy0WHsuTn37q173Flo+3MpsGFw8lrEWEuOlCM+01DanwkKFw1bv6hJskUM=" # DOCKER_PASS
+
+script:
+  - echo $TRAVIS_COMMIT
+  - echo $TRAVIS_TAG
+  - echo $TRAVIS_BRANCH
+  - echo $TRAVIS_BUILD_NUMBER
+  - echo $TRAVIS_REPO_SLUG
+  
+after_success:
+    - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USERNAME --password-stdin
+    - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ] ; then echo "travis-$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER" ; else echo "travis-$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER-snapshot" ; fi`
+    - docker build -t jaxy -f jaxy/demo/18_Docker/Dockerfile . # 2>&1 > /dev/null
+    - docker tag jaxy $DOCKER_USERNAME/jaxy:$TAG
+    - docker push $DOCKER_USERNAME/jaxy:$TAG
+    - docker tag jaxy $DOCKER_USERNAME/jaxy:latest
+    - docker push $DOCKER_USERNAME/jaxy:latest
+    

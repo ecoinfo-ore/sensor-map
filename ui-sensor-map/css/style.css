@@ -1,0 +1,441 @@
+/*  */
+/* coby css - responsive UI */
+
+* {
+    --air-background:lightgreen;
+   /* font-family:sans-serif */
+}
+
+h1 {
+    animation: text-glow 3s ease-out infinite alternate;
+    font-family: 'Ubuntu', sans-serif;
+    color: #00a4a2;
+    /*font-size: 48px;*/
+    /*font-size: 4.8rem;*/
+    font-weight: bold;
+    /*position: absolute;*/
+    text-shadow: 0 0 10px #000, 0 0 20px #000, 0 0 30px #000, 0 0 40px #000, 0 0 50px #000, 0 0 60px #000, 0 0 70px #000;
+    /*top: 50px;*/  
+    /*margin-top: 1em;*/
+    margin-left: 1em;
+    margin-right: 1em;
+    height: 0;
+    min-width: 7em;
+    /*margin-left: 1.3em;*/
+  }
+  
+  body, html {
+   /*height: 80%;*/
+   font-family: Arial, sans-serif;
+   line-height: 1.5;
+   margin: 0.3em auto;
+   padding: 0 1em;
+   max-width: 95% ;
+   background: #656fbf ; /*beige;*/
+  /* background: linear-gradient(45deg, black, transparent);*/
+    
+  }
+  
+  main {
+        height:5em;        
+        display:grid;
+        grid-template-areas:"sensor-header sensor-header" " article article" "footer footer"
+    }
+
+    
+    nav {
+        grid-area:nav;
+        background-image: linear-gradient(#43a17a,#000); /*linear-gradient(#b3edd5,#000);*/
+        height:100%;
+        border-style:ridge groove hidden hidden;
+        position:relative
+    }
+
+     
+    sensor-header {
+        grid-area:sensor-header;
+        background: linear-gradient(#f5f5dc,#929e35);
+        height:100%;
+        border-style:ridge groove hidden hidden;
+        position:relative ;
+    }    
+    
+    article {
+        grid-area:article;
+        height: 0em;
+        grid-gap:0.5rem;
+        background:var(--air-background,#fff);
+        display:inline-grid;
+        /*background-image:linear-gradient(#171616,#8a8383);*/
+        background-image: linear-gradient(#000000,#131212) ; /*linear-gradient(#000000,#706c6c);*/
+        
+        grid-template-columns:3.5fr 1.5fr;
+        grid-template-areas:
+             " sql-builder-container sql-builder-container" 
+             " coby-tab-container      coby-command-container "
+    }
+    
+    sql-builder-container{
+       margin:1.5em;  
+       margin-bottom: 0.5em;
+    }
+    
+   
+   
+   
+
+   /* COMBO CSS */
+   
+   /* -------------------- Page Styles (not required) */
+
+
+/* -------------------- Select Box Styles: bavotasan.com Method (with special adaptations by ericrasch.com) */
+/* -------------------- Source: http://bavotasan.com/2011/style-select-box-using-only-css/ */
+.styled-select {
+   background: url(http://i62.tinypic.com/15xvbd5.png) no-repeat 96% 0;
+   height: 29px;
+   overflow: hidden;
+   width: 240px;
+}
+
+.styled-select select {
+   background: transparent;
+   border: none;
+   font-size: 14px;
+   height: 29px;
+   padding: 5px; /* If you add too much padding here, the options won't show in IE */
+   width: 268px;
+}
+
+.styled-select.slate {
+   background: url(http://i62.tinypic.com/2e3ybe1.jpg) no-repeat right center;
+   height: 34px;
+   width: 240px;
+}
+
+.styled-select.slate select {
+   border: 1px solid #ccc;
+   font-size: 16px;
+   height: 34px;
+   width: 268px;
+}
+
+/* -------------------- Rounded Corners */
+.rounded {
+   -webkit-border-radius: 20px;
+   -moz-border-radius: 20px;
+   border-radius: 20px;
+}
+
+.semi-square {
+   -webkit-border-radius: 5px;
+   -moz-border-radius: 5px;
+   border-radius: 5px;
+}
+
+/* -------------------- Colors: Background */
+.slate   { background-color: #ddd; }
+.green   { background-color: #779126; }
+.blue    { background-color: #3b8ec2; }
+.yellow  { background-color: #eec111; }
+.black   { background-color: #000; }
+
+/* -------------------- Colors: Text */
+.slate select   { color: #000; }
+.green select   { color: #fff; }
+.blue select    { color: #fff; }
+.yellow select  { color: #000; }
+.black select   { color: #fff; }
+
+
+/* -------------------- Select Box Styles: danielneumann.com Method */
+/* -------------------- Source: http://danielneumann.com/blog/how-to-style-dropdown-with-css-only/ */
+#mainselection select {
+   border: 0;
+   color: #ff0000;
+   margin-top: 0.3em;
+   background: transparent;
+   font-size: 16px;
+   font-weight: bold;
+   padding: 2px 10px;
+   width: 378px;
+   width: 23em;
+   /* background: #58B14C;*/
+   /*-webkit-appearance: none;*/
+}
+
+#mainselection {
+   overflow:hidden;
+  /* width:22em;*/
+   -moz-border-radius: 9px 9px 9px 9px;
+   -webkit-border-radius: 9px 9px 9px 9px;
+   border-radius: 9px 9px 9px 9px;
+   box-shadow: 1px 1px 11px #330033;
+   background: #010a00 url(https://www.iconsdb.com/icons/preview/white/square-xxl.png) no-repeat scroll 26em center
+}
+
+
+/* -------------------- Select Box Styles: stackoverflow.com Method */
+/* -------------------- Source: http://stackoverflow.com/a/5809186 */
+select#soflow, select#soflow-color {
+   -webkit-appearance: button;
+   -webkit-border-radius: 2px;
+   -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+   -webkit-padding-end: 20px;
+   -webkit-padding-start: 2px;
+   -webkit-user-select: none;
+   background-image: url(https://www.iconsdb.com/icons/preview/white/square-xxl.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+   background-position: 97% center;
+   background-repeat: no-repeat;
+   border: 1px solid #AAA;
+   color: #555;
+   font-size: inherit;
+   margin: 20px;
+   overflow: hidden;
+   padding: 5px 10px;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   width: 300px;
+}
+
+select#soflow-color {
+   color: #fff;
+   background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#779126, #779126 40%, #779126);
+   background-color: #779126;
+   -webkit-border-radius: 20px;
+   -moz-border-radius: 20px;
+   border-radius: 20px;
+   padding-left: 15px;
+}
+
+
+
+
+
+
+
+/* ---- TABLE -----*/
+
+.my-table{
+      border-collapse: collapse;
+      width: 100%;   
+}
+
+ .table-th, .table-td {
+  border: groove;
+  padding: 10px;
+}
+
+
+
+/* LOG */
+
+.hit-the-floor {
+  padding: 1em;
+  color: #fff;
+  font-size: 1.7em;
+  font-weight: bold;
+  font-family: Helvetica;
+  /*text-shadow: 7px -1px 20px #ff0101, 0 2px 0 #ff0000, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1), 1px 18px 5px rgba(0,0,0,.1), 5px 8px 2px rgba(0,0,0,.3), 15px 13px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.2), 0 20px 20px rgba(197, 91, 91, 0.15);*/
+  text-shadow: 7px -1px 5px #ff0101, 0 4px 0 #ff0000, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1), 1px 18px 5px rgba(0,0,0,.1), 5px 8px 2px rgba(0,0,0,.3), 15px 13px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.2), 0 20px 20px rgba(197, 91, 91, 0.15)
+}
+
+.hit-the-floor {
+  text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+/* BUTTON */
+
+
+
+/* -------------- THE button -------------- */
+.button {
+
+/* text */
+	text-decoration: 		none;
+	font: 					15px/1em 'Droid Sans', sans-serif;
+	font-weight: 			bold;
+	text-shadow: 			rgba(255,255,255,.5) 0 1px 0;
+	-webkit-user-select: 	none;
+	-moz-user-select: 		none;
+	user-select: 			none;
+	
+	
+/* layout */
+	padding: 				.5em .6em .4em .6em;
+	margin: 				.5em;
+	display: 				inline-block;
+	position: 				relative;
+	
+	-webkit-border-radius: 	8px;
+	-moz-border-radius: 	8px;
+	border-radius: 	8px;
+	
+/* effects */
+	border-top: 		1px solid rgba(255,255,255,0.8);
+	border-bottom: 		1px solid rgba(0,0,0,0.1);
+	
+	background-image: 	-webkit-gradient(radial, 50% 0, 100, 50% 0, 0, from( rgba(255,255,255,0) ), to( rgba(255,255,255,0.7) )), url(https://lh4.googleusercontent.com/-Qs9-Ohgo6sk/UY11O1WoMQI/AAAAAAAACME/nUID7awcMow/s50-no/noise.png);
+	background-image: 	-moz-radial-gradient(top, ellipse cover, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 100%), url(https://lh4.googleusercontent.com/-Qs9-Ohgo6sk/UY11O1WoMQI/AAAAAAAACME/nUID7awcMow/s50-no/noise.png);
+	background-image: 	gradient(radial, 50% 0, 100, 50% 0, 0, from( rgba(255,255,255,0) ), to( rgba(255,255,255,0.7) )), url(https://lh4.googleusercontent.com/-Qs9-Ohgo6sk/UY11O1WoMQI/AAAAAAAACME/nUID7awcMow/s50-no/noise.png);
+
+	-webkit-transition: background .2s ease-in-out;
+	-moz-transition: 	background .2s ease-in-out;
+	transition: 		background .2s ease-in-out;
+	
+/* color */
+	color: 				hsl(0, 0%, 40%) !important;
+	background-color: 	hsl(0, 0%, 75%);
+	
+	-webkit-box-shadow: inset rgba(255,254,255,0.6) 0 0.3em .3em, inset rgba(0,0,0,0.15) 0 -0.1em .3em, /* inner shadow */ 
+						hsl(0, 0%, 60%) 0 .1em 3px, hsl(0, 0%, 45%) 0 .3em 1px, /* color border */
+						rgba(0,0,0,0.2) 0 .5em 5px; /* drop shadow */
+	-moz-box-shadow: 	inset rgba(255,254,255,0.6) 0 0.3em .3em, inset rgba(0,0,0,0.15) 0 -0.1em .3em, /* inner shadow */ 
+						hsl(0, 0%, 60%) 0 .1em 3px, hsl(0, 0%, 45%) 0 .3em 1px, /* color border */
+						rgba(0,0,0,0.2) 0 .5em 5px; /* drop shadow */
+	box-shadow:		 	inset rgba(255,254,255,0.6) 0 0.3em .3em, inset rgba(0,0,0,0.15) 0 -0.1em .3em, /* inner shadow */ 
+						hsl(0, 0%, 60%) 0 .1em 3px, hsl(0, 0%, 45%) 0 .3em 1px, /* color border */
+						rgba(0,0,0,0.2) 0 .5em 5px; /* drop shadow */
+}
+
+/* -------------- button (tag) -------------- */
+
+button.button {
+	border-left: none;
+	border-right: none;
+}
+button.button:hover {
+	cursor: pointer;
+}
+
+
+/* -------------- icon -------------- */
+.button:before {
+	font: 			1.2em/0 'Pictos', sans-serif;
+	content: 		attr(data-icon); /* gets the icon value from the custom data attribute and puts it infront of the button label */
+	margin-right: 	0.4em;
+	
+	
+}
+/* icon only */
+.icon {
+	font-weight: normal;
+	font-style: normal;
+	text-indent: 	-999em;
+}
+.icon:before { 
+	margin-right: 	0;
+	display: 		block;
+	height: 		0;
+	text-indent: 	0px;	
+}
+
+
+/* -------------- colours -------------- */
+
+.button.green {
+	color: 				hsl(88, 70%, 30%) !important;
+	background-color: 	hsl(88, 70%, 60%);
+	
+}
+.button.green:hover { 	background-color: hsl(88, 70%, 75%); }
+
+
+/* -------------- States -------------- */
+
+.button:hover {
+	background-color: 	hsl(0, 0%, 83%);
+}
+
+.button:active {
+	background-image: 	-webkit-gradient(radial, 50% 0, 100, 50% 0, 0, from( rgba(255,255,255,0) ), to( rgba(255,255,255,0) ));
+	background-image: 	-moz-gradient(radial, 50% 0, 100, 50% 0, 0, from( rgba(255,255,255,0) ), to( rgba(255,255,255,0) ));
+	background-image: 	gradient(radial, 50% 0, 100, 50% 0, 0, from( rgba(255,255,255,0) ), to( rgba(255,255,255,0) ));
+
+	-webkit-transform: 	translateY(.2em);
+	-moz-transform: 	translateY(.2em);
+	transform: 			translateY(.2em);
+}
+
+.button:focus {
+	outline: none;
+	color: rgba(254,255,255,0.9) !important;
+	text-shadow: rgba(0,0,0,0.2) 0 1px 2px;
+}
+
+
+/* -------------- Fonts -------------- */
+
+.serif { 
+	font-family: 'Lobster', serif;
+	font-weight: 			normal;
+}
+
+
+/* -------------- Sizes -------------- */
+
+.xs { font-size: 12px; }
+.xl { font-size: 16px; }
+
+
+
+@-moz-document url-prefix() {
+	.button { text-align: center; }
+	
+	.icon:before { margin-left: -.42em; float: left; }
+	
+	.drop.icon { padding-right: 1.1em; }
+	.shield.icon { padding-left: 1.1em; padding-right: 1.1em; }
+	.skew.icon { padding-right: 1.4em; padding-left: 1.3em; }
+	.oval.icon { padding-left: 1.3em; padding-right: 1.3em;	}
+	.knife { padding-left: 2em; }
+}
+
+
+/******************************************************************************/
+

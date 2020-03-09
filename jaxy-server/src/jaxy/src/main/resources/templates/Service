@@ -1,0 +1,264 @@
+
+package {PACKAGE_NAME} ;
+
+import javax.ws.rs.GET ;
+import javax.inject.Inject ;
+import javax.ws.rs.Produces ;
+import javax.ws.rs.QueryParam ;
+import javax.ws.rs.HeaderParam ;
+import javax.ws.rs.core.UriInfo ;
+import javax.ws.rs.core.Context ;
+import javax.ws.rs.core.Response ;
+import javax.annotation.PostConstruct ;
+import com.rac021.jaxy.api.crypto.AcceptType ;
+import com.rac021.jaxy.api.qualifiers.Format ;
+import com.rac021.jaxy.api.crypto.CipherTypes ;
+import com.rac021.jaxy.api.streamers.IStreamer ;
+import com.rac021.jaxy.api.qualifiers.security.Policy ;
+import com.rac021.jaxy.api.qualifiers.security.Public ;
+import com.rac021.jaxy.api.qualifiers.security.Cipher ;
+import com.rac021.jaxy.api.qualifiers.ServiceRegistry ;
+import com.rac021.jaxy.api.qualifiers.ResourceRegistry ;
+import com.rac021.jaxy.api.streamers.StreamerOutputXml ;
+import com.rac021.jaxy.api.qualifiers.security.Secured ;
+import com.rac021.jaxy.api.streamers.StreamerOutputJson ;
+import com.rac021.jaxy.api.streamers.StreamerOutputTemplate ;
+import com.rac021.jaxy.api.streamers.StreamerOutputXmlEncrypted ;
+import com.rac021.jaxy.api.streamers.DefaultStreamerConfigurator ;
+import com.rac021.jaxy.api.streamers.StreamerOutputJsonEncrypted ;
+import com.rac021.jaxy.api.streamers.StreamerOutputTemplateEncrypted ;
+
+// Monitoring Packages
+import org.eclipse.microprofile.metrics.MetricUnits ;
+import org.eclipse.microprofile.faulttolerance.Retry ;
+import org.eclipse.microprofile.faulttolerance.Fallback ;
+// import org.eclipse.microprofile.faulttolerance.Bulkhead ;
+import org.eclipse.microprofile.metrics.annotation.Counted ;
+// import org.eclipse.microprofile.metrics.annotation.Timed ;
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker ;
+import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException ;
+
+
+/**
+ *
+ * @author R.Yahiaoui
+ */
+
+@ServiceRegistry("{SERVICE_CODE}")
+{SECURITY}
+@Cipher( cipherType = { {CIPHERS} } )
+
+ // @Bulkhead( value = 2 ) // maximum concurrent requests allowed
+ @Retry(delay = 300, maxDuration= 3200, jitter= 400, maxRetries = 2 )
+ @CircuitBreaker ( requestVolumeThreshold=2,
+                   failureRatio=0.50, 
+                   delay=5000, 
+                   successThreshold=2 ,
+                   failOn = FaultToleranceException.class )
+
+public class {SERVICE_NAME}               {
+
+    @ResourceRegistry("{RESOURCE_CODE}")
+    private Resource {RESOURCE_NAME}      ;
+
+    @Inject
+    @Format( AcceptType.XML_PLAIN )
+    private IStreamer streamerOutputXml   ;
+    
+    @Inject
+    @Format( AcceptType.JSON_PLAIN )
+    private IStreamer streamerOutputJson  ;
+    
+    @Inject
+    @Format( AcceptType.XML_ENCRYPTED )
+    private IStreamer streamerOutputXmlEncrypted  ;
+    
+    @Inject
+    @Format( AcceptType.JSON_ENCRYPTED )
+    private IStreamer streamerOutputJsonEncrypted ;
+   
+    @Inject
+    @Format( AcceptType.TEMPLATE_PLAIN )
+    private IStreamer streamerOutputTemplate      ;
+   
+    @Inject
+    @Format( AcceptType.TEMPLATE_ENCRYPTED )
+    private IStreamer streamerOutputTemplateEncrypted  ;
+   
+    @PostConstruct
+    public void init()      {
+    }
+
+    public {SERVICE_NAME}() {
+    }
+   
+    @GET
+    @Produces("xml/plain")
+    @Fallback(fallbackMethod = "retryLaterMethod" )
+    @Counted(name = "{SERVICE_CODE_SNAKE_NAME}_xml_plain_counter_total", absolute = true, reusable = true, /* monotonic = true, */ unit = MetricUnits.NONE )
+    // @Timed(name = "{SERVICE_CODE_SNAKE_NAME}_xml_plain_timer",absolute = true, unit = MetricUnits.MILLISECONDS )
+    public Response getResourceASXml( @HeaderParam("Keep") String filterdIndex, @Context UriInfo uriInfo , {SQL_PARAMS} ) {    
+
+        /**
+        * DefaultStreamerConfigurator defaultStreamerConfigurator = new
+        * DefaultStreamerConfigurator()                        ;
+        * defaultStreamerConfigurator.setNbrCores(2)           ;
+        * defaultStreamerConfigurator.setRatio(4)              ;
+        * defaultStreamerConfigurator.setRecorderLenght(16000) ;
+        * streamerOutputXml.setStreamerConfigurator(defaultStreamerConfigurator) ;
+        */
+
+        // System.out.println(" JAX-Y - Process : getResourceASXml ... ") ; 
+
+        return Response.status(Response.Status.OK)
+                       .entity( streamerOutputXml.wrapResource( {RESOURCE_NAME}           , 
+                                                                {DTO_CLASS}               ,
+                                                                filterdIndex              , 
+                                                                uriInfo.getQueryParameters() ))
+                       .build() ;
+    }
+
+    @GET
+    @Produces("xml/encrypted")
+    @Fallback(fallbackMethod = "retryLaterMethod" )
+    @Counted(name = "{SERVICE_CODE_SNAKE_NAME}_xml_encrypted_counter_total", absolute = true, reusable = true, /* monotonic = true, */ unit = MetricUnits.NONE )
+    // @Timed(name = "{SERVICE_CODE_SNAKE_NAME}_xml_encrypted_timer",absolute = true, unit = MetricUnits.MILLISECONDS)
+    public Response getResourceASEnctyptedXml( @HeaderParam("Keep") String filterdIndex, @Context UriInfo uriInfo , {SQL_PARAMS} ) {    
+
+        /**
+        * DefaultStreamerConfigurator defaultStreamerConfigurator = new
+        * DefaultStreamerConfigurator()                        ;
+        * defaultStreamerConfigurator.setNbrCores(2)           ;
+        * defaultStreamerConfigurator.setRatio(4)              ;
+        * defaultStreamerConfigurator.setRecorderLenght(16000) ;
+        * streamerOutputXmlEncrypted.setStreamerConfigurator(defaultStreamerConfigurator) ;
+        */
+            
+        // System.out.println(" JAX-Y - Process : getResourceASEnctyptedXml ... ") ; 
+        
+        return Response.status(Response.Status.OK)
+                       .entity(streamerOutputXmlEncrypted.wrapResource( {RESOURCE_NAME}           , 
+                                                                        {DTO_CLASS}               ,
+                                                                        filterdIndex              , 
+                                                                        uriInfo.getQueryParameters() ))
+                       .build() ;
+    }
+
+    @GET
+    @Produces("json/plain")
+    @Fallback(fallbackMethod = "retryLaterMethod" )
+    @Counted(name = "{SERVICE_CODE_SNAKE_NAME}_json_plain_counter_total", absolute = true, reusable = true, /* monotonic = true, */ unit = MetricUnits.NONE )
+    // @Timed(name = "{SERVICE_CODE_SNAKE_NAME}_json_plain_timer",absolute = true, unit = MetricUnits.MILLISECONDS)
+    public Response getResourceASJson( @HeaderParam("Keep") String filterdIndex, @Context UriInfo uriInfo, {SQL_PARAMS} ) {
+        
+        /**
+        * DefaultStreamerConfigurator defaultStreamerConfigurator = new
+        * DefaultStreamerConfigurator()                        ;
+        * defaultStreamerConfigurator.setNbrCores(2)           ;
+        * defaultStreamerConfigurator.setRatio(4)              ;
+        * defaultStreamerConfigurator.setRecorderLenght(16000) ;
+        * streamerOutputJson.setStreamerConfigurator(defaultStreamerConfigurator) ;
+        */
+  
+        // System.out.println(" JAX-Y - Process : getResourceASJson ... ") ; 
+
+        return Response.status(Response.Status.OK)
+                       .entity(streamerOutputJson.wrapResource( {RESOURCE_NAME}           , 
+                                                                {DTO_CLASS}               ,
+                                                                filterdIndex              , 
+                                                                uriInfo.getQueryParameters() ))
+                       .build() ;
+    }
+    
+    @GET
+    @Produces("json/encrypted")
+    @Fallback(fallbackMethod = "retryLaterMethod" )
+    @Counted(name = "{SERVICE_CODE_SNAKE_NAME}_json_encrypted_counter_total", absolute = true, reusable = true, /* monotonic = true, */ unit = MetricUnits.NONE )
+    // @Timed(name = "{SERVICE_CODE_SNAKE_NAME}_json_encrypted_timer",absolute = true, unit = MetricUnits.MILLISECONDS)
+    public Response getResourceASEncryptedJson( @HeaderParam("Keep") String filterdIndex , 
+                                                @Context UriInfo uriInfo                 , 
+                                                {SQL_PARAMS})  {
+ 
+        /**
+        * DefaultStreamerConfigurator defaultStreamerConfigurator = new
+        * DefaultStreamerConfigurator()                        ;
+        * defaultStreamerConfigurator.setNbrCores(2)           ;
+        * defaultStreamerConfigurator.setRatio(4)              ;
+        * defaultStreamerConfigurator.setRecorderLenght(16000) ;
+        * streamerOutputJsonEncrypted.setStreamerConfigurator(defaultStreamerConfigurator) ;
+        */
+  
+        // System.out.println(" JAX-Y - Process : getResourceASEncryptedJson ... ") ; 
+
+        return Response.status(Response.Status.OK)
+                       .entity( streamerOutputJsonEncrypted.wrapResource( {RESOURCE_NAME}           , 
+                                                                          {DTO_CLASS}               ,
+                                                                          filterdIndex              , 
+                                                                          uriInfo.getQueryParameters() ))
+                       .build() ;
+    }
+
+    @GET
+    @Produces("template/plain")
+    @Fallback(fallbackMethod = "retryLaterMethod" )
+    @Counted(name = "{SERVICE_CODE_SNAKE_NAME}_template_plain_counter_total", absolute = true, reusable = true, /* monotonic = true, */ unit = MetricUnits.NONE )
+    // @Timed(name = "{SERVICE_CODE_SNAKE_NAME}_template_plain_timer",absolute = true, unit = MetricUnits.MILLISECONDS)
+    public Response getResourceASTemplate( @HeaderParam("Keep") String filterdIndex , 
+                                           @Context UriInfo uriInfo                 , 
+                                           {SQL_PARAMS})    {
+  
+        /**
+        * DefaultStreamerConfigurator defaultStreamerConfigurator = new
+        * DefaultStreamerConfigurator()                        ;
+        * defaultStreamerConfigurator.setNbrCores(2)           ;
+        * defaultStreamerConfigurator.setRatio(4)              ;
+        * defaultStreamerConfigurator.setRecorderLenght(16000) ;
+        * streamerOutputTemplate.setStreamerConfigurator(defaultStreamerConfigurator) ;
+        */
+  
+        // System.out.println(" JAX-Y - Process : getResourceASTemplate ... ") ; 
+
+        return Response.status(Response.Status.OK)
+                       .entity( streamerOutputTemplate.wrapResource( {RESOURCE_NAME}           , 
+                                                                     {DTO_CLASS}               ,
+                                                                     filterdIndex              , 
+                                                                     uriInfo.getQueryParameters() ))
+                       .build() ;
+    }
+
+    @GET
+    @Produces("template/encrypted")
+    @Fallback(fallbackMethod = "retryLaterMethod"  )
+    @Counted(name = "{SERVICE_CODE_SNAKE_NAME}_template_encrypted_counter_total", absolute = true, reusable = true, /* monotonic = true, */ unit = MetricUnits.NONE )
+    // @Timed(name = "{SERVICE_CODE_SNAKE_NAME}_template_encrypted_timer",absolute = true, unit = MetricUnits.MILLISECONDS)
+    public Response getResourceASTemplateEncrypted( @HeaderParam("Keep") String filterdIndex , 
+                                                    @Context UriInfo uriInfo                 , 
+                                                    {SQL_PARAMS})    {
+
+        /**
+        * DefaultStreamerConfigurator defaultStreamerConfigurator = new
+        * DefaultStreamerConfigurator()                        ;
+        * defaultStreamerConfigurator.setNbrCores(2)           ;
+        * defaultStreamerConfigurator.setRatio(4)              ;
+        * defaultStreamerConfigurator.setRecorderLenght(16000) ;
+        * streamerOutputTemplateEncrypted.setStreamerConfigurator(defaultStreamerConfigurator) ;
+        */
+  
+        // System.out.println(" JAX-Y - Process : getResourceASEncryptedTemplate ... ") ; 
+
+        return Response.status(Response.Status.OK)
+                       .entity( streamerOutputTemplateEncrypted.wrapResource( {RESOURCE_NAME}           , 
+                                                                              {DTO_CLASS}               ,
+                                                                              filterdIndex              , 
+                                                                              uriInfo.getQueryParameters() ))
+                       .build() ;
+    }
+
+
+    public Response retryLaterMethod ( @HeaderParam("Keep") String filterdIndex, @Context UriInfo uriInfo , {SQL_PARAMS} ) {    
+
+        return Response.status( Response.Status.OK )
+                       .entity( " -- Retry Later -- " )
+                       .build() ;
+    }
+}

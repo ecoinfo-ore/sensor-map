@@ -1,0 +1,591 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:head>
+        <title>Jaxy Detail Service</title>
+    </h:head>    
+
+    <script src="js/jaxy.js" type="text/javascript" charset="utf-8"></script>
+
+    <style>
+
+        body {
+            color: black;
+            background-color: whitesmoke;
+        }
+        div.navbar>div.container {
+            float: left; 
+            padding: 5px;
+
+        }
+    </style>
+
+    <h:body>
+
+        <b:navBar inverse="true" >
+
+            <h:form style="display: inline-block; margin-top:4px" >
+                <b:navCommandLink value="Log Out"
+                                  style=" margin: 4px"  
+                                  action="#{loginAuthenticator.logout()}">
+                </b:navCommandLink>
+            </h:form>
+            <a id="atrigger" style=" margin: 20px;" href="#{request.contextPath}/index.xhtml?faces-redirect=true">Back</a>
+
+        </b:navBar>
+
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{serviceSelector.redirectIfEmptyService()}"/>
+        </f:metadata>
+
+
+        <b:container>
+
+            <b:panel look="primary" 
+                     title="Service : #{serviceSelector.getSelectedServiceName()} [  #{serviceSelector.getSelectedServiceUriTemplate()} ]" 
+                     collapsible="false" 
+                     style="background: lightblue"  >
+
+
+                <b:panelGrid columns="5" colSpans="2,1,3,3,3" >
+
+                    <b:row>
+                        <b:column  style="margin-bottom: 5px"> 
+                            <label class="input-group-addon"
+                                   style="text-align: left" > Security </label> </b:column>
+                                   
+                        <b:column><h:outputText class="form-control"  
+                                                id="selectedServiceName" 
+                                                style="background: lightgray; font-weight: bold;"
+                                                value="#{serviceSelector.getSelectedServiceSecurity()}" /> </b:column>
+                    </b:row>
+
+                    <b:row>
+                        
+                        <b:column style="margin-bottom: 5px " > <label class="input-group-addon" 
+                                                                       style="text-align: left" >Threads</label> </b:column>
+                        <b:column><h:outputText class="form-control"  
+                                                id="selectedServiceNbThreads" 
+                                                style="background: lightgray; font-weight: bold;"
+                                                value="#{serviceSelector.getSelectedServiceMaxThreads()}" /> </b:column>
+                    </b:row>
+
+                    <b:row>
+                        
+                        <b:column style="margin-bottom: 5px" > <label class="input-group-addon"
+                                                                      style="text-align: left" >Accept </label> </b:column>
+                        
+                        <b:column>
+                            
+                            <b:form prependId="false">
+                                
+                                <b:selectOneMenu value="#{serviceDetails.acceptItem}" 
+                                                 required="true" 
+                                                 onchange="#{serviceDetails.updateCipher()}" >
+                                    
+                                    <f:selectItems value="#{serviceSelector.selectedServiceAccepts}" 
+                                                   var="selectedAcceptItem" 
+                                                   itemValue="#{selectedAcceptItem}" />
+                                    
+                                    <f:ajax event="change" 
+                                            render="@this 
+                                                    TemplateId
+                                                    keepIDForm:keepID 
+                                                    CipherItemsId 
+                                                    scriptID " />
+                                </b:selectOneMenu>
+                                
+                            </b:form>
+                            
+                        </b:column>
+                        
+                    </b:row>
+
+                    <b:row>
+                        
+                        <b:column style="margin-bottom: 5px" > <label class="input-group-addon"
+                                                                      style="text-align: left" >Cipher</label> </b:column>
+                        <b:column>
+                            
+                            <b:form  prependId="false" id="CipherItemsId" >
+                                
+                                <b:selectOneMenu   value="#{serviceDetails.cipherItem}" 
+                                                   disabled="#{ not serviceDetails.acceptItem.contains('crypt') }" 
+                                                   required="true" onchange="#{serviceDetails.updateTemplate()}" >
+                                    <f:selectItems value="#{serviceSelector.selectedServiceCiphers}"  />
+                                    
+                                    <f:ajax event="change" render=" @this
+                                                                    tab_0:selectedServiceScript
+                                                                    tab_2:jaxyClientScript
+                                                                    tab_1:selectedServiceScriptCryptor "/>
+                                </b:selectOneMenu>
+                                
+                            </b:form>
+                            
+                        </b:column>
+                        
+                    </b:row>
+
+                    <b:row>
+                        
+                        <b:column style="margin-bottom: 5px"> <label class="input-group-addon" 
+                                                                     style="text-align: left" >Template</label> </b:column>
+                        <b:column> 
+                            
+                            <b:form  prependId="false" id="TemplateId" >
+                                <b:inputTextarea class="form-control"
+                                                 id="selectedServiceTemplate" 
+                                                 value="#{serviceSelector.getSelectedServiceTemplate()}" 
+                                                 readonly="true" 
+                                                 rendered="#{ serviceDetails.acceptItem.contains('template') }"
+                                                 style="overflow:hidden ; 
+                                                 resize: none;" 
+                                                 rows="#{serviceSelector.getSelectedServiceTotalLinesInTemplate() }" /> 
+                            </b:form>
+                            
+                        </b:column>
+                        
+                    </b:row>
+
+                </b:panelGrid>
+
+                <br />
+
+                <b:panelGrid columns="2" colSpans="2,10" >
+
+                    <h:outputText style=" font-weight:bold; font-size: 15px; " 
+                                  value="#{ serviceSelector.getSelectedServiceSecurity().toLowerCase() eq 
+                                            'sso' ? 'KeyCloak Server :' : '' } " />
+                    <h:form>
+                        <h:commandLink style=" font-weight:bold; font-size: 15px; color: blue "
+                                       value="#{serviceSelector.getKeyCloakUrlForSelectedService()}" 
+                                       onclick="#" />
+                    </h:form>
+
+                </b:panelGrid>
+
+                <br />
+
+            </b:panel>
+
+            <b:panel style="background: lightblue" >
+
+            <b:form  prependId="false" id="formExpCalculator" >
+
+                <b:panelGrid columns="5" colSpans="2,3,3,2,2" >
+
+                    <b:row>
+                        
+                        <b:column style="margin-bottom: 5px " > <label class="input-group-addon" 
+                                                                       style="text-align: left">Filters</label> </b:column>
+                        <b:column>
+                            
+                            <b:selectOneMenu  id="selectedFilterID" 
+                                              value="#{serviceDetails.selectedFilter}" 
+                                              onchange="#{serviceDetails.updateFilters()}"
+                                              requiredMessage="Select Filter !" 
+                                              required="#{empty param['skipvalidation']}"
+                                              disabled="#{serviceDetails.disableFilterSelection()}" >
+                                
+                                <f:selectItem  itemValue="" itemLabel="--select--" noSelectionOption="true" />
+                                
+                                <f:selectItems value="#{serviceSelector.selectedServiceFilters}" />
+                                
+                                <f:ajax event="change" render=" @this selectedExpressionID" />
+                                  
+                            </b:selectOneMenu>
+                            
+                        </b:column>
+                        
+                        <b:column style="margin-bottom: 3px">
+                            
+                            <b:message id="messagesFilterID"  
+                                       showDetail="true"  
+                                       for="formExpCalculator:selectedFilterID" />
+                            
+                        </b:column>
+
+                    </b:row>
+
+                    <b:row>
+                        <b:column style="margin-bottom: 5px" > <label class="input-group-addon" 
+                                                                      style="text-align: left">Expression</label> </b:column>
+                        <b:column>
+                            
+                            <b:selectOneMenu id="selectedExpressionID"  
+                                             value="#{serviceDetails.selectedExpression}" 
+                                             requiredMessage="Select Expression !" 
+                                             required="#{empty param['skipvalidation']}" 
+                                             disabled="#{serviceDetails.disableSelectionForExpressionAnsValueAndBottom()}" >
+                                
+                                <f:selectItem  itemValue="" itemLabel="--select--" noSelectionOption="true" />
+                                
+                                <f:selectItems value="#{serviceDetails.expressions}"  />
+                                
+                            </b:selectOneMenu>
+                            
+                        </b:column>
+                        
+                        <b:column>
+                            
+                            <b:message id="messagesExpressionID" 
+                                       showDetail="true"  
+                                       for="formExpCalculator:selectedExpressionID" />
+                            
+                        </b:column>
+                        
+                    </b:row>
+
+                    <b:row>
+                        
+                        <b:column style="margin-bottom: 5px" > 
+                            <label class="input-group-addon" 
+                                   style="text-align: left" >Value</label> 
+                        </b:column>
+                        
+                        <b:column>
+                            
+                            <b:inputText class="form-control" 
+                                         id="selectedServiceValueExpressionInputText"
+                                         value="#{serviceDetails.selectedValue}" 
+                                         required="true" 
+                                         disabled="#{serviceDetails.disableSelectionForExpressionAnsValueAndBottom()}"
+                                         requiredMessage=" Enter Value !" >
+                                
+                                <f:validateLength minimum="1" />
+                                
+                            </b:inputText> 
+                            
+                        </b:column>
+                        
+                        <b:column>
+                            
+                            <b:message id="messagesValueID" showDetail="true" 
+                                       for="formExpCalculator:selectedServiceValueExpressionInputText" />
+                            
+                        </b:column>
+                        
+                    </b:row>
+
+                    <b:row>
+                        
+                        <b:column style="margin-bottom: 5px" >
+
+                            <b:commandButton id="ValidateButtonID" class="btn btn-primary"
+                                             ajax="true" 
+                                             value=" Submit Filter "
+                                             large-screen="full-width"
+                                             action="#{serviceDetails.calculateExpression()}"
+                                             disabled="#{serviceDetails.disableSelectionForExpressionAnsValueAndBottom()}"
+                                             update="@form 
+                                                     tab_0:selectedServiceScript
+                                                     tab_2:jaxyClientScript 
+                                                     formExpCalculator:selectedFilterID" 
+                                             oncomplete=" timeOut('messagesValueID')      ;
+                                                          timeOut('messagesExpressionID') ; 
+                                                          timeOut('messagesFilterID')     ;
+                                                          timeOut('messagesNotification') ; " >
+                                
+                                <f:param name="skipvalidation" value="" />
+                                
+                            </b:commandButton>
+
+                        </b:column>
+                        
+                        <b:column style="margin-bottom: 5px " >
+                            
+                            <b:commandButton id="ChainButtonID" 
+                                             class="btn btn-primary"
+                                             actionListener="#{serviceDetails.updateRequirementValidation()}"
+                                             disabled="#{ serviceDetails.disabledChangeFilerButtom  or
+                                                          serviceDetails.disableSelectionForExpressionAnsValueAndBottom() }"
+                                             update="@form" 
+                                             immediate="true"
+                                             ajax="true" 
+                                             value="Change Filter" 
+                                             large-screen="full-width" >
+                                
+                                <f:param name="skipvalidation" value="1" />
+                                
+                            </b:commandButton>
+                            
+                        </b:column>
+
+                    </b:row>
+
+                    <b:row>
+                        <b:column style="margin-bottom: 5px " >
+
+                            <b:commandButton id="UndoButtonID" class="btn btn-primary btn-block"
+                                             ajax="true"   
+                                             disabled="#{ serviceDetails.isEmptyListExpression() or 
+                                                          serviceDetails.disableSelectionForExpressionAnsValueAndBottom() }"
+                                             value="Reset Filters"
+                                             update=" ValidateButtonID 
+                                                      ChainButtonID 
+                                                      UndoButtonID 
+                                                      messagesNotification 
+                                                      tab_0:selectedServiceScript 
+                                                      tab_2:jaxyClientScript
+                                                      formExpCalculator:selectedExpressionID
+                                                      formExpCalculator:selectedFilterID " 
+                                             immediate="true"
+                                             action="#{serviceDetails.undoLastFilter()}"
+                                             large-screen="full-width"
+                                             oncomplete="timeOut('messagesNotification');"
+                                             />
+                        </b:column>
+
+                        <b:column style="margin-bottom: 5px " >
+                            
+                            <b:messages id="messagesNotification"
+                                        severity="warn"
+                                        showDetail="true" 
+                                        tooltipDelay="500"
+                                        style=" margin-bottom:0px ; margin-top:0px; height:33px; 
+                                        padding-left:20px; padding:10px " 
+                                        tooltip-delay-hide="200"  />
+                            
+                        </b:column>
+                        
+                    </b:row>
+
+                </b:panelGrid>
+
+            </b:form>
+
+
+            <b:panelGrid columns="5" colSpans="2,2,2,3,3" style="">
+
+                <b:row>
+                    
+                    <b:column style="margin-bottom: 5px" > <label class="input-group-addon"
+                                                                  style="text-align: left" >Keep</label> </b:column>
+                                                                  
+                    <b:column col-md="0" span="0" offset="0" styleClass="col-md-0"  >
+                        
+                        <h:form prependId="false"  id="keepIDForm">
+                            
+                            <b:selectMultiMenu nonSelectedText="--Keep Result-- "
+                                               small-screen="full" 
+                                               ajax="true"  process="@this"
+                                               medium-screen="full" 
+                                               large-screen="full"
+                                               update="tab_0:selectedServiceScript
+                                                       tab_2:jaxyClientScript "
+                                               value="#{serviceDetails.keep}" 
+                                               button-width="150"
+                                               disabled="#{ serviceDetails.acceptItem.contains('template') or 
+                                                            serviceDetails.disableSelectionForExpressionAnsValueAndBottom()}"
+                                               id="keepID"  >
+                                
+                                <f:selectItems value="#{serviceSelector.selectedServiceFilters}"/>
+                                
+                            </b:selectMultiMenu>
+                        </h:form>
+                        
+                    </b:column>
+
+                </b:row>
+
+            </b:panelGrid>
+            
+            </b:panel>
+                
+            <b:row id="scriptID">
+
+                <b:tabView activeIndex="0" id="tabv" >
+                    
+                    <b:tab title="Client Script" id="tab_0" style="background: lightgray" >
+                        
+                        <b:panelGrid columns="2" colSpans="10,2" >
+                            
+                            <h:form>
+
+                                <b:commandLink  class="form-control" id="scriptDownloaderId" 
+                                                style="margin-bottom: 1px"
+                                                onclick="openOnSamePage('input_tab_0:selectedServiceScript', 'jaxy_client.sh')"
+                                                value=" Click here to download : jaxy_client.sh " />
+                            </h:form>
+
+                            <h:form id="checkerForm1" >
+
+                            <b:commandButton class="font-weight-bold display-3 
+                                                    btn-warning btn 
+                                                    btn-outline-primary 
+                                                    btn-block"
+                                             id="validat1"
+                                             ajax="true"
+                                             update="@none"
+                                             actionListener="#{serviceDetails.displayMessageCopy()}"
+                                             onclick="copy ( 'input_tab_0:selectedServiceScript',
+                                                             'input_tab_1:selectedServiceScriptCryptor',
+                                                             'input_tab_2:jaxyClientScript' );"
+                                             value="Copy to ClipBoard" >
+                                <f:ajax event="click" execute="@form" render="growlMsgCpy0" />
+
+                            </b:commandButton>
+
+                            <b:growl id="growlMsgCpy0"  
+                                     placement-from="bottom"
+                                     show-detail="true"
+                                     show-summary="false" 
+                                     allowDismiss="true"
+                                     severity="info"
+                                     delay="5000" escape="true" />
+
+                            </h:form>
+
+                        </b:panelGrid>
+                        
+                        <b:inputTextarea class="form-control"
+                                         id="selectedServiceScript" 
+                                         value="#{serviceDetails.script}" 
+                                         readonly="true" 
+                                         style="overflow:hidden; margin-bottom: 5px; background: lightgray " 
+                                         rows="#{serviceDetails.getSelectedServiceTotalLinesInScript() }" />
+                    </b:tab>
+                    
+                    <b:tab title="Decryptor Script " 
+                           id="tab_1" 
+                           rendered="#{serviceDetails.acceptItem.contains('crypt') }" 
+                           style="background: lightgreen">
+                        
+                        <b:panelGrid columns="2" colSpans="10,2" >
+                            
+                            <h:form>
+
+                                <b:commandLink  class="form-control" id="decrypterScriptDownloaderId" 
+                                                style="margin-bottom: 1px"
+                                                onclick="openOnSamePage('input_tab_1:selectedServiceScriptCryptor', 'jaxy_decryptor.sh')"
+                                                value=" Click here to download : jaxy_decryptor.sh " />
+                            </h:form>
+
+                            <h:form id="checkerForm2" >
+
+                            <b:commandButton class="font-weight-bold display-3 
+                                                    btn-warning btn 
+                                                    btn-outline-primary 
+                                                    btn-block"
+                                             id="validat2"
+                                             ajax="true"
+                                             update="@none"
+                                             action="#{serviceDetails.displayMessageCopy()}"
+                                             onclick="copy ( 'input_tab_0:selectedServiceScript',
+                                                             'input_tab_1:selectedServiceScriptCryptor',
+                                                             'input_tab_2:jaxyClientScript' );"
+                                             value="Copy to ClipBoard" >
+                                
+                                <f:ajax  event="click" execute="@form" render="growlMsgCpy1"  />
+
+                            </b:commandButton>
+
+                            <b:growl id="growlMsgCpy1"  
+                                     placement-from="bottom"
+                                     show-detail="true"
+                                     show-summary="false" 
+                                     allowDismiss="true"
+                                     severity="info"
+                                     delay="5000" escape="true" />
+
+                            </h:form>
+
+                        </b:panelGrid>
+                        
+                        
+                        <b:inputTextarea class="form-control"
+                                         id="selectedServiceScriptCryptor" 
+                                         value="#{serviceDetails.genScriptDecryptor()}" 
+                                         readonly="true"
+                                         style="overflow:hidden; margin-bottom: 5px; background: lightgreen " 
+                                         rows="#{serviceDetails.getSelectedServiceTotalLinesInScriptDecryptor() }" />
+                        
+                    </b:tab>
+                    
+                    <b:tab title="Java Client " 
+                           id="tab_2" 
+                           style="background: #ade6ba ">
+                        
+                        <b:panelGrid columns="2" colSpans="3,2,5,2" >
+                            
+                            <h:form>
+                                
+                                <b:commandLink  class="form-control"
+                                                id="jarClientCopyerId" 
+                                                onclick="openOnSamePage('input_tab_2:jaxyClientScript', 'jaxy_conf.txt')"
+                                                style="margin-bottom: 1px"
+                                                value=" Download : jaxy_conf.txt "  >
+                                </b:commandLink>
+                                
+                             
+                            </h:form>
+                            
+                            <b:row> </b:row>
+                            
+                            <h:form id="checkerForm3" >
+
+                                    
+                            <b:commandButton class="font-weight-bold display-3 
+                                                    btn-danger btn 
+                                                    btn-outline-primary 
+                                                    btn-block"
+                                             id="validat3"
+                                             action="#{serviceDetails.download()}"
+                                             value="Download jaxyClient.jar ( for all services )" />
+                            </h:form>
+                            
+                            <h:form id="checkerForm4" >
+                                
+                            <b:commandButton class="font-weight-bold display-3 
+                                                    btn-warning btn 
+                                                    btn-outline-primary 
+                                                    btn-block"
+                                              id="validat4"
+                                              ajax="true"
+                                              update="@none"
+                                              actionListener="#{serviceDetails.displayMessageCopy()}"
+                                              onclick="copy ( 'input_tab_0:selectedServiceScript',
+                                                              'input_tab_1:selectedServiceScriptCryptor',
+                                                              'input_tab_2:jaxyClientScript' );"
+                                              value="Copy to ClipBoard" >
+                                  <f:ajax  execute="@form" render="growlMsgCpy2"  event="click" />
+                                  
+                             </b:commandButton>
+                            
+                            
+                             <b:growl id="growlMsgCpy2"  
+                                      placement-from="bottom"
+                                      show-detail="true"
+                                      show-summary="false" 
+                                      allowDismiss="true"
+                                      severity="info"
+                                      delay="5000"
+                                      escape="true" />
+                             
+                            </h:form>
+                            
+                        </b:panelGrid>
+                        
+                        <b:inputTextarea class="form-control"
+                                         id="jaxyClientScript" 
+                                         value="#{serviceDetails.genClientConfig()}"
+                                         readonly="true"
+                                         style="overflow:hidden; margin-bottom: 5px; background: #ade6ba " 
+                                         rows="#{serviceDetails.getClientConfTotalLines() }" />
+                        
+                    </b:tab>
+                    
+                </b:tabView>
+
+            </b:row>
+
+        </b:container>
+
+    </h:body>
+
+
+</html>

@@ -1,0 +1,150 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../../bower_components/px-card/px-card.html">
+<link rel="import" href="../../bower_components/st-core/st-entity-datastreams.html">
+<link rel="import" href="../../bower_components/st-core/st-entity-observedproperty.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="../controls/st-table.html">
+<link rel="import" href="../controls/st-entity-details.html">
+
+<link rel="import" href="../../css/globalstyle.html" />
+<link rel="import" href="observedproperty-view-styles.html" />
+
+<dom-module id="observedproperty-view">
+    <template>       
+        
+        <style>       
+            :host {
+                --px-card-background-color: #111F27;
+            }
+
+            body {
+                background-color: #111F27;
+            }
+
+            .card {
+                padding-top: 20px;
+                min-width: 400px;
+                padding-bottom: 2rem;
+            }
+
+        </style>   
+        <style include="location-view-styles"></style> 
+        <style include="globalstyle"></style> 
+        <div class="flex flex--row flex--spaced flex--wrap flex--top ">
+            <px-card class="card flex__item flex__item--top" header-text="OBSERVEDPROPERTY({{observedpropertyid}})" icon="icons:list">  
+                <st-entity-details details="{{observedpropertydetails}}"></st-entity-details>
+            </px-card>     
+        </div>   
+
+        <px-card class="card" header-text="ObservedProperty({{observedpropertyid}})/Datastreams" icon="icons:timeline">
+            <st-table 
+                id="table" 
+                arraytype="datastreams" 
+                count="{{datastreamscount}}" 
+                tabledata="[[datastreams]]" 
+                top="{{datastreamstop}}" 
+                skip="{{datastreamsskip}}" 
+                on-request="_tableDataRequestDatastreams"
+                on-px-table-row-tap="_rowSelectedDatastream" >
+            <st-table>
+        </px-card> 
+          
+        <st-entity-observedproperty id="entity" rawreceived="{{observedproperty}}" gid="{{observedpropertyid}}"></st-entity-observedproperty>
+        <st-entity-datastreams 
+            id="entitydatastreams" 
+            observedpropertyid="[[observedpropertyid]]" 
+            collection="{{datastreams}}" 
+            odata="[[datastreamsodata]]" 
+            count="{{datastreamscount}}">
+        </st-entity-datastreams>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'observedproperty-view',
+            properties: {
+                observedproperty: {
+                    type: Object,
+                    notify: true,
+                    observer: '_observedpropertySet'                 
+                },     
+                observedpropertyid: {
+                    type: String,
+                    notify: true
+                },    
+                observedpropertydetails: {
+                    type: Array,
+                    notify: true,
+                    value: []
+                },
+                datastreams: {
+                    type: Array,
+                    notify: true
+                },
+                datastreamsodata: {
+                    type: Object,
+                    value: function() { 
+                        return { skip: 0, count: true, top: 10 }; 
+                    } 
+                },
+                datastreamscount: {
+                    type: Number,
+                    notify: true
+                },
+                datastreamstop: {
+                    type: Number,
+                    value: 10,
+                    notify: true
+                },
+                datastreamsskip: {
+                    type: Number,
+                    value: 0,
+                    notify: true
+                },
+                selecteddatastream: {
+                    type: Object,
+                    notify: true
+                }
+            },
+            _getID(item){
+                return item['@iot.id'];
+            },
+            _observedpropertySet(observedproperty){
+                if(!observedproperty){
+                    return;
+                }
+                
+                // create detail info for entity-detail-view
+                this.observedpropertyid = this._getID(observedproperty);
+                this.observedpropertydetails = [
+                    { label: "id", value: this._getID(observedproperty), write: false, type: "text" },
+                    { label: "name", value: observedproperty.name, write: false, type: "text" },
+                    { label: "description", value: observedproperty.description, write: false, type: "text" },
+                    { label: "definition", value: observedproperty.definition, write: false, type: "text" }                    
+                ]
+
+                // get related entities
+                this.$.entitydatastreams.get();
+            },
+            _tableDataRequestDatastreams(event) {
+                this.datastreamsodata.count = false;
+                this.datastreamsodata.top = event.detail.top;
+                this.datastreamsodata.skip = event.detail.skip;
+                this.$.entitydatastreams.get();
+            },            
+            _rowSelectedDatastream(evt) {
+                this.selecteddatastream = null;                
+                this.selecteddatastream = evt.srcElement;
+            },
+            load(id){
+                if(!this.observedproperty){
+                    this.observedpropertyid = id;
+                    this.$.entity.get();
+                }
+            }
+        });
+    </script>
+</dom-module>

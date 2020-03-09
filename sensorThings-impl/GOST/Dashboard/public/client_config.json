@@ -1,0 +1,10 @@
+{
+    "endpoint": "http://localhost:8080/FROST-Server/v1.0",
+    "maxEntities": 20,
+    "mqtt": {
+        "host": "mosquitto",
+        "port": 9002,
+        "path": "",
+        "ssl": true
+    }
+}

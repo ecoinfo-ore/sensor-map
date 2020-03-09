@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <!-- INTERFACE -->
+
+    <cc:interface>
+        <cc:attribute name="data"/>
+        <cc:attribute name="select" required="true" />
+        <cc:attribute name="updateDetails"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    
+    <cc:implementation>
+
+        <style>
+            table tr.odd {
+                background: lightblue ;
+            }
+
+            table tr.even {
+                background: lightcyan ;
+            }
+        </style>
+        
+        <b:panel look="primary" title="Services" collapsible="false">
+
+            <h:form>
+
+                <b:dataTable value="#{cc.attrs.data}" 
+                             var="service"
+                             onselect="ajax:cc.attrs.select.selectedService(service)" 
+                             select="true" 
+                             selectionMode="single" 
+                             class="table table-hover" 
+                             paginated="false" 
+                             info="false" 
+                             widgetVar="tableWV"
+                             striped="false" 
+                             searching="false" 
+                             row-highlight="true" 
+                             rowStyleClass="#{ service.serviceName eq 'time' or 
+                                               service.serviceName eq 'infoServices' or                                                            
+                                               service.serviceName eq 'script_gen'  ? 'text-primary' : null } "
+                             update="#{cc.attrs.updateDetails}" >
+
+                    <b:dataTableColumn value="#{service.serviceName}" label="Service Name" class="form-signin-heading" />
+
+                </b:dataTable>
+
+            </h:form>
+
+            <br />
+
+        </b:panel>
+
+    </cc:implementation>
+    
+</html>

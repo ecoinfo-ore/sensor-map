@@ -1,0 +1,25 @@
+{
+    "entrypoint": "public/index.html",
+    "shell": "public/elements/seed-app/seed-app.html",
+    "fragments": [      
+      "public/elements/views/map-view.html",
+      "public/elements/views/widget-view.html",
+      "public/elements/views/entity-browser-view.html",
+      "public/elements/views/thing-view.html",
+      "public/elements/views/location-view.html",
+      "public/elements/views/historicallocation-view.html",
+      "public/elements/views/datastream-view.html"
+    ],
+    "sources": [      
+      "public/elements/**/*",
+      "public/index*",
+      "public/seed*"
+    ],
+    "builds": [
+      {
+        "name": "default",
+        "js": {"compile": true, "minify": true},
+        "bundle": true
+      }
+    ]
+  }

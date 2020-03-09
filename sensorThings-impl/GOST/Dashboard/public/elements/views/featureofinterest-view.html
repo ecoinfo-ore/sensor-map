@@ -1,0 +1,205 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../../bower_components/px-card/px-card.html">
+<link rel="import" href="../../bower_components/st-core/st-entity-observations.html">
+<link rel="import" href="../../bower_components/st-core/st-entity-featureofinterest.html">
+<link rel="import" href="../../bower_components/px-map/px-map.html">
+<link rel="import" href="../../bower_components/px-map/px-map-tile-layer.html">
+<link rel="import" href="../../bower_components/px-map/px-map-layer-geojson.html">
+<link rel="import" href="../../bower_components/px-map/px-map-control-zoom.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/maps-icons.html">
+
+<link rel="import" href="../controls/st-table.html">
+<link rel="import" href="../controls/st-entity-details.html">
+
+<link rel="import" href="../../css/globalstyle.html" />
+<link rel="import" href="featureofinterest-view-styles.html" />
+
+<dom-module id="featureofinterest-view">
+    <template>       
+        
+        <style>       
+            :host {
+                --px-card-background-color: #111F27;
+            }
+
+            body {
+                background-color: #111F27;
+            }
+
+            .card {
+                padding-top: 20px;
+                min-width: 400px;
+                padding-bottom: 2rem;
+            }
+
+        </style>   
+        <style include="location-view-styles"></style> 
+        <style include="globalstyle"></style> 
+
+        <div class="flex flex--row flex--spaced flex--wrap flex--top ">
+                              
+            <px-card class="card flex__item flex__item--top" header-text="FeaturesOfInterest({{featureofinterestid}})" icon="maps:beenhere">  
+                <st-entity-details details="{{featureofinterestdetails}}"></st-entity-details>
+            </px-card>   
+            <px-card class="card flex__item flex__item--top" header-text="Map" icon="maps:map">
+                <div class="flex flex--row flex--spaced flex--wrap flex--top ">
+                    <div class="flex__item flex__item--top" >
+                        <div id="mapwrapper" style="height:400px; width:100%; display:flex" >                
+                            <px-map id="map" zoom="0" lat="0" lng="0" attributionPrefix="" disableAttribution flex-to-size disable-scroll-zoom disable-dragging >
+                                <px-map-control-zoom position='bottomright'></px-map-control-zoom>
+                                <px-map-tile-layer
+                                    url='http://tile.stamen.com/toner/{z}/{x}/{y}.png'>
+                                </px-map-tile-layer>
+                                <px-map-layer-geojson 
+                                    data="[[mapdatafoi]]" 
+                                    feature-style='{"color":"#FA39DD", "fillColor": "#FA39DD", "weight": 8, "opacity": 0.8 , "fillOpacity": 0.8}' 
+                                    show-feature-properties>
+                                </px-map-layer-geojson>
+                            </px-map>
+                        </div>
+                    </div>
+                </div>
+            </px-card>   
+        </div>   
+
+        <px-card class="card" header-text="FeaturesOfInterest({{featureofinterestid}})/Observations" icon="icons:visibility">
+            <st-table 
+                id="table" 
+                arraytype="observations" 
+                count="{{observationscount}}" 
+                tabledata="[[observations]]" 
+                top="{{observationstop}}" 
+                skip="{{observationsskip}}" 
+                on-request="_tableDataRequestObservations"
+                on-px-table-row-tap="_rowSelectedObservation" >
+            <st-table>
+        </px-card> 
+          
+        <st-entity-featureofinterest id="entity" rawreceived="{{featureofinterest}}" gid="{{featureofinterestid}}"></st-entity-featureofinterest>
+        <st-entity-observations 
+            id="entityobservations" 
+            featureofinterestid="[[featureofinterestid]]" 
+            collection="{{observations}}" 
+            odata="[[observationsodata]]" 
+            count="{{observationscount}}">
+        </st-entity-datastreams>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'featureofinterest-view',
+            properties: {
+                featureofinterest: {
+                    type: Object,
+                    notify: true,
+                    observer: '_featureofinterestSet'                 
+                },     
+                featureofinterestid: {
+                    type: String,
+                    notify: true
+                },    
+                featureofinterestdetails: {
+                    type: Array,
+                    notify: true,
+                    value: []
+                },
+                observations: {
+                    type: Array,
+                    notify: true
+                },            
+                mapdatafoi: {
+                    type: Object,
+                    notify: true
+                },
+                observationsodata: {
+                    type: Object,
+                    value: function() { 
+                        return { skip: 0, count: true, top: 10 }; 
+                    } 
+                },
+                observationscount: {
+                    type: Number,
+                    notify: true
+                },
+                observationsstop: {
+                    type: Number,
+                    value: 10,
+                    notify: true
+                },
+                observationsskip: {
+                    type: Number,
+                    value: 0,
+                    notify: true
+                },
+                selectedobservation: {
+                    type: Object,
+                    notify: true
+                }
+            },
+            _getID(item){
+                return item['@iot.id'];
+            },
+            _featureofinterestSet(featureofinterest){
+                if(!featureofinterest){
+                    return;
+                }
+                
+                // create detail info for entity-detail-view
+                this.featureofinterestid = this._getID(featureofinterest);
+                this.featureofinterestdetails = [
+                    { label: "id", value: this._getID(featureofinterest), write: false, type: "text" },
+                    { label: "name", value: featureofinterest.name, write: false, type: "text" },
+                    { label: "description", value: featureofinterest.description, write: false, type: "text" },
+                    { label: "encoding type", value: featureofinterest.encodingType, write: false, type: "text" },
+                    { label: "feature", value: featureofinterest.feature, write: false, type: "object" },
+                ]
+
+                // show location on map
+                this._setLocationOnMap(featureofinterest);
+                this._mapInit(); 
+
+                // get related entities
+                this.$.entityobservations.get();
+            },
+            _setLocationOnMap(featureofinterest){
+                fc = {
+                    type: "FeatureCollection",
+                    features: [{
+                        type: "Feature",
+                        id: location['@iot.id'],
+                        properties: {},
+                        geometry: featureofinterest.feature
+                    }]
+                };
+
+                this.mapdatafoi = fc;                
+            },
+            _mapInit(){
+                coordinates = this.featureofinterest.feature.coordinates;
+                this.$.map.lng = coordinates[0];
+                this.$.map.lat = coordinates[1];
+                this.$.map.zoom = 16;
+                this.$.map.invalidateSize();
+            },
+            _tableDataRequestObservations(event) {
+                this.observationsodata.count = false;
+                this.observationsodata.top = event.detail.top;
+                this.observationsodata.skip = event.detail.skip;
+                this.$.entityobservations.get();
+            },            
+            _rowSelectedObservation(evt) {
+                this.selectedobservation = null;                
+                this.selectedobservation = evt.srcElement;
+            },
+            load(id){
+                if(!this.senosr){
+                    this.sensorid = id;
+                    this.$.entity.get();
+                }
+            }
+        });
+    </script>
+</dom-module>

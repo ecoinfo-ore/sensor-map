@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <!-- INTERFACE -->
+    
+    <cc:interface>
+        <cc:attribute name="idForm" required="true" /> 
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    
+    <cc:implementation>
+        
+        Service Description 
+
+        <ul>
+            
+            <h:form prependId="false" id="#{cc.attrs.idForm}" >
+
+                <br /> 
+
+                <b:panelGrid columns="2" colSpans="3,9" >
+
+                    <label class="input-group-addon"  style="text-align: left" >Service : </label>
+                    <h:outputText class="form-control" 
+                                  style="margin-bottom: 5px" 
+                                  id="selectedServiceName" 
+                                  value="#{serviceSelector.getSelectedServiceName()}" />
+
+                    <label class="input-group-addon"  style="text-align: left">Security : </label>
+                    <h:outputText class="form-control" 
+                                  style="margin-bottom: 5px" 
+                                  id="selectedServiceSecurity" 
+                                  value="#{serviceSelector.getSelectedServiceSecurity()}" />
+
+                    <label class="input-group-addon"  style="text-align: left">Accept : </label>
+                    <h:outputText class="form-control" 
+                                  style="margin-bottom: 5px; height:47px"
+                                  id="selectedServiceAccept" 
+                                  value="#{serviceSelector.getSelectedServiceAcceptsAsString()}" />
+
+                    <label class="input-group-addon"  style="text-align: left">Ciphers : </label>
+                    <b:inputTextarea class="form-control" 
+                                     style="margin-bottom: 5px;" 
+                                     id="selectedServiceCiphers" 
+                                     value="#{serviceSelector.getSelectedServiceCiphersAsString()}"
+                                     rows="3" 
+                                     readonly="true" />
+
+                    <label class="input-group-addon" style="text-align: left">MaxThreads : </label>
+                    <h:outputText class="form-control" 
+                                  style="margin-bottom: 5px" 
+                                  id="selectedServiceThreads" 
+                                  value="#{serviceSelector.getSelectedServiceMaxThreads()}" />
+
+                    <label class="input-group-addon" style="text-align: left">URI : </label>
+                    <h:outputText class="form-control btn-success" 
+                                  style="width: 600px ; 
+                                         display:table-cell;
+                                         word-break: break-all ;
+                                         vertical-align: middle;
+                                         border: 2px solid; "
+                                  id="selectedServiceUri" 
+                                  value="#{serviceSelector.getSelectedServiceUriTemplate()}" />
+
+                    <label class="input-group-addon" style="text-align: left">Fields : </label>
+                    <h:inputTextarea class="form-control"
+                                     id="selectedServiceArgs" 
+                                     value="#{serviceSelector.getSelectedServiceParamsAsString()}" 
+                                     readonly="true" style="overflow:hidden; margin-bottom: 5px ; 
+                                     resize: none;  margin-top: 5px " rows="4" />
+
+                    <label class="input-group-addon" style="text-align: left">Template : </label>
+                    <b:inputTextarea class="form-control"
+                                     id="selectedServiceTemplate" 
+                                     value="#{serviceSelector.getSelectedServiceTemplate()}" 
+                                     readonly="true" 
+                                     style="overflow:hidden; margin-bottom: 5px ; 
+                                     resize: none;" 
+                                     rows="#{serviceSelector.getSelectedServiceTotalLinesInTemplate() }" />
+                </b:panelGrid>
+
+            </h:form>
+
+        </ul>
+
+        <h:form prependId="false" >
+
+            <b:panelGrid columns="2"  colSpans="3,9" id="panGrpDet" >
+
+                <b:commandButton class="btn btn-primary" 
+                                 icon="log-in"
+                                 actionListener="#{serviceDetails.initData()}"
+                                 action="#{serviceSelector.redirectToDetails('details?faces-redirect=true')}" 
+                                 ajax="true"
+                                 update="messagesRedirection"
+                                 oncomplete="setTimeout(function() { 
+                                                 $('##{cc.clientId}\\\\:messagesRedirection').delay(200)
+                                                                                             .fadeOut( 2500, function() { 
+                                                                                                      $(this).html(''); });
+                                                                                             }, 900 ) ; "
+                                 value="Details" />
+
+                    <b:messages id="messagesRedirection" 
+                                 showDetail="true"
+                                 tooltipDelay="500"
+                                 tooltip-delay-hide="200" 
+                                 style="padding:7px;margin-top:0px;;margin-bottom:0px;" />
+            </b:panelGrid>
+
+        </h:form>
+
+    </cc:implementation>
+</html>

@@ -1,0 +1,8 @@
+/src/jaxy/target/
+/src/add-on/JaxyClientUi/target/
+/src/dependencies/05_jaxyClient/target/
+/src/dependencies/06_jaxyClient_2020/target/
+/src/dependencies/01_jaxy-api/target/
+/src/dependencies/02_jaxy-security-provider/target/
+/src/dependencies/03_jaxy-service-discovery/target/
+/src/dependencies/04_certMe/target/
