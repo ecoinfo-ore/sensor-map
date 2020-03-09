@@ -55,7 +55,7 @@ authentication : # using HTTP
 HTTP_PORT  : 8080       
 HTTPS_PORT : 8443      
 
-TRANSPORT  : HTTP  # HTTPS
+TRANSPORT  : HTTPS  # HTTPS
 
 #################################
 ### HOST CONFIG #################
