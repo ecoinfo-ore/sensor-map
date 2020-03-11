@@ -3,6 +3,7 @@
         <thead class="st-thead">
         <tr>
             <th>ID</th>
+            <th>name</th>
             <th>Description</th>
             <th>Properties</th>
             <th>Delete</th>
@@ -11,6 +12,7 @@
         <tbody>
         <tr ng-repeat="x in thingsList" >
             <td ng-click="thingClicked(x['@iot.id'])">{{x["@iot.id"]}}</td>
+            <td ng-click="thingClicked(x['@iot.id'])">{{x["name"]}}</td>
             <td ng-click="thingClicked(x['@iot.id'])">{{x["description"]}}</td>
             <td ng-click="thingClicked(x['@iot.id'])">{{x["properties"]}}</td>
             <td><div class="fa fa-remove delete-entity" ng-click="deleteThingClicked(x)"></div></td>
