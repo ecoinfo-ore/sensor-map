@@ -2,7 +2,7 @@ gostApp.controller('DatastreamsCtrl', function ($scope, $http) {
     $scope.Page.setTitle('DATASTREAMS');
     $scope.Page.setHeaderIcon(iconDatastream);
 
-    $http.get(getUrl() + "/v1.0/Datastreams").then(function (response) {
+    $http.get(getUrl() + "FROST-Server/v1.0/Datastreams").then(function (response) {
         $scope.datastreamsList = response.data.value;
     });
 
@@ -17,7 +17,7 @@ gostApp.controller('DatastreamsCtrl', function ($scope, $http) {
     };
 
      $scope.deleteDatastreamClicked = function (entity) {
-        var res = $http.delete(getUrl() + '/v1.0/Datastreams(' + entity["@iot.id"] + ')');
+        var res = $http.delete(getUrl() + 'FROST-Server/v1.0/Datastreams(' + entity["@iot.id"] + ')');
         res.success(function(data, status, headers, config) {
             var index = $scope.datastreamsList.indexOf(entity);
             $scope.datastreamsList.splice(index, 1);

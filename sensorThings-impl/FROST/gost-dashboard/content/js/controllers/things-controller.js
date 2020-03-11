@@ -3,7 +3,7 @@ gostApp.controller('ThingsCtrl', function ($scope, $http) {
     $scope.Page.setTitle('THINGS');
     $scope.Page.setHeaderIcon(iconThing);
 
-    $http.get(getUrl() + "/v1.0/Things").then(function (response) {
+    $http.get(getUrl() + "FROST-Server/v1.0/Things").then(function (response) {
         $scope.thingsList = response.data.value;
     });
 
@@ -18,7 +18,8 @@ gostApp.controller('ThingsCtrl', function ($scope, $http) {
     };
 
     $scope.addNewThing = function(newThing) {
-        var res = $http.post(getUrl() + '/v1.0/Things', newThing);
+
+        var res = $http.post(getUrl() + 'FROST-Server/v1.0/Things', newThing);
         res.success(function(data, status, headers, config) {
             alert( "added: " + JSON.stringify({data: data}));
         });
@@ -28,13 +29,13 @@ gostApp.controller('ThingsCtrl', function ($scope, $http) {
     };
 
      $scope.deleteThingClicked = function (entity) {
-        var res = $http.delete(getUrl() + '/v1.0/Things(' + entity["@iot.id"] + ')');
+        var res = $http.delete(getUrl() + 'FROST-Server/v1.0/Things(' + entity["@iot.id"] + ')');
         res.success(function(data, status, headers, config) {
             var index = $scope.thingsList.indexOf(entity);
             $scope.thingsList.splice(index, 1);
         });
         res.error(function(data, status, headers, config) {
-            alert( "failure: " + JSON.stringify({data: data}));
+            alert( "failure: " + JSON.stringify({config: config}));
         });
      };
 });

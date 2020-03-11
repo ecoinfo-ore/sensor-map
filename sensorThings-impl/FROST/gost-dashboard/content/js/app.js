@@ -50,8 +50,11 @@ function getWebSocketPort() {
 
 function getUrl() {
     var path = window.location.pathname;
-    // path = path.substring(0, path.lastIndexOf('/Dashboard'));
-    return window.location.origin + path;
+    path = path.substring(0, path.lastIndexOf('/Dashboard'));
+    //alert( window.location.origin + path);
+   // return window.location.origin + path;
+   // return "http://172.28.1.2:8080/";   
+    return "http://172.28.1.2:8080/"   ;
 }
 
 var olMap;

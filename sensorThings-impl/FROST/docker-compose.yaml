@@ -1,8 +1,9 @@
-version: '2'
+version: '3'
 
 services:
-  web:
+  sensorthings:
     image: fraunhoferiosb/frost-server:latest
+    hostname: sensorthings
     environment:
       - serviceRootUrl=http://localhost:8080/FROST-Server
       - http_cors_enable=true
@@ -12,11 +13,19 @@ services:
       - persistence_db_username=sensorthings
       - persistence_db_password=ChangeMe
       - persistence_autoUpdateDatabase=true
+      - http.cors.enable=true
+      - http.cors.allowed.origins=*
+      - http.cors.allowed.headers=*
+      - http.cors.allowed.methods=HEAD,POST,GET,OPTIONS,DELETE
+      - persistence.idGenerationMode=ServerAndClientGenerated
     ports:
       - 8080:8080
       - 1883:1883
     depends_on:
       - database
+    networks:
+      sensor_net:
+        ipv4_address: 172.28.1.2
 
   database:
     image: mdillon/postgis:latest    
@@ -26,14 +35,40 @@ services:
       - POSTGRES_PASSWORD=ChangeMe
     volumes:
       - postgis_volume:/var/lib/postgresql/data
-                
+    networks:
+      sensor_net:
+        ipv4_address: 172.28.1.1
+  
+  gost-ui:
+    hostname: gost-ui
+    build:    ./gost-dashboard/
+    image:    gost-ui    
+    ports:
+      - 8181:8181
+    networks:
+      sensor_net:
+         ipv4_address: 172.28.1.5
+    depends_on:
+      - sensorthings
+      
   pgadmin-compose:
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
       PGADMIN_DEFAULT_PASSWORD: "admin"
     ports:
-      - "54321:80"
-    
+      - 54321:80
+    networks:
+      sensor_net:
+         ipv4_address: 172.28.1.4
+         
 volumes:
     postgis_volume:
+
+networks:
+  sensor_net: 
+    ipam:
+       driver: default
+       config:
+         - subnet: 172.28.0.0/16
+
