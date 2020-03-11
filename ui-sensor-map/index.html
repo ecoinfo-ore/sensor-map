@@ -42,11 +42,11 @@
 
 <textarea id="code" cols="120" rows="50" >
 
- SELECT *  FROM aircraft limit 10  ; 
+ SELECT *  FROM spatial_ref_sys limit 10  ; 
+ 
  -- SELECT pg_sleep(10);
  
  -- INSERT INTO public.aircraft( model, total_passengers, distance_km, speed_km_h, cost_euro) VALUES ('1111', 11, 11, 11, 11);
-
  
  
 -- WITH tmp_table AS ( SELECT model as mod  FROM aircraft limit 10 )
@@ -62,13 +62,13 @@
 
   <table class="my-table" >
 	<tr class="table-tr" >
-		<td class="table-td" > DB_Host <span style="padding-left:1em"> <input id="db_host"     type="text"     name="db_host"     placeholder="db_host"     style="width: 15em;background: chartreuse;padding: 0.2em;" value="localhost"></td>
-		<td class="table-td" > DB_Port <span style="padding-left:3.5em">  <input id="db_port"     type="text"     name="db_port"     placeholder="db_port"     style="width: 15em;background: chartreuse;padding: 0.2em;" value="5432"></td>
-		<td class="table-td" > Database <span style="padding-left:1em">  <input id="db_name"     type="text"     name="db_name"     placeholder="db_name"     style="width: 15em;background: chartreuse;padding: 0.2em;" value="aviation"></td>
+		<td class="table-td" > DB_Host <span style="padding-left:1em"> <input id="db_host"     type="text"     name="db_host"     placeholder="db_host"     style="width: 15em;background: chartreuse;padding: 0.2em;" value="147.100.179.208"></td>
+		<td class="table-td" > DB_Port <span style="padding-left:3.5em">  <input id="db_port"     type="text"     name="db_port"     placeholder="db_port"     style="width: 15em;background: chartreuse;padding: 0.2em;" value="5433"></td>
+		<td class="table-td" > Database <span style="padding-left:1em">  <input id="db_name"     type="text"     name="db_name"     placeholder="db_name"     style="width: 15em;background: chartreuse;padding: 0.2em;" value="donesol3_ns"></td>
 	</tr>
 	<tr class="table-tr" >
-		<td class="table-td" >DB_User <span style="padding-left:1em">  <input id="db_user"     type="text"     name="db_user"     placeholder="db_user"     style="width: 15em;background: black ; color: white;padding: 0.2em;" value="jaxy_user"></td>
-		<td class="table-td" >DB_Password <span style="padding-left:1em">  <input id="db_password" type="password" name="db_password" placeholder="db_password" style="width: 15em; background: black ; color: white; padding: 0.2em;" value="jaxy_password"></td>
+		<td class="table-td" >DB_User <span style="padding-left:1em">  <input id="db_user"     type="text"     name="db_user"     placeholder="db_user"     style="width: 15em;background: black ; color: white;padding: 0.2em;" value="ryahiaoui"></td>
+		<td class="table-td" >DB_Password <span style="padding-left:1em">  <input id="db_password" type="password" name="db_password" placeholder="db_password" style="width: 15em; background: black ; color: white; padding: 0.2em;" value="password"></td>
 		<td class="table-td" > <button style="margin-bottom: 1em; margin-bottom: 1em; margin-right: 3.5em;  background: orange;" class="button green" onclick="getHeaders()" >Get Headers</button> </td>
 	</tr>
 	
