@@ -77,7 +77,7 @@ echo "
     proxy_buffers                   32 16k;
     proxy_busy_buffers_size         64k;
       
-       # proxy_pass http://172.28.1.2:8080/FROST-Server/v1.0;
+         # proxy_pass http://172.28.1.2:8080/FROST-Server/v1.0;
 
 		if (\$request_method = 'OPTIONS') {
 		   add_header 'Access-Control-Allow-Origin' '*' ;

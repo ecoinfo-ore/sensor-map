@@ -20,15 +20,45 @@
 
 <sensor-header>
 
- <b class="hit-the-floor">Sensor-Map</b>
+ <div style=" float: left; margin-right: 1em; margin-top: 0.2em; " >
+
+  <b style=" " class="hit-the-floor">Sensor-Map</b>
  
- <div style="float: right; padding: 0.5em; margin-right: 1em; background: linear-gradient(45deg, black, transparent); margin-top: 0.5em;" >
+  <table  style="margin-top: 0.3em; float: right; margin-left: .5em; padding-right: 1em; padding-left: 1em; background: linear-gradient(45deg, black, transparent); border-radius: 2em; border: ridge; " >
+           
+           <tr class="" >
+                
+               <td class="" > <input type="file" id="file" name="file" class="button green" 
+                                     style="background: darkgray; margin:0.7em; display: grid; font: 11px/1em 'Droid Sans', sans-serif; color: #9e00ff !important;"       
+                                     onchange="handleFileSelect(this.files);" onclick="this.value=null;" /> </td>
+                                     
+               <td class="" > <button class="button green" style="background: #ca2929; color: #ffffff !important;"  onclick="download()">Export Mapping</button></td>
+              
+            </tr>
+            
+   </table>
+</div> 
+                                
+                                
+ <div style="display:flex; place-content: center; padding: 0.6em; margin-right: 1em; background: linear-gradient(45deg, black, transparent); margin-top: 0.7em; margin-bottom: 0.4em; border: ridge; " >
   
-   <span style="color:white"> Login</span>  <span style="padding-left:1em"> <input id="sensor-login-id"    type="text"     name="sensor-login"      placeholder="login"    style="width: 15em;background: chartreuse;padding: 0.2em;" value="admin" > 
+   <div >
+       <label for="sensor-login" style="color:white"> Login :
+       <input id="sensor-login-id" type="text" name="sensor-login" placeholder="login" style="width: 15em;background: chartreuse;padding: 0.2em; margin-right: 1em;" 
+               value="admin" />  
+    </div>
    
-   <span style="color:white"> Password </span> <span style="padding-left:1em"> <input id="sensor-password-id" type="password"  name="sensor-password"  placeholder="password" style="width: 15em;background: chartreuse;padding: 0.2em; margin-right: 1em;" value="admin" > 
+   <div>
+       <label for="sensor-password" style="color:white"> Password :</label> 
+       <input id="sensor-password-id" type="password"  name="sensor-password" placeholder="password" 
+              style="width: 15em;background: chartreuse; padding: 0.2em; margin-right: 1em;" value="admin" /> 
+    </div>
    
-   <span style="color:white"> SensorMap  </span> <span style="padding-left:1em"> <input id="sensor-map-id" type="text"  name="sensor-map"  placeholder="sensor-map Endpoint" style="width: 30em;background: chartreuse;padding: 0.2em; padding-left: 1em;" value="https://ryahiaoui-pc:8443/rest/resources" > 
+   <div>
+      <label for="sensor-map-id" style="color:white;"> SensorMap :</label>
+      <input id="sensor-map-id" type="text"  name="sensor-map"  placeholder="sensor-map Endpoint"
+             style="min-width: 25em; background: chartreuse;padding: 0.2em; padding-left: 1em;" value="http://localhost:8443/rest/resources" />
+   </div>
    
  </div>
    
@@ -58,18 +88,20 @@
 </div>
 
 
-<div style="background: #c3c360; margin-top:0.5em; margin-bottom: 1.5em; padding:1em;">
+<div style="background: #c3c360; margin-top:0.5em; margin-bottom: 1em; padding:1em;">
 
   <table class="my-table" >
 	<tr class="table-tr" >
-		<td class="table-td" > DB_Host <span style="padding-left:1em"> <input id="db_host"     type="text"     name="db_host"     placeholder="db_host"     style="width: 15em;background: chartreuse;padding: 0.2em;" value="147.100.179.208"></td>
-		<td class="table-td" > DB_Port <span style="padding-left:3.5em">  <input id="db_port"     type="text"     name="db_port"     placeholder="db_port"     style="width: 15em;background: chartreuse;padding: 0.2em;" value="5433"></td>
-		<td class="table-td" > Database <span style="padding-left:1em">  <input id="db_name"     type="text"     name="db_name"     placeholder="db_name"     style="width: 15em;background: chartreuse;padding: 0.2em;" value="donesol3_ns"></td>
+		<td class="table-td" > DB_Host <span style="padding-left:1em"> <input id="db_host"     type="text"     name="db_host"     placeholder="db_host"     style="width: 15em;background: chartreuse;padding: 0.2em;" value="147.100.179.208" /> </td>
+		
+		<td class="table-td" > DB_Port <span style="padding-left:3.5em">  <input id="db_port"     type="number"     name="db_port"     placeholder="db_port"     style="width: 15em;background: chartreuse;padding: 0.2em;" value="5433" min="1" max="65535" /> </td>
+		
+		<td class="table-td" > Database <span style="padding-left:1em">  <input id="db_name"     type="text"     name="db_name"     placeholder="db_name"     style="width: 15em;background: chartreuse;padding: 0.2em;" value="donesol3_ns" /></td>
 	</tr>
 	<tr class="table-tr" >
-		<td class="table-td" >DB_User <span style="padding-left:1em">  <input id="db_user"     type="text"     name="db_user"     placeholder="db_user"     style="width: 15em;background: black ; color: white;padding: 0.2em;" value="ryahiaoui"></td>
-		<td class="table-td" >DB_Password <span style="padding-left:1em">  <input id="db_password" type="password" name="db_password" placeholder="db_password" style="width: 15em; background: black ; color: white; padding: 0.2em;" value="password"></td>
-		<td class="table-td" > <button style="margin-bottom: 1em; margin-bottom: 1em; margin-right: 3.5em;  background: orange;" class="button green" onclick="getHeaders()" >Get Headers</button> </td>
+		<td class="table-td" >DB_User <span style="padding-left:1em">  <input id="db_user"     type="text"     name="db_user"     placeholder="db_user"     style="width: 15em;background: black ; color: white;padding: 0.2em;" value="ryahiaoui" /></td>
+		<td class="table-td" >DB_Password <span style="padding-left:1em">  <input id="db_password" type="password" name="db_password" placeholder="db_password" style="width: 15em; background: black ; color: white; padding: 0.2em;" value="password" /></td>
+		<td class="table-td" > <button style="margin-bottom: 1em; margin-bottom: 1em; margin-right: 3.5em;  background: orange;" class="button green" onclick="getHeaders()" >Get Columns Name </button> </td>
 	</tr>
 	
 </table>
@@ -77,11 +109,9 @@
 <!--    -->
   
   
-  
-  
 </div>
 
-<textarea id="sql_headers" rows="4" cols="50" style="width:100%; margin:0.2em; padding:0.2em;height: 10em; background: linear-gradient(45deg, black, transparent); color:wheat;" placeholder="Logs..." readOnly></textarea>
+<textarea id="logs-id" rows="4" cols="50" style="width:100%; margin:0.2em; padding:0.2em;height: 10.5em; background: linear-gradient(45deg, black, transparent); color:wheat;" placeholder="Logs..." readOnly></textarea>
 
 
 </sql-builder-container>
@@ -94,7 +124,7 @@
  
 <div style="float:left; color:white;padding-right: 0.5em;margin-top:0.3em;padding-left: 0.3em;">SELECT</div>
  
- <select onchange="getComboA(this.options[this.selectedIndex].value);" >
+ <select id="sensorTemplateId" onchange="getComboA(this.options[this.selectedIndex].value);" >
     <option>Sensor-Templates</option>
     <option>Things</option>
     <option>Thing with new Location</option>
@@ -118,37 +148,51 @@
             <tr class="table-tr" >
                 <td class="table-td" style="border: hidden;" > <b>S-Things Endpoint</b> </button> </td>
                 <td class="table-td" style="border: hidden;" > <input id="sensorthings_endpoint_url" name="sensorthings_endpoint_url" type="text" 
-                                       value="http://localhost:8080/FROST-Server/v1.0/" style="background: black; color : white; padding: 0.5em; width: 100%; " > </button> </td>               
+                                     value="http://localhost:8080/FROST-Server/v1.0/" style="background: black; color : white; padding: 0.5em; width: 100%; " > </button> </td>               
             </tr>
             <tr class="table-tr" >
                 <td class="table-td" style="border: hidden;" > --- </td>
-                <td class="table-td" style="border: hidden;" > <button  class="button green" style="margin-top:1em; margin-right: 0em; width: 90%; background: linear-gradient(45deg, #1adf3b66, transparent); float: right;" onclick="genDatas()">Produce SensorThings Datas</button></td>
+                <td class="table-td" style="border: hidden;" > <button  class="button green" style="margin-top:1em; margin-right: 0em; width: 90%; background: linear-gradient(45deg, #00ff2b, transparent); float: right;" onclick="genDatas()">Produce SensorThings Datas</button></td>
             </tr>
 	
         </table>
         
+         <table  style="margin:0; text-align: end;" >
+            <tr class="" >
+                <td class="" style="text-align: left;"> <button style="color: red !important;"  class="button green" onclick="getLogs()" >*** LOGS ***</button> </td>
+                <td class="" > <button style=""  class="button green" onclick="closeLogs()" >Close Log Connection</button> </td>
+                
+            </tr>
+        </table>
 
     </div>
 
 
 </sql-builder-container>
 
+<!--
  <table  style="margin:0; margin-left: 1em; " >
             <tr class="" >
-                <td class="" > <button class="button green" style="background: darkgray; ">Import Mapping</button></td>
-                 <td class="" > <button class="button green" style="background: darkgray; margin:1em;" >Export Mapping</button> </td>
+                
+               <td class="" > <button class="button green" style="background: #ca2929; color: #ffffff !important;"  onclick="download()">Export Mapping</button></td>
+           
+               <td class="" > <input type="file" id="file" name="file" class="button green" style="background: darkgray; margin:1em; display: grid; "       
+                                onchange="handleFileSelect(this.files);" onclick="this.value=null;" /> </td>
+                 
             </tr>
             
         </table>
-      
+-->
+
+<!--
  <table  style="margin:0; margin-left: 1em; text-align: end;" >
             <tr class="" >
                 <td class="" style="text-align: left;"> <button style=""  class="button green" onclick="getLogs()" >*** LOGS ***</button> </td>
                 <td class="" > <button style="margin:1em;"  class="button green" onclick="closeLogs()" >Close Log Connection</button> </td>
                 
-            </tr>
-            
+            </tr>            
  </table>
+ -->
  
 </article>
 
@@ -156,7 +200,9 @@
 
 <script type="text/javascript">
 
-  var sensorType = "Things" ;
+  var sensorType = "NULL" ;
+  
+  var currentTemplate = "" ;
   
   var codeMirrorEditor = CodeMirror.fromTextArea('code', {
     height: "27.5em",
@@ -190,7 +236,7 @@
    
         closeLogs() ;
         
-        document.getElementById("sql_headers").value = "" ;
+        document.getElementById("logs-id").value = "" ;
      
         var sqlQuery = encodeURIComponent(codeMirrorEditor.getCode()) ;
         
@@ -217,9 +263,9 @@
         fetch( myRequest )
         .then( response => response.text() )
         .then( data =>  {
-            document.getElementById("sql_headers").value = data ;
+            document.getElementById("logs-id").value = data ;
         }).catch ( err => {
-            document.getElementById("sql_headers").value = " ERROR : " + err ;
+            document.getElementById("logs-id").value = " " + err ;
         });
 
  //  alert(edit.getText()) ;
@@ -230,7 +276,7 @@
     
         closeLogs() ;
         
-        document.getElementById("sql_headers").value = "" ;
+        document.getElementById("logs-id").value = "" ;
      
         var templateQuery = encodeURIComponent(edit.getText()) ;
         var sqlQuery = encodeURIComponent(codeMirrorEditor.getCode()) ;
@@ -263,14 +309,13 @@
         fetch( myRequest )
         .then( response => response.text() )
         .then( data =>  {
-            document.getElementById("sql_headers").value = data ;
+        alert("ok");
+            document.getElementById("logs-id").value = data ;
         }).catch ( err => {
-           console.warn('Something went wrong.', err);
-           document.getElementById("sql_headers").value = JSON.stringify(err) ;
+          // document.getElementById("logs-id").value = " " + JSON.stringify(err) ;
+          document.getElementById("logs-id").value = " " + err ;
         });
 
- //  alert(edit.getText()) ;
-   
   }
   
   var reader ;
@@ -279,7 +324,7 @@
     
         closeLogs() ;
         
-        document.getElementById("sql_headers").value = "" ;
+        document.getElementById("logs-id").value = "" ;
      
         var myHeaders = new Headers() ;
 
@@ -311,8 +356,8 @@
                 return reader.read()
                              .then(({ value, done })=> {
                
-                     document.getElementById("sql_headers").value += decoder.decode(value) ;
-                     document.getElementById("sql_headers").scrollTop =  document.getElementById("sql_headers").scrollHeight;
+                     document.getElementById("logs-id").value += decoder.decode(value) ;
+                     document.getElementById("logs-id").scrollTop =  document.getElementById("logs-id").scrollHeight;
                      
                 if (done) {
                     console.log('done');
@@ -323,7 +368,8 @@
             }
             read();
      }).catch(function(err) {       // fallback mechanism
-              alert( " ERROR : " + err );
+              //alert( " ERROR : " + err );
+              document.getElementById("logs-id").value = " " + err ;
             }); ;
 
 /*
@@ -333,7 +379,7 @@
           .then( data =>  {
            //  alert("data ==> " + data ) ;24019
              console.log(data);
-             document.getElementById("sql_headers").value += data ;
+             document.getElementById("logs-id").value += data ;
         }).catch ( err => {
             alert( " ERROR : " + err );
             //console.warn('Something went wrong.', err);
@@ -352,11 +398,28 @@
        try {
          reader.cancel();
        } catch( err ) {
-          console.log( " ERROR ==> " + err);
+           document.getElementById("logs-id").value = " " + err ;
        }
     }
-    document.getElementById("sql_headers").value = "" ;
+    
+    document.getElementById("logs-id").value = "" ;
   }
+  
+  
+  function setTemplate( type, templateInJsonValue) {
+  
+      var options= document.getElementById('sensorTemplateId').options;
+      
+      for (var i= 0; i < options.length; i++ ) {
+            if (options[i].value === type ) {
+                options[i].selected= true;
+                break;
+            }
+      }
+        
+      edit.set( JSON.parse(templateInJsonValue)) ;
+  }
+  
   
   function getComboA(templateValue) {
   
@@ -364,6 +427,8 @@
     
         sensorType = "Things"
 
+        currentTemplate = "Things" ;
+        
         const thingJson = {
           
             "name": "{{name}}",
@@ -381,6 +446,8 @@
     
         sensorType = "Observations" ;
 
+        currentTemplate = "Observation_linked_to_an_existing_Sensor" ;
+        
         const thingJson = {          
             
                 "result": "{{result}}",
@@ -397,7 +464,7 @@
                   "@iot.id": "{{featureOfInterest_id}}"
                 }
       }
-        
+
       edit.set(thingJson) ;
     }
     
@@ -405,6 +472,8 @@
     
         sensorType = "Things" ;
 
+        currentTemplate = "Thing_with_new_Location" ;
+        
         const thingJson = {            
                    
                     "name": "{{name}}",
@@ -435,6 +504,8 @@
     
        sensorType = "Locations" ;
         
+       currentTemplate = "Location" ;
+        
        const thingJson = { 
                 "name": "{{location_name}}",
                 "description": "{{location_description}}",
@@ -453,6 +524,8 @@
     
        sensorType = "NULL" ;
         
+      currentTemplate = "" ;
+         
        var thingJson ;
        
        edit.set(thingJson) ;
@@ -478,7 +551,129 @@
       return document.getElementById("sensor-map-id").value ;
    }
 
+      
+function download() {
+
+  if( sensorType === "NULL" ) {
+    alert(" Please, select a Sensor-Template ! ");
+    return ;
+  }
+  var login    = document.getElementById("sensor-login-id").value ;
+  
+  var sensorTemplate = edit.getText() ;
+  var sqlQuery       = codeMirrorEditor.getCode() ;
+
+  var db_host = document.getElementById("db_host").value  ;
+  var db_port = document.getElementById("db_port").value  ;
+  var db_name = document.getElementById("db_name").value  ;
+  var db_user = document.getElementById("db_user").value  ;
+  
+  var sensorThingsEndpointUrl = document.getElementById("sensorthings_endpoint_url").value ;
+  
+  var element = document.createElement('a');
+  
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' +
+                        encodeURIComponent( "##LOGIN##                     : " + login                   + "\n\n" + 
+                                            "##SensorMapEndPoint##         : " + getSensorEndPoint()     + "\n\n" + 
+                                            "##DB_HOST##                   : " + db_host                 + "\n\n" + 
+                                            "##DB_PORT##                   : " + db_port                 + "\n\n" + 
+                                            "##DB_NAME##                   : " + db_name                 + "\n\n" + 
+                                            "##DB_USER##                   : " + db_user                 + "\n\n" + 
+                                            "##SensorType##                : " + sensorType              + "\n\n" + 
+                                            "##SensorThingsEndpointUrl##   : " + sensorThingsEndpointUrl + "\n\n" + 
+                                            "##SensorTemplate##            : " + sensorTemplate          + "\n\n" + 
+                                            "##SqlQuery##                  : " + "\n" + sqlQuery         + "\n\n" + "##SqlQueryEnd## \n" 
+                                          ));
+                                          
+  element.setAttribute('download', sensorType );
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
+/* IMPORT */
+
+ function handleFileSelect(files) {
+
+    var file = files[0]; // FileList object
+
+    // file is a FileList of File objects. List some properties.
+    var output = [];
+    
+    output.push('<li><strong>', escape( file.name), '</strong> (', file.type || 'n/a', ') - ',
+                  file.size, ' bytes, last modified: ',
+                  file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : 'n/a',
+                  '</li>');
         
+    if (file) {
+    
+        var reader = new FileReader();
+        reader.readAsText(file );
+        
+        // var sensorTemplate = edit.getText() ;
+        // var sqlQuery       = codeMirrorEditor.getCode() ;
+  
+        reader.onload = function(evt) {
+           
+            var content = evt.target.result ;
+           
+            var login = getValueByKey(content, "##LOGIN##                     : ") ;
+            document.getElementById("sensor-login-id").value = login ;
+            
+            var sensorMapEndPoint = getValueByKey(content, "##SensorMapEndPoint##         : ") ;
+            document.getElementById("sensor-map-id").value = sensorMapEndPoint ;
+            
+            var dbHost = getValueByKey(content, "##DB_HOST##                   : ") ;
+            document.getElementById("db_host").value = dbHost ;
+            
+            var dbPort = getValueByKey(content, "##DB_PORT##                   : ") ;
+            document.getElementById("db_port").value = dbPort ;
+            
+            var dbName = getValueByKey(content, "##DB_NAME##                   : ") ;
+            document.getElementById("db_name").value = dbName ;
+      
+            var dbUser = getValueByKey(content, "##DB_USER##                   : ") ;
+            document.getElementById("db_user").value = dbUser ;
+      
+            var sensorType = getValueByKey(content, "##SensorType##                : ") ;
+            //document.getElementById("sensor-login-id").value = sensorType ;
+            
+            var sensorTemplate = getValueByKey(content, "##SensorTemplate##            : ") ;
+            // getComboA(sensorTemplate) ;
+            setTemplate( sensorType, sensorTemplate) ;
+            
+            var sensorThingsEndpointUrl = getValueByKey(content, "##SensorThingsEndpointUrl##   : ", "##SqlQueryEnd##" ) ;
+            document.getElementById("sensorthings_endpoint_url").value = sensorThingsEndpointUrl ;
+            
+            var sqlQuery = extractSqlFromString(content ,"##SqlQuery##                  : " ); 
+            codeMirrorEditor.setCode( "\n" + sqlQuery ) ;
+            
+        }
+        reader.onerror = function (evt) {
+            alert("Error reading file");
+        }
+    }
+   
+  }
+  
+  
+  function extractSqlFromString( text, keyBeg, keyEnd) {
+  
+        return text.split(keyBeg)[1].split(keyEnd)[0].trim() ;
+  }
+  
+  function getValueByKey(text, key ){
+    var regex = new RegExp("^" + key + "(.*)$", "m");
+    var match = regex.exec(text);
+    if(match)
+        return match[1].trim();
+    else
+        return "NULL";
+}
 
 </script>
 
