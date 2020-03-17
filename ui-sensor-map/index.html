@@ -310,7 +310,6 @@
         fetch( myRequest )
         .then( response => response.text() )
         .then( data =>  {
-        alert("ok");
             document.getElementById("logs-id").value = data ;
         }).catch ( err => {
           // document.getElementById("logs-id").value = " " + JSON.stringify(err) ;
