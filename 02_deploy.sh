@@ -4,5 +4,8 @@
  
  cd $CURRENT_PATH
  
-./jaxy/run.sh serviceConf=jaxy/service-conf/serviceConf.yaml &
-
+ ./sensorThings-impl/FROST/run.sh
+ 
+ cd $CURRENT_PATH
+ 
+ ./jaxy-server/start.sh

@@ -1,6 +1,10 @@
 #!/bin/bash
 
-  CURRENT_LOCATION=`pwd`/src
+  CURRENT_SCRIPT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+ 
+  cd $CURRENT_SCRIPT_PATH
+ 
+  CURRENT_LOCATION="$CURRENT_SCRIPT_PATH/src"
   
   DEMO_PATH="jaxy"
 

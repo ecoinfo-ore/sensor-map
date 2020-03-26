@@ -4,5 +4,4 @@
  
  cd $CURRENT_PATH
  
-./jaxy/run.sh serviceConf=jaxy/service-conf/serviceConf.yaml &
-
+ ./jaxy-server/compile.sh
