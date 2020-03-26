@@ -29,19 +29,17 @@ password        : jaxy_password                        # Password
 
 authentication : # using HTTP
   type : customSignOn   
-  secured       :
-    vip_planes  : 
-      Accept    : [ Xml/Plain, Xml/Encrypted , Json/Plain , Json/Encrypted , Template/Encrypted , Template/Plain ]
-      Ciphers   : [ AES_128_CBC , AES_128_ECB , AES_256_CBC , AES_256_ECB ,
-                    AES_192_CBC , AES_192_ECB , DESede_192_CBC ,
-                    DESede_192_ECB , DES_64_CBC , DES_64_ECB ]                  
-  credentials   :  # The Table used for authentication 
+  secured         :
+    empty_service : 
+      Accept      : [ Xml/Plain ]
+      Ciphers     : [ ]                  
+  credentials     :    # The Table used for authentication 
     tableName          : users
     loginColumnName    : login
     passwordColumnName : password -> MD5  # Default Storage : PLAIN
-  paramToSign :    # Ex : Signature = SHA2 ( login + MD5 ( password ) + timeStamp )
+  paramToSign :           # Ex : Signature = SHA2 ( login + MD5 ( password ) + timeStamp )
     login     : PLAIN 
-    password  : MD5     # password hashed with MD5 in the signature of the request ( Equal to the Hash used in passwordColumn )
+    password  : MD5       # password hashed with MD5 in the signature of the request ( Equal to the Hash used in passwordColumn )
     timeStamp : PLAIN
   algoSign    : SHA2
   validRequestTimeout : 5 # Request Validity in secondes ( Default : 30 )
