@@ -210,6 +210,7 @@ public class ServiceSensorThings {
                         if( ! isReachable(sensorthings_endpoint_url) ) {
                              respBuilder.add("Exception", "Url " + sensorthings_endpoint_url + " Not Reachable !! ") ;
                              latch.countDown() ;
+                             client.close()    ;
                              return            ;
                         }
                         
