@@ -1,681 +1,614 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    
-     <title>CodeMirror: SQL demonstration</title>
-    
-     <script src="js/codemirror.js" type="text/javascript"></script>
-     <link rel="stylesheet" type="text/css" href="css/docs.css"/>
-     <link rel="stylesheet" type="text/css" href="css/style.css"/>    
+<html>
 
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/8.6.1/jsoneditor-minimalist.min.js" type="text/javascript"></script>
-     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/8.6.1/jsoneditor.min.css"/>
-     
-     <script src="js/sensor.js" type="text/javascript"></script>
-     
-  </head>
-  
-  <body style="padding: 20px;">
-
-<main>
-
-<sensor-header>
-
- <div style=" float: left; margin-right: 1em; margin-top: 0.2em; " >
-
-  <b style=" " class="hit-the-floor">Sensor-Map</b>
- 
-  <table  style="margin-top: 0.3em; float: right; margin-left: .5em; padding-right: 1em; padding-left: 1em; background: linear-gradient(45deg, black, transparent); border-radius: 2em; border: ridge; " >
-           
-           <tr class="" >
-                
-               <td class="" > <input type="file" id="file" name="file" class="button green" 
-                                     style="background: darkgray; margin:0.7em; display: grid; font: 11px/1em 'Droid Sans', sans-serif; color: #9e00ff !important;"       
-                                     onchange="handleFileSelect(this.files);" onclick="this.value=null;" /> </td>
-                                     
-               <td class="" > <button class="button green" style="background: #ca2929; color: #ffffff !important;"  onclick="download()">Export Mapping</button></td>
-              
-            </tr>
-            
-   </table>
-</div> 
-                                
-                                
- <div style="display:flex; place-content: center; padding: 0.6em; margin-right: 1em; background: linear-gradient(45deg, black, transparent); margin-top: 0.7em; margin-bottom: 0.4em; border: ridge; " >
-  
-   <div >
-       <label for="sensor-login" style="color:white"> Login :
-       <input id="sensor-login-id" type="text" name="sensor-login" placeholder="login" style="width: 15em;background: chartreuse;padding: 0.2em; margin-right: 1em;" 
-               value="admin" />  
-    </div>
+   <head>
    
-   <div>
-       <label for="sensor-password" style="color:white"> Password :</label> 
-       <input id="sensor-password-id" type="password"  name="sensor-password" placeholder="password" 
-              style="width: 15em;background: chartreuse; padding: 0.2em; margin-right: 1em;" value="admin" /> 
-    </div>
+      <title>CodeMirror: SQL demonstration</title>
+      <script src="js/codemirror.js" type="text/javascript"></script>
+      <link   rel="stylesheet"       type="text/css" href="css/docs.css"/>
+      <link   rel="stylesheet"       type="text/css" href="css/style.css"/>
+      <link   rel="stylesheet"       type="text/css" href="css/cloudflare-jsoneditor.min.css"/>
+      <script src="js/sensor.js"     type="text/javascript"></script>
+      <script src="js/cloudflare-jsoneditor-minimalist.min.js" type="text/javascript"></script>
+      
+   </head>
    
-   <div>
-      <label for="sensor-map-id" style="color:white;"> SensorMap :</label>
-      <input id="sensor-map-id" type="text"  name="sensor-map"  placeholder="sensor-map Endpoint"
-             style="min-width: 25em; background: chartreuse;padding: 0.2em; padding-left: 1em;" value="http://localhost:8443/rest/resources" />
-   </div>
+   <body style="padding: 20px;">
    
- </div>
-   
-</sensor-header>
-
-<article>
-
-<sql-builder-container>
-
-<div style="border-top: 1px solid green; border-bottom: 1px solid green; caret-color: white; background: #dddddd; border-radius: 10px; ">
-
-<textarea id="code" cols="120" rows="50" >
-
+      <main>
+      
+         <sensor-header>
+            <div style=" float: left; margin-right: 1em; margin-top: 0.2em; " >
+               <b style=" " class="hit-the-floor">Sensor-Map</b>
+               <table  style="margin-top: 0.3em; float: right; margin-left: .5em; padding-right: 1em; padding-left: 1em; background: linear-gradient(45deg, black, transparent); border-radius: 2em; border: ridge; " >
+                  <tr class="" >
+                     <td class="" > <input type="file" id="file" name="file" class="button green" 
+                        style="background: darkgray; margin:0.7em; display: grid; font: 11px/1em 'Droid Sans', sans-serif; color: #9e00ff !important;"       
+                        onchange="handleFileSelect(this.files);" onclick="this.value=null;" /> </td>
+                     <td class="" > <button id="download-butt-id" class="button green" style="background: #ca2929; color: #ffffff !important;"  onclick="download()">Export Mapping</button></td>
+                  </tr>
+               </table>
+            </div>
+            <div style="display:flex; place-content: center; padding: 0.6em; margin-right: 1em; background: linear-gradient(45deg, black, transparent); margin-top: 0.7em; margin-bottom: 0.4em; border: ridge; " >
+               <div >
+                  <label for="sensor-login" style="color:white">
+                     Login :
+                     <input id="sensor-login-id" type="text" name="sensor-login" placeholder="login" style="width: 15em;background: chartreuse;padding: 0.2em; margin-right: 1em;" 
+                        value="admin" />  
+               </div>
+               <div>
+               <label for="sensor-password" style="color:white"> Password :</label> 
+               <input id="sensor-password-id" type="password"  name="sensor-password" placeholder="password" 
+                  style="width: 15em;background: chartreuse; padding: 0.2em; margin-right: 1em;" value="admin" /> 
+               </div>
+               <div>
+                  <label for="sensor-map-id" style="color:white;"> SensorMap :</label>
+                  <input id="sensor-map-id" type="text"  name="sensor-map"  placeholder="sensor-map Endpoint"
+                     style="min-width: 25em; background: chartreuse;padding: 0.2em; padding-left: 1em;" value="http://localhost:8443/rest/resources" />
+               </div>
+            </div>
+         </sensor-header>
+         
+         <article>
+            <sql-builder-container>
+               <div style="border-top: 1px solid green; border-bottom: 1px solid green; caret-color: white; background: #dddddd; border-radius: 10px; ">
+                  <textarea id="code" cols="120" rows="50" >
+                  
  SELECT *  FROM spatial_ref_sys limit 10  ; 
- 
  -- SELECT pg_sleep(10);
- 
  -- INSERT INTO public.aircraft( model, total_passengers, distance_km, speed_km_h, cost_euro) VALUES ('1111', 11, 11, 11, 11);
+ -- WITH tmp_table AS ( SELECT model as mod  FROM aircraft limit 10 )
+ -- SELECT * FROM tmp_table ;
  
- 
--- WITH tmp_table AS ( SELECT model as mod  FROM aircraft limit 10 )
--- SELECT * FROM tmp_table ;
-
-
-</textarea>
-
-</div>
-
-
-<div style="background: #c3c360; margin-top:0.5em; margin-bottom: 1em; padding:1em;">
-
-  <table class="my-table" >
-	<tr class="table-tr" >
-		<td class="table-td" > DB_Host <span style="padding-left:1em"> <input id="db_host"     type="text"     name="db_host"     placeholder="db_host"     style="width: 15em;background: chartreuse;padding: 0.2em;" value="147.100.179.208" /> </td>
-		
-		<td class="table-td" > DB_Port <span style="padding-left:3.5em">  <input id="db_port"     type="number"     name="db_port"     placeholder="db_port"     style="width: 15em;background: chartreuse;padding: 0.2em;" value="5433" min="1" max="65535" /> </td>
-		
-		<td class="table-td" > Database <span style="padding-left:1em">  <input id="db_name"     type="text"     name="db_name"     placeholder="db_name"     style="width: 15em;background: chartreuse;padding: 0.2em;" value="donesol3_ns" /></td>
-	</tr>
-	<tr class="table-tr" >
-		<td class="table-td" >DB_User <span style="padding-left:1em">  <input id="db_user"     type="text"     name="db_user"     placeholder="db_user"     style="width: 15em;background: black ; color: white;padding: 0.2em;" value="ryahiaoui" /></td>
-		<td class="table-td" >DB_Password <span style="padding-left:1em">  <input id="db_password" type="password" name="db_password" placeholder="db_password" style="width: 15em; background: black ; color: white; padding: 0.2em;" value="password" /></td>
-		<td class="table-td" > <button style="margin-bottom: 1em; margin-bottom: 1em; margin-right: 3.5em;  background: orange;" class="button green" onclick="getHeaders()" >Get Columns Name </button> </td>
-	</tr>
-	
-</table>
-
-<!--    -->
-  
-  
-</div>
-
-<textarea id="logs-id" rows="4" cols="50" style="width:100%; margin:0.2em; padding:0.2em;height: 10.5em; background: linear-gradient(45deg, black, transparent); color:wheat;" placeholder="Logs..." readOnly></textarea>
-
-
-</sql-builder-container>
-
-
-<sql-builder-container style="background:#adb7e6">
-
-
-<div id="mainselection" style="margin:0.5em; width:76%; height: 2em; ">
- 
-<div style="float:left; color:white;padding-right: 0.5em;margin-top:0.3em;padding-left: 0.3em;">SELECT</div>
- 
- <select id="sensorTemplateId" onchange="getComboA(this.options[this.selectedIndex].value);" >
-    <option>Sensor-Templates</option>
-    <option>Things</option>
-    <option>Thing with new Location</option>
-    <option>Sensors</option>
-    <option>Observations</option>
-    <option>Observation linked to an existing Sensor</option>
-    <option>Location</option>
-  </select>
-</div>
-    
- 
-
-<!-- <button onclick="myFunction()">Click me</button>-->
-
-  <div id="jsoneditor" style="width:37em; margin:0.5em; height: 32em;"></div>
-     
-     
-     <div style="margin:1em" >
-            
-        <table class="my-table" style="border:hidden; border-top: hidden; border-bottom: hidden; color: antiquewhite; " >
-            <tr class="table-tr" >
-                <td class="table-td" style="border: hidden;" > <b>S-Things Endpoint</b> </button> </td>
-                <td class="table-td" style="border: hidden;" > <input id="sensorthings_endpoint_url" name="sensorthings_endpoint_url" type="text" 
-                                     value="http://localhost:8080/FROST-Server/v1.0/" style="background: black; color : white; padding: 0.5em; width: 100%; 
-			             font-weight: bold; " > </button> </td>               
-            </tr>
-            <tr class="table-tr" >
-                <td class="table-td" style="border: hidden;" > --- </td>
-                <td class="table-td" style="border: hidden;" > <button  class="button green" style="margin-top:1em; margin-right: 0em; width: 100%; background: linear-gradient(45deg, #00ff2b, transparent); float: right;" onclick="genDatas()">Produce SensorThings Datas</button></td>
-            </tr>
-	
-        </table>
-        
-         <table  style="margin:0; text-align: end;" >
-            <tr class="" >
-                <td class="" style="text-align: left;"> <button style="color: red !important;"  class="button green" onclick="getLogs()" >*** LOGS ***</button> </td>
-                <td class="" > <button style=""  class="button green" onclick="closeLogs()" >Close Log Connection</button> </td>
-                
-            </tr>
-        </table>
-
-    </div>
-
-
-</sql-builder-container>
-
-<!--
- <table  style="margin:0; margin-left: 1em; " >
-            <tr class="" >
-                
-               <td class="" > <button class="button green" style="background: #ca2929; color: #ffffff !important;"  onclick="download()">Export Mapping</button></td>
-           
-               <td class="" > <input type="file" id="file" name="file" class="button green" style="background: darkgray; margin:1em; display: grid; "       
-                                onchange="handleFileSelect(this.files);" onclick="this.value=null;" /> </td>
-                 
-            </tr>
-            
-        </table>
--->
-
-<!--
- <table  style="margin:0; margin-left: 1em; text-align: end;" >
-            <tr class="" >
-                <td class="" style="text-align: left;"> <button style=""  class="button green" onclick="getLogs()" >*** LOGS ***</button> </td>
-                <td class="" > <button style="margin:1em;"  class="button green" onclick="closeLogs()" >Close Log Connection</button> </td>
-                
-            </tr>            
- </table>
- -->
- 
-</article>
-
-</main>
-
-<script type="text/javascript">
-
-  var sensorType = "NULL" ;
-  
-  var currentTemplate = "" ;
-  
-  var codeMirrorEditor = CodeMirror.fromTextArea('code', {
-    height: "27.5em",
-    parserfile: "parsesql.js",
-    stylesheet: "css/sqlcolors.css",
-    path: "js/",
-    lineSeparator: "\n",
-    autoCloseTags:true,
-    textWrapping: true,
-    autoRefresh: true,
-    //lineNumbers:true 
-  });
- 
-    
-  // JSON
-   // create the editor
-        const container = document.getElementById("jsoneditor")
-        const options = {}
-        const edit = new JSONEditor(container, options)
-
-        // set json
-        var initialJson ;
-        
-        edit.set(initialJson)
-
-        // get json
-        const updatedJson = edit.get() ;
-  
-  
-  function getHeaders() {
-   
-        closeLogs() ;
-        
-        document.getElementById("logs-id").value = "" ;
-     
-        var sqlQuery = encodeURIComponent(codeMirrorEditor.getCode()) ;
-        
-        var token = getAuthHeader()   ;
-      
-        var myHeaders = new Headers();
-
-        myHeaders.append( "API-key-Token", token ) ;
-      
-        myHeaders.append( "sqlQuery", sqlQuery ) ;
-
-        myHeaders.append( "db_host", encodeURIComponent(document.getElementById("db_host").value )) ;
-        myHeaders.append( "db_port", encodeURIComponent(document.getElementById("db_port").value )) ;
-        myHeaders.append( "db_name", encodeURIComponent(document.getElementById("db_name").value )) ;
-        myHeaders.append( "db_user", encodeURIComponent(document.getElementById("db_user").value )) ;
-        myHeaders.append( "db_password", encodeURIComponent(document.getElementById("db_password").value )) ;
-         
-        var myInit = { method: 'GET',
-                       headers: myHeaders,
-                       cache: 'default' };
-           
-        var myRequest = new Request( getSensorEndPoint() + '/sensorThings/headers' , myInit ) ;
-        
-        fetch( myRequest )
-        .then( response => response.text() )
-        .then( data =>  {
-            document.getElementById("logs-id").value = data ;
-        }).catch ( err => {
-            document.getElementById("logs-id").value = " " + err ;
-        });
-
- //  alert(edit.getText()) ;
-   
-  }  
-  
-   function genDatas() {
-    
-        closeLogs() ;
-        
-        document.getElementById("logs-id").value = "" ;
-     
-        var templateQuery = encodeURIComponent(edit.getText()) ;
-        var sqlQuery = encodeURIComponent(codeMirrorEditor.getCode()) ;
-        var _sensorType = encodeURIComponent(sensorType) ;
-
-        var token = getAuthHeader()   ;
-        
-        var myHeaders = new Headers();
-
-        myHeaders.append( "API-key-Token", token ) ;
-       
-        myHeaders.append( "sqlQuery", sqlQuery );
-        myHeaders.append( "templateQuery", templateQuery );
-        myHeaders.append( "sensorType", _sensorType );
-
-        myHeaders.append( "db_host", encodeURIComponent(document.getElementById("db_host").value )) ;
-        myHeaders.append( "db_port", encodeURIComponent(document.getElementById("db_port").value )) ;
-        myHeaders.append( "db_name", encodeURIComponent(document.getElementById("db_name").value )) ;
-        myHeaders.append( "db_user", encodeURIComponent(document.getElementById("db_user").value )) ;
-        myHeaders.append( "db_password", encodeURIComponent(document.getElementById("db_password").value )) ;
-        
-        myHeaders.append( "sensorthings_endpoint_url", encodeURIComponent(document.getElementById("sensorthings_endpoint_url").value )) ;
-                
-        var myInit = { method: 'GET',
-                       headers: myHeaders,
-                       cache: 'default' };
-        
-        var myRequest = new Request( getSensorEndPoint() + '/sensorThings' , myInit ) ;
-        
-        fetch( myRequest )
-        .then( response => response.text() )
-        .then( data =>  {
-            document.getElementById("logs-id").value = data ;
-        }).catch ( err => {
-          // document.getElementById("logs-id").value = " " + JSON.stringify(err) ;
-          document.getElementById("logs-id").value = " " + err ;
-        });
-
-  }
-  
-  var reader ;
-  
-   function getLogs() {
-    
-        closeLogs() ;
-        
-        document.getElementById("logs-id").value = "" ;
-     
-        var myHeaders = new Headers() ;
-
-        var token = getAuthHeader()   ;
-        
-      //  myHeaders.append( 'toto', encodeURIComponent('titi') ) ;
-      //  myHeaders.append( "Accept", "json/plain") ;
-        
-       // myHeaders.append( "Access-Control-Max-Age", "17250") ;
-       // myHeaders.append('Access-Control-Allow-Headers' , 'X-Requested-With'); 
-        
-
-        
-       myHeaders.append( "API-key-Token", token ) ;
-       
-        var myInit = { method: 'GET',
-                       headers: myHeaders ,
-                       cache:  'default' };
-       
-        var myRequest = new Request( getSensorEndPoint() + '/logs' , myInit ) ;
-   
-   const decoder = new TextDecoder('utf-8') ;
-
-   fetch(myRequest).then( function(response ) {
-   
-            reader = response.body.getReader();
-            function read() {
-            
-                return reader.read()
-                             .then(({ value, done })=> {
+                  </textarea>
+               </div>
+               <div style="background: #c3c360; margin-top:0.5em; margin-bottom: 1em; padding:1em;">
+                  <table class="my-table" >
+                     <tr class="table-tr" >
+                        <td class="table-td" > DB_Host <span style="padding-left:1em">   
+                            <input id="db_host" 
+                                   type="text" 
+                                   name="db_host" 
+                                   placeholder="db_host"   
+                                   style="width: 15em;background: chartreuse;padding: 0.2em;" 
+                                   value="147.100.179.208" /> 
+                        </td>
+                        <td class="table-td" > DB_Port <span  style="padding-left:3.5em"> 
+                            <input id="db_port" 
+                                   type="number" 
+                                   name="db_port" 
+                                   placeholder="db_port"   
+                                   style="width: 15em;background: chartreuse;padding: 0.2em;" 
+                                   value="5433"  
+                                   min="1" 
+                                   max="65535" />
+                        </td>
+                        <td class="table-td" > Database <span style="padding-left:1em"> 
+                            <input id="db_name" 
+                                   type="text"  
+                                   name="db_name" 
+                                   placeholder="db_name"   
+                                   style="width: 15em;background: chartreuse;padding: 0.2em;" 
+                                   value="donesol3_ns" /></td> 
+                     </tr>
+                     <tr class="table-tr" >
+                        <td  class="table-td" >DB_User <span style="padding-left:1em"> 
+                             <input id="db_user"     
+                                    type="text"     
+                                    name="db_user"    
+                                    placeholder="db_user"     
+                                    style="width: 15em;background: black ; color: white;padding: 0.2em;" 
+                                    value="ryahiaoui" /></td>
+                        <td  class="table-td" >DB_Password <span style="padding-left:1em"> 
+                             <input id="db_password" 
+                                    type="password" 
+                                    name="db_password"
+                                    placeholder="db_password" 
+                                    style="width: 15em; background: black ; color: white; padding: 0.2em;" 
+                                    value="password" /></td>
+                        <td class="table-td" > 
+                            <button style="margin-bottom: 1em; margin-bottom: 1em; margin-right: 3.5em;  background: orange;" 
+                                    class="button green" 
+                                    onclick="getHeaders()" >Get Columns Name </button>
+                        </td>
+                     </tr>
+                  </table>                
+               </div>
                
-                     document.getElementById("logs-id").value += decoder.decode(value) ;
-                     document.getElementById("logs-id").scrollTop =  document.getElementById("logs-id").scrollHeight;
-                     
-                if (done) {
-                    console.log('done');
-                    return;
-                }
-                read() ;
-                });
-            }
-            read();
-     }).catch(function(err) {       // fallback mechanism
-              //alert( " ERROR : " + err );
-              document.getElementById("logs-id").value = " " + err ;
-            }); ;
-
-/*
-        fetch( myRequest )
-        
-          .then( response => response.text() )
-          .then( data =>  {
-           //  alert("data ==> " + data ) ;24019
-             console.log(data);
-             document.getElementById("logs-id").value += data ;
-        }).catch ( err => {
-            alert( " ERROR : " + err );
-            //console.warn('Something went wrong.', err);
-        });
- */
-        
-        
-        
- //  alert(edit.getText()) ;
-   
-  }
-  
-  function closeLogs() {
-  
-    if( reader != null ) {
-       try {
-         reader.cancel();
-       } catch( err ) {
-           document.getElementById("logs-id").value = " " + err ;
-       }
-    }
-    
-    document.getElementById("logs-id").value = "" ;
-  }
-  
-  
-  function setTemplate( type, templateInJsonValue) {
-  
-      var options= document.getElementById('sensorTemplateId').options;
-      
-      for (var i= 0; i < options.length; i++ ) {
-            if (options[i].value === type ) {
-                options[i].selected= true;
-                break;
-            }
-      }
-        
-      edit.set( JSON.parse(templateInJsonValue)) ;
-  }
-  
-  
-  function getComboA(templateValue) {
-  
-    if( templateValue == "Things" ) {
-    
-        sensorType = "Things"
-
-        currentTemplate = "Things" ;
-        
-        const thingJson = {
-          
-            "name": "{{name}}",
-            "description": "{{description}}",
-            "properties": {
-                "owner": "{{owner}}",
-             } ,
-           
-        }
-        
-      edit.set(thingJson) ;
-    }
-    
-    else if( templateValue == "Observation linked to an existing Sensor" ) {
-    
-        sensorType = "Observations" ;
-
-        currentTemplate = "Observation_linked_to_an_existing_Sensor" ;
-        
-        const thingJson = {          
+               <textarea id="logs-id" rows="4" cols="50" 
+                         style="width:100%; margin:0.2em; padding:0.2em;height: 10.5em; background: linear-gradient(45deg, black, transparent); color:wheat;" 
+                         placeholder="Logs..." readOnly ></textarea>
+            </sql-builder-container>
             
-                "result": "{{result}}",
+            <sql-builder-container style="background:#adb7e6">
+               <div id="mainselection" style="margin:0.5em; width:76%; height: 2em; ">
+                  <div style="float:left; color:white;padding-right: 0.5em;margin-top:0.3em;padding-left: 0.3em;">SELECT</div>
+                  <select id="sensorTemplateId" onchange="getComboA(this.options[this.selectedIndex].value);" >
+                     <option>Sensor-Templates</option>
+                     <option>Things</option>
+                     <option>Thing with new Location</option>
+                     <option>Sensors</option>
+                     <option>Observations</option>
+                     <option>Observation linked to an existing Sensor</option>
+                     <option>Location</option>
+                  </select>
+               </div>
+
+               <div id="jsoneditor" style="width:37em; margin:0.5em; height: 32em;"></div>
+               <div style="margin:1em" >
+                  <table class="my-table" style="border:hidden; border-top: hidden; border-bottom: hidden; color: antiquewhite; " >
+                     <tr class="table-tr" >
+                        <td class="table-td" style="border: hidden;" > <b>S-Things Endpoint</b> </button> </td>
+                        <td class="table-td" style="border: hidden;" > <input id="sensorthings_endpoint_url" 
+                                                                              name="sensorthings_endpoint_url" 
+                                                                              type="text" value="http://localhost:8080/FROST-Server/v1.0/"   
+                                                                              style="background: black; color : white; padding: 0.5em; width: 100%; font-weight: bold; " > </button> 
+                        </td>
+                     </tr>
+                     <tr class="table-tr" >
+                        <td class="table-td" style="border: hidden;" > --- </td>
+                        <td class="table-td" style="border: hidden;" > <button  class="button green" 
+                                                                                style="margin-top:1em; margin-right: 0em; width: 100%; background: linear-gradient(45deg, #00ff2b, transparent); float: right;" 
+                                                                                onclick="genDatas()">Produce SensorThings Datas</button> </td>
+                     </tr>
+                  </table>
+                  <table  style="margin:0; text-align: end;" >
+                     <tr class="" >
+                        <td class=""   style="text-align: left;"> <button style="color: red !important;"  
+                                                                          class="button green" 
+                                                                          onclick="getLogs()" >*** LOGS ***</button> </td>
+                        <td class="" > <button style="" 
+                                               class="button green" 
+                                               onclick="closeLogs()" >Close Log Connection</button> </td>
+                     </tr>
+                  </table>
+               </div>
+               
+            </sql-builder-container>
             
-                "Datastream":
-                {
-                  "@iot.id": "{{datastream_id}}"
-                },
-                
-                "phenomenonTime": "{{1900-01-10T16:00:00-00:00}}",
-                
-                "FeatureOfInterest" :
-                {
-                  "@iot.id": "{{featureOfInterest_id}}"
-                }
-      }
-
-      edit.set(thingJson) ;
-    }
-    
-    else if( templateValue == "Thing with new Location" ) {
-    
-        sensorType = "Things" ;
-
-        currentTemplate = "Thing_with_new_Location" ;
-        
-        const thingJson = {            
-                   
-                    "name": "{{name}}",
-                    "description": "{{desc}}",
-                    "properties": {
-                        "Deployment Condition": "{{cond}}",
-                        "Case Used": "{{used}}"
-                    },
-                    "Locations": [
-                        {
-                        "name": "{{name}}",
-                        "description": "{{desc}}",
-                        "encodingType": "application/vnd.geo+json",
-                        "location": {
-                            "type": "Point",
-                            "coordinates": [
-                                 -114.133,
-                                 51.08
-                            ]
-                        }
-                        }
-                    ]                    
-      }
-        
-      edit.set(thingJson) ;
-    }
-     else if( templateValue == "Location" ) {
-    
-       sensorType = "Locations" ;
-        
-       currentTemplate = "Location" ;
-        
-       const thingJson = { 
-                "name": "{{location_name}}",
-                "description": "{{location_description}}",
-                "encodingType": "application/vnd.geo+json",
-                "location": {
-                    "type": "Point",
-                    "coordinates": [-114.133, 51.08]
-                }
-       }
-       
-       edit.set(thingJson) ;
-  
-    }
-    
-      else if( templateValue == "SensorThings Templates" ) {
-    
-       sensorType = "NULL" ;
-        
-      currentTemplate = "" ;
+         </article>
          
-       var thingJson ;
-       
-       edit.set(thingJson) ;
-  
-    } 
-
-  }
-  
-  function getAuthHeader() {
-    
-     var login    = document.getElementById("sensor-login-id").value ;
-     var password = document.getElementById("sensor-password-id").value ;
-     
-     return hash( login , password, "SHA2" , "PLAIN" , "MD5", "PLAIN" )  ;
-     
-     // return " admin 1583749993 0189919686ff7d081dcf837e79a9bbadcf778eff820c0a4d92999fae10d1c4a3";
-  }
-   
-   
-   
-   function getSensorEndPoint() {
-
-      return document.getElementById("sensor-map-id").value ;
-   }
-
+      </main>
       
-function download() {
-
-  if( sensorType === "NULL" ) {
-    alert(" Please, select a Sensor-Template ! ");
-    return ;
-  }
-  var login    = document.getElementById("sensor-login-id").value ;
-  
-  var sensorTemplate = edit.getText() ;
-  var sqlQuery       = codeMirrorEditor.getCode() ;
-
-  var db_host = document.getElementById("db_host").value  ;
-  var db_port = document.getElementById("db_port").value  ;
-  var db_name = document.getElementById("db_name").value  ;
-  var db_user = document.getElementById("db_user").value  ;
-  
-  var sensorThingsEndpointUrl = document.getElementById("sensorthings_endpoint_url").value ;
-  
-  var element = document.createElement('a');
-  
-  element.setAttribute('href', 'data:text/plain;charset=utf-8,' +
-                        encodeURIComponent( "##LOGIN##                     : " + login                   + "\n\n" + 
-                                            "##SensorMapEndPoint##         : " + getSensorEndPoint()     + "\n\n" + 
-                                            "##DB_HOST##                   : " + db_host                 + "\n\n" + 
-                                            "##DB_PORT##                   : " + db_port                 + "\n\n" + 
-                                            "##DB_NAME##                   : " + db_name                 + "\n\n" + 
-                                            "##DB_USER##                   : " + db_user                 + "\n\n" + 
-                                            "##SensorType##                : " + sensorType              + "\n\n" + 
-                                            "##SensorThingsEndpointUrl##   : " + sensorThingsEndpointUrl + "\n\n" + 
-                                            "##SensorTemplate##            : " + sensorTemplate          + "\n\n" + 
-                                            "##SqlQuery##                  : " + "\n" + sqlQuery         + "\n\n" + "##SqlQueryEnd## \n" 
-                                          ));
-                                          
-  element.setAttribute('download', sensorType );
-
-  element.style.display = 'none';
-  document.body.appendChild(element);
-
-  element.click();
-
-  document.body.removeChild(element);
-}
-
-/* IMPORT */
-
- function handleFileSelect(files) {
-
-    var file = files[0]; // FileList object
-
-    // file is a FileList of File objects. List some properties.
-    var output = [];
-    
-    output.push('<li><strong>', escape( file.name), '</strong> (', file.type || 'n/a', ') - ',
-                  file.size, ' bytes, last modified: ',
-                  file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : 'n/a',
-                  '</li>');
-        
-    if (file) {
-    
-        var reader = new FileReader();
-        reader.readAsText(file );
-        
-        // var sensorTemplate = edit.getText() ;
-        // var sqlQuery       = codeMirrorEditor.getCode() ;
-  
-        reader.onload = function(evt) {
+      <script type="text/javascript">
+      
+         var sensorType = "NULL"  ;
+         
+         var currentTemplate = "" ;
+         
+         var codeMirrorEditor = CodeMirror.fromTextArea('code', {
+           height: "27.5em",
+           parserfile: "parsesql.js",
+           stylesheet: "css/sqlcolors.css",
+           path: "js/",
+           lineSeparator: "\n",
+           autoCloseTags:true,
+           textWrapping: true,
+           autoRefresh: true,
            
-            var content = evt.target.result ;
+         });
+         
+         var reader ;
+         
+         // JSON
+         // create the editor
+         const container = document.getElementById("jsoneditor")
+         const options = {}
+         const edit = new JSONEditor(container, options)
+         
+         // set json
+         var initialJson ;
+               
+         edit.set(initialJson)
+         
+         // get json
+         const updatedJson = edit.get() ;
            
-            var login = getValueByKey(content, "##LOGIN##                     : ") ;
-            document.getElementById("sensor-login-id").value = login ;
+         function getHeaders() {
+          
+               closeLogs()     ;
+               
+               document.getElementById("logs-id").value = "" ;
             
-            var sensorMapEndPoint = getValueByKey(content, "##SensorMapEndPoint##         : ") ;
-            document.getElementById("sensor-map-id").value = sensorMapEndPoint ;
+               var sqlQuery = encodeURIComponent(codeMirrorEditor.getCode()) ;
+               
+               var token = getAuthHeader()   ;
+             
+               var myHeaders = new Headers() ;
+         
+               myHeaders.append( "API-key-Token", token ) ;
+             
+               myHeaders.append( "sqlQuery", sqlQuery )   ;
+         
+               myHeaders.append( "db_host", encodeURIComponent(document.getElementById("db_host").value )) ;
+               myHeaders.append( "db_port", encodeURIComponent(document.getElementById("db_port").value )) ;
+               myHeaders.append( "db_name", encodeURIComponent(document.getElementById("db_name").value )) ;
+               myHeaders.append( "db_user", encodeURIComponent(document.getElementById("db_user").value )) ;
+               myHeaders.append( "db_password", encodeURIComponent(document.getElementById("db_password").value )) ;
+                
+               var myInit = { method: 'GET',
+                              headers: myHeaders,
+                              cache: 'default' };
+                  
+               var myRequest = new Request( getSensorEndPoint() + '/sensorThings/headers' , myInit ) ;
+               
+               fetch( myRequest )
+               .then( response => response.text() )
+               .then( data =>  {
+                   document.getElementById("logs-id").value = data ;
+               }).catch ( err => {
+                   document.getElementById("logs-id").value = " " + err ;
+               });
+         }  
+         
+         function genDatas() {
+           
+               closeLogs() ;
+               
+               document.getElementById("logs-id").value = "" ;
             
-            var dbHost = getValueByKey(content, "##DB_HOST##                   : ") ;
-            document.getElementById("db_host").value = dbHost ;
+               var templateQuery = encodeURIComponent(edit.getText())        ;
+               var sqlQuery = encodeURIComponent(codeMirrorEditor.getCode()) ;
+               var _sensorType = encodeURIComponent(sensorType) ;
+         
+               var token = getAuthHeader()   ;
+               
+               var myHeaders = new Headers() ;
+         
+               myHeaders.append( "API-key-Token", token )         ;
+              
+               myHeaders.append( "sqlQuery", sqlQuery )           ;
+               myHeaders.append( "templateQuery", templateQuery ) ;
+               myHeaders.append( "sensorType", _sensorType )      ;
+         
+               myHeaders.append( "db_host", encodeURIComponent(document.getElementById("db_host").value )) ;
+               myHeaders.append( "db_port", encodeURIComponent(document.getElementById("db_port").value )) ;
+               myHeaders.append( "db_name", encodeURIComponent(document.getElementById("db_name").value )) ;
+               myHeaders.append( "db_user", encodeURIComponent(document.getElementById("db_user").value )) ;
+               myHeaders.append( "db_password", encodeURIComponent(document.getElementById("db_password").value )) ;
+               
+               myHeaders.append( "sensorthings_endpoint_url", encodeURIComponent(document.getElementById("sensorthings_endpoint_url").value )) ;
+                       
+               var myInit = { method: 'GET'      ,
+                              headers: myHeaders ,
+                              cache: 'default' } ;
+               
+               var myRequest = new Request( getSensorEndPoint() + '/sensorThings' , myInit ) ;
+               
+               fetch( myRequest )
+               .then( response => response.text() )
+               .then( data =>  {
+                   document.getElementById("logs-id").value = data    ;
+               }).catch ( err => {
+                 document.getElementById("logs-id").value = " " + err ;
+               });
+         }
+         
+         function getLogs() {
+           
+               closeLogs() ;
+               
+               document.getElementById("logs-id").value = "" ;
             
-            var dbPort = getValueByKey(content, "##DB_PORT##                   : ") ;
-            document.getElementById("db_port").value = dbPort ;
+               var myHeaders = new Headers() ;
+         
+               var token = getAuthHeader()   ;
+               
+               myHeaders.append( "API-key-Token", token ) ;
+              
+               var myInit = { method: 'GET',
+                              headers: myHeaders  ,
+                              cache:  'default' } ;
+              
+              var myRequest = new Request( getSensorEndPoint() + '/logs' , myInit ) ;
+          
+              const decoder = new TextDecoder('utf-8')   ;
+         
+              fetch(myRequest).then( function(response ) {
+          
+                   reader = response.body.getReader()    ;
+                   function read() {
+                   
+                       return reader.read()
+                                    .then(({ value, done })=> {
+                      
+                            document.getElementById("logs-id").value     += decoder.decode(value) ;
+                            document.getElementById("logs-id").scrollTop =  document.getElementById("logs-id").scrollHeight ;
+                            
+                       if (done)               {
+                           console.log('done') ;
+                           return ;
+                       }
+                       read() ;
+                       }) ;
+                   }
+                   read() ;
+              }).catch(function(err) {
+                 document.getElementById("logs-id").value = " " + err ;
+              });
+         }
+         
+         function closeLogs()   {
+         
+           if( reader != null ) {
+              try {
+                reader.cancel();
+              } catch( err ) {
+                  document.getElementById("logs-id").value = " " + err ;
+              }
+           }
+           
+           document.getElementById("logs-id").value = "" ;
+         }
+         
+         
+         function setTemplate( type, templateInJsonValue) {
+         
+             var options= document.getElementById('sensorTemplateId').options;
+             
+             for (var i= 0; i < options.length; i++ ) {
+                   if (options[i].value === type )    {
+                       options[i].selected= true;
+                       break;
+                   }
+             }
+               
+             edit.set( JSON.parse(templateInJsonValue)) ;
+         }
+         
+         
+         function getComboA(templateValue) {
+         
+           if( templateValue == "Things" ) {
+           
+               sensorType = "Things"       ;
+         
+               currentTemplate = "Things"  ;
+               
+               const thingJson =     {
+                 
+                   "name": "{{name}}",
+                   "description": "{{description}}",
+                   "properties": {
+                       "owner": "{{owner}}",
+                    } ,
+                  
+               }
+               
+             edit.set(thingJson) ;
+           }
+           
+           else if( templateValue == "Observation linked to an existing Sensor" ) {
+           
+               sensorType = "Observations" ;
+         
+               currentTemplate = "Observation_linked_to_an_existing_Sensor" ;
+               
+               const thingJson = {          
+                   
+                       "result": "{{result}}",
+                   
+                       "Datastream":
+                       {
+                         "@iot.id": "{{datastream_id}}"
+                       },
+                       
+                       "phenomenonTime": "{{1900-01-10T16:00:00-00:00}}",
+                       
+                       "FeatureOfInterest" :
+                       {
+                         "@iot.id": "{{featureOfInterest_id}}"
+                       }
+             }
+         
+             edit.set(thingJson) ;
+           }
+           
+           else if( templateValue == "Thing with new Location" ) {
+           
+               sensorType = "Things" ;
+         
+               currentTemplate = "Thing_with_new_Location" ;
+               
+               const thingJson = {            
+                          
+                           "name": "{{name}}",
+                           "description": "{{desc}}",
+                           "properties": {
+                               "Deployment Condition": "{{cond}}",
+                               "Case Used": "{{used}}"
+                           },
+                           "Locations": [
+                               {
+                               "name": "{{name}}",
+                               "description": "{{desc}}",
+                               "encodingType": "application/vnd.geo+json",
+                               "location": {
+                                   "type": "Point",
+                                   "coordinates": [
+                                        -114.133,
+                                        51.08
+                                   ]
+                               }
+                               }
+                           ]                    
+             }
+               
+             edit.set(thingJson) ;
+           }
+           
+           else if( templateValue == "Location" )  {
+           
+              sensorType = "Locations" ;
+               
+              currentTemplate = "Location" ;
+               
+              const thingJson = { 
+                       "name": "{{location_name}}",
+                       "description": "{{location_description}}",
+                       "encodingType": "application/vnd.geo+json",
+                       "location": {
+                           "type": "Point",
+                           "coordinates": [-114.133, 51.08]
+                       }
+              }
+              
+              edit.set(thingJson) ;
+         
+           }
+           
+           else if( templateValue == "SensorThings Templates" ) {
+           
+              sensorType = "NULL" ;
+               
+             currentTemplate = "" ;
+                
+              var thingJson ;
+              
+              edit.set(thingJson) ;
+         
+           } 
+         
+         }
+         
+         function getAuthHeader() {
+           
+            var login    = document.getElementById("sensor-login-id").value ;
+            var password = document.getElementById("sensor-password-id").value ;
             
-            var dbName = getValueByKey(content, "##DB_NAME##                   : ") ;
-            document.getElementById("db_name").value = dbName ;
+            return hash( login , password, "SHA2" , "PLAIN" , "MD5", "PLAIN" )  ;
+         }
+          
+          
+         function getSensorEndPoint() {
+         
+            return document.getElementById("sensor-map-id").value ;
+         }
+         
+             
+         function download() {
+         
+           if( sensorType === "NULL" ) {
+               alert(" Please, select a Sensor-Template ! ");
+               return ;
+           }
+           
+           var login    = document.getElementById("sensor-login-id").value ;
+           
+           var sensorTemplate = edit.getText() ;
+           var sqlQuery       = codeMirrorEditor.getCode() ;
+         
+           var db_host = document.getElementById("db_host").value  ;
+           var db_port = document.getElementById("db_port").value  ;
+           var db_name = document.getElementById("db_name").value  ;
+           var db_user = document.getElementById("db_user").value  ;
+           
+           var sensorThingsEndpointUrl = document.getElementById("sensorthings_endpoint_url").value ;
+           
+           var element = document.createElement('a');
+           
+           element.setAttribute('href', 'data:text/plain;charset=utf-8,' +
+                                   encodeURIComponent( "##LOGIN##                     : " + login                   + "\n\n" + 
+                                                       "##SensorMapEndPoint##         : " + getSensorEndPoint()     + "\n\n" + 
+                                                       "##DB_HOST##                   : " + db_host                 + "\n\n" + 
+                                                       "##DB_PORT##                   : " + db_port                 + "\n\n" + 
+                                                       "##DB_NAME##                   : " + db_name                 + "\n\n" + 
+                                                       "##DB_USER##                   : " + db_user                 + "\n\n" + 
+                                                       "##SensorType##                : " + sensorType              + "\n\n" + 
+                                                       "##SensorThingsEndpointUrl##   : " + sensorThingsEndpointUrl + "\n\n" + 
+                                                       "##SensorTemplate##            : " + sensorTemplate          + "\n\n" + 
+                                                       "##SqlQuery##                  : " + "\n" + sqlQuery         + "\n\n" + "##SqlQueryEnd## \n" 
+                                                   ));
+                                                   
+           element.setAttribute('download', sensorType ) ;
+         
+           element.style.display = 'none'                ;
+           document.body.appendChild(element)            ;
+         
+           element.click()                               ;
+         
+           document.body.removeChild(element)            ;
+         }
+         
+         
+         /* IMPORT */
+         
+         function handleFileSelect(files) {
+         
+           var file = files[0]  ;
+         
+           var output = [];
+           
+           output.push('<li><strong>', escape( file.name), '</strong> (', file.type || 'n/a', ') - '  ,
+                        file.size, ' bytes, last modified: ',
+                        file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : 'n/a'    ,
+                        '</li>' ) ;
+               
+           if (file) {
+           
+               var reader = new FileReader() ;
+               
+               reader.readAsText(file )      ;
+               
+               reader.onload = function(evt) {
+                  
+                   var content = evt.target.result ;
+                  
+                   var login = getValueByKey(content, "##LOGIN##                     : "             ) ;
+                   document.getElementById("sensor-login-id").value = login ;
+                   
+                   var sensorMapEndPoint = getValueByKey(content, "##SensorMapEndPoint##         : " ) ;
+                   document.getElementById("sensor-map-id").value = sensorMapEndPoint ;
+                   
+                   var dbHost = getValueByKey(content, "##DB_HOST##                   : "            ) ;
+                   document.getElementById("db_host").value = dbHost ;
+                   
+                   var dbPort = getValueByKey(content, "##DB_PORT##                   : "            ) ;
+                   document.getElementById("db_port").value = dbPort ;
+                   
+                   var dbName = getValueByKey(content, "##DB_NAME##                   : "            ) ;
+                   document.getElementById("db_name").value = dbName ;
+             
+                   var dbUser = getValueByKey(content, "##DB_USER##                   : "            ) ;
+                   document.getElementById("db_user").value = dbUser ;
+             
+                   var sensorType = getValueByKey(content, "##SensorType##                : "        ) ;
+                   
+                   var sensorTemplate = getValueByKey(content, "##SensorTemplate##            : "    ) ;
+                   setTemplate( sensorType, sensorTemplate) ;
+                   
+                   var sensorThingsEndpointUrl = getValueByKey(content , "##SensorThingsEndpointUrl##   : ", "##SqlQueryEnd##" ) ;
+                   document.getElementById("sensorthings_endpoint_url").value = sensorThingsEndpointUrl ;
+                   
+                   var sqlQuery = extractSqlFromString(content ,"##SqlQuery##                     : " ) ; 
+                   codeMirrorEditor.setCode( "\n" + sqlQuery ) ;
+                   
+               }
+               
+               reader.onerror = function (evt)  {
+                   alert("Error reading file" ) ;
+               }
+           }
+          
+         }
+         
+         
+         function extractSqlFromString( text, keyBeg, keyEnd)     {
+         
+             return text.split(keyBeg)[1].split(keyEnd)[0].trim() ;
+         }
+         
+         
+         function getValueByKey(text, key )                 {
+           var regex = new RegExp("^" + key + "(.*)$", "m") ;
+           var match = regex.exec(text)                     ;
+           if(match)
+               return match[1].trim()                       ;
+           else
+               return "NULL";
+         }
+         
+      </script>
       
-            var dbUser = getValueByKey(content, "##DB_USER##                   : ") ;
-            document.getElementById("db_user").value = dbUser ;
-      
-            var sensorType = getValueByKey(content, "##SensorType##                : ") ;
-            //document.getElementById("sensor-login-id").value = sensorType ;
-            
-            var sensorTemplate = getValueByKey(content, "##SensorTemplate##            : ") ;
-            // getComboA(sensorTemplate) ;
-            setTemplate( sensorType, sensorTemplate) ;
-            
-            var sensorThingsEndpointUrl = getValueByKey(content, "##SensorThingsEndpointUrl##   : ", "##SqlQueryEnd##" ) ;
-            document.getElementById("sensorthings_endpoint_url").value = sensorThingsEndpointUrl ;
-            
-            var sqlQuery = extractSqlFromString(content ,"##SqlQuery##                  : " ); 
-            codeMirrorEditor.setCode( "\n" + sqlQuery ) ;
-            
-        }
-        reader.onerror = function (evt) {
-            alert("Error reading file");
-        }
-    }
+   </body>
    
-  }
-  
-  
-  function extractSqlFromString( text, keyBeg, keyEnd) {
-  
-        return text.split(keyBeg)[1].split(keyEnd)[0].trim() ;
-  }
-  
-  function getValueByKey(text, key ){
-    var regex = new RegExp("^" + key + "(.*)$", "m");
-    var match = regex.exec(text);
-    if(match)
-        return match[1].trim();
-    else
-        return "NULL";
-}
-
-</script>
-
-  </body>
 </html>

@@ -3,5 +3,6 @@
  CURRENT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
  
  cd $CURRENT_PATH
- 
- ./sensor-map-server/compile.sh
+
+ java -jar sensor-map/sensor-map-0.9.jar &
+

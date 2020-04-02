@@ -5,7 +5,7 @@ services:
     image: fraunhoferiosb/frost-server:latest
     hostname: sensorthings
     environment:
-      - serviceRootUrl=http://localhost:8080/FROST-Server
+      - serviceRootUrl=http://localhost:8181/FROST-Server
       - http_cors_enable=true
       - http_cors_allowed.origins=*
       - persistence_db_driver=org.postgresql.Driver
@@ -19,7 +19,7 @@ services:
       - http.cors.allowed.methods=HEAD,POST,GET,OPTIONS,DELETE
       - persistence.idGenerationMode=ServerAndClientGenerated
     ports:
-      - 8080:8080
+      - 8181:8080
       - 1883:1883
     depends_on:
       - database
@@ -44,7 +44,7 @@ services:
     build:    ./gost-dashboard/
     image:    gost-ui    
     ports:
-      - 8181:8181
+      - 8282:8181
     networks:
       sensor_net:
          ipv4_address: 172.28.1.5

@@ -154,11 +154,12 @@ var CodeMirror = (function(){
     div.appendChild(frame);
     if (options.lineNumbers) this.lineNumbers = addLineNumberDiv(div, options.firstLineNumber);
 
-    this.win = frame.contentWindow;
-    if (!options.domain || !internetExplorer) {
-      this.win.document.open();
-      this.win.document.write(frameHTML(options));
-      this.win.document.close();
+    this.win = frame.contentWindow ;
+    if (!options.domain || !internetExplorer)     {
+      this.win.document.open() ;
+      this.win.document.write(frameHTML(options)) ;
+      this.win.document.close()                   ;
+      console.clear() ; // Ingore the Warning Message // Rac021
     }
   }
 
