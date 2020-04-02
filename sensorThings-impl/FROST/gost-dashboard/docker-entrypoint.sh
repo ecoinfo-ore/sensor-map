@@ -37,7 +37,7 @@ if [ "$ssl" == "true" ]; then
 
 echo "Creating NGINX default.conf with ssl"
 
-echo "	
+echo " 
 	listen 443 ssl http2;
 	listen [::]:443 ipv6only=on ssl;
 
@@ -53,77 +53,79 @@ else
 echo "Creating NGINX default.conf without ssl"
 
 echo "	
-	listen 8181;
-	listen [::]:8181 ipv6only=on;
+	listen 8282;
+	listen [::]:8282 ipv6only=on;
     server_name localhost ;" >> /etc/nginx/conf.d/default.conf
 
 fi
 
-echo "	
+echo "
+
     root /var/www/html;
     index index.html;
-  
-  
     access_log /var/nginx-access.log ;
   
-	location / {
-	
-	
-   # Activer le proxy
-   # proxy_set_header               X-Real-IP $remote_addr;
-   # proxy_set_header               X-Forwarded-For $proxy_add_x_forwarded_for;
-   # proxy_pass                     http://api.com;
-    proxy_redirect                  off;
-    proxy_buffers                   32 16k;
-    proxy_busy_buffers_size         64k;
-      
-         # proxy_pass http://172.28.1.2:8080/FROST-Server/v1.0;
-
-		if (\$request_method = 'OPTIONS') {
-		   add_header 'Access-Control-Allow-Origin' '*' ;
-		   add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, PATCH, DELETE';
-		   add_header 'Access-Control-Allow-Headers' '*';
-		   add_header 'Access-Control-Max-Age' 1728000;
-		   add_header 'Content-Type' 'application/json, charset=UTF-8';
-		   add_header 'Content-Length' 0;
-		   
+    location / {
+ 
+        proxy_redirect              off;
+        proxy_buffers               32 16k;
+        proxy_busy_buffers_size     64k;
+              
+        if (\$request_method = 'OPTIONS') {
+           add_header 'Access-Control-Allow-Origin' '*' ;
+           add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, PATCH, DELETE';
+           add_header 'Access-Control-Allow-Headers' '*';
+           add_header 'Access-Control-Max-Age' 1728000;
+           add_header 'Content-Type' 'application/json, charset=UTF-8';
+           add_header 'Content-Length' 0;
+           
 		  # add_header 'TEST_HEADER_RAC' 'INRAE';
-		   
-		   return 204;
+           
+           return 204;
 		}
 		if (\$request_method = 'GET') {
-		   add_header 'Access-Control-Allow-Origin' '*' always;
-		   add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, PATCH, DELETE';
-		   add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range,Accept';
-		   add_header 'Access-Control-Expose-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range';
-		}
-		if (\$request_method = 'POST') {
-		   add_header 'Access-Control-Allow-Origin' '*' always;
-		   add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, PATCH, DELETE';
-		   add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range,Accept';
-		   add_header 'Access-Control-Expose-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range';
+           add_header 'Access-Control-Allow-Origin' '*' always;
+           add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, PATCH, DELETE';
+           add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range,Accept';
+           add_header 'Access-Control-Expose-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range';
+        }
+        if (\$request_method = 'POST') {
+           add_header 'Access-Control-Allow-Origin' '*' always;
+           add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, PATCH, DELETE';
+           add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range,Accept';
+           add_header 'Access-Control-Expose-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range';
 		}
 		if (\$request_method = 'DELETE') {
-		   add_header 'Access-Control-Allow-Origin' '*' always;
-		   add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, PATCH, DELETE';
-		   add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range,Accept';
-		   add_header 'Access-Control-Expose-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range';
-		}
-		if (\$request_method = 'PATCH') {
-		   add_header 'Access-Control-Allow-Origin' '*' always;
-		   add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, PATCH, DELETE';
-		   add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range,Accept';
-		   add_header 'Access-Control-Expose-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range';
-		}
-		if (\$request_method = 'PUT') {
-		   add_header 'Access-Control-Allow-Origin' '*' always;
-		   add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, PATCH, DELETE';
-		   add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range,Accept';
-		   add_header 'Access-Control-Expose-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range';
-		}
+           add_header 'Access-Control-Allow-Origin' '*' always;
+           add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, PATCH, DELETE';
+           add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range,Accept';
+           add_header 'Access-Control-Expose-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range';
+        }
+        if (\$request_method = 'PATCH') {
+           add_header 'Access-Control-Allow-Origin' '*' always;
+           add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, PATCH, DELETE';
+           add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range,Accept';
+           add_header 'Access-Control-Expose-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range';
+        }
+        if (\$request_method = 'PUT') {
+           add_header 'Access-Control-Allow-Origin' '*' always;
+           add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, PATCH, DELETE';
+           add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range,Accept';
+           add_header 'Access-Control-Expose-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range';
+        }
     }
 
     location = /favicon.ico { access_log off; log_not_found off; }
+    
 }" >> /etc/nginx/conf.d/default.conf
+
+
+DEFAULT_SENSORTHINGS_URL="http://localhost:8181/"
+SENSORTHINGS_URL="$SENSORTHINGS_URL"
+
+if [ "$SENSORTHINGS_URL" != "" ]; then 
+  echo " + Update SensorThings Server URL : $SENSORTHINGS_URL"
+  sed -i "s|$DEFAULT_SENSORTHINGS_URL|$SENSORTHINGS_URL|g" /var/www/html/js/app.js
+fi
 
 exec "$@"

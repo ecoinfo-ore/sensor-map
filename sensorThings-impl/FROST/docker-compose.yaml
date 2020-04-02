@@ -24,8 +24,7 @@ services:
     depends_on:
       - database
     networks:
-      sensor_net:
-        ipv4_address: 172.28.1.2
+      - sensor_net
 
   database:
     image: mdillon/postgis:latest    
@@ -35,21 +34,23 @@ services:
       - POSTGRES_PASSWORD=ChangeMe
     volumes:
       - postgis_volume:/var/lib/postgresql/data
+    ports:
+      - 2345:5432
     networks:
-      sensor_net:
-        ipv4_address: 172.28.1.1
+      - sensor_net
   
   gost-ui:
     hostname: gost-ui
     build:    ./gost-dashboard/
     image:    gost-ui    
     ports:
-      - 8282:8181
-    networks:
-      sensor_net:
-         ipv4_address: 172.28.1.5
+      - 8282:8282
     depends_on:
       - sensorthings
+    environment:
+      - SENSORTHINGS_URL=http://localhost:8181/
+    networks:
+      - sensor_net
       
   pgadmin-compose:
     image: dpage/pgadmin4
@@ -57,18 +58,14 @@ services:
       PGADMIN_DEFAULT_EMAIL:    "admin@admin.com"
       PGADMIN_DEFAULT_PASSWORD: "admin"
     ports:
-      - 54321:80
+      - 8383:80
     networks:
-      sensor_net:
-         ipv4_address: 172.28.1.4
+      - sensor_net  
          
 volumes:
     postgis_volume:
 
+  
 networks:
-  sensor_net: 
-    ipam:
-       driver: default
-       config:
-         - subnet: 172.28.0.0/16
+  sensor_net: {}
 
