@@ -20,7 +20,7 @@
  echo
  echo " UI    :                                                                                          "
  echo "  -  GOST-UI        Deployed at :  http://localhost:8282                                          "
- echo "  -  Ui-Sensor-Map              :  ui-sensor-map/index.html (  Launch into the browser            "
+ echo "  -  Sensor-Map-Ui              :  sensor-map-ui/index.html (  Launch on browser )                "
  echo 
  echo " ===============================================================================================  " 
  echo
