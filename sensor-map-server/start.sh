@@ -14,3 +14,4 @@
  #      -Dquarkus.datasource.jdbc.min-size=4                           \
  #      -Dquarkus.datasource.jdbc.max-size=16                          \
  #      -jar sensor-map/sensor-map-0.9.jar &
+
