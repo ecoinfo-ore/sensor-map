@@ -69,8 +69,8 @@ public class ServiceSensorThings /* extends Service*/ {
     void onStart(@Observes StartupEvent ev) { }
 
     @PostConstruct
-    public void init() {
-      System.out.println(" + ServiceSensorThings Instanciation : " + this);
+    public void init()  {
+      System.out.println( " + ServiceSensorThings Instanciation : " + this ) ;
     }
 
     @GET
@@ -90,53 +90,53 @@ public class ServiceSensorThings /* extends Service*/ {
         System.out.println(" Call : ServiceSensorThings... ") ;
       
         if( _sensorType == null ) {
-           JsonObject respObj = Json.createObjectBuilder().add("Error", "SensorType Can't be Null").build();
-           return Response.status(Response.Status.OK).entity(respObj.toString()).build();
+           JsonObject respObj = Json.createObjectBuilder().add("Error", "SensorType Can't be Null").build() ;
+           return Response.status(Response.Status.OK).entity(respObj.toString()).build()                    ;
         }
         
         if( _sqlQuery == null ) {
-           JsonObject respObj = Json.createObjectBuilder().add("Error", "Sql Query Can't be Null").build();
-           return Response.status(Response.Status.OK).entity(respObj.toString()).build();
+           JsonObject respObj = Json.createObjectBuilder().add("Error", "Sql Query Can't be Null").build()  ;
+           return Response.status(Response.Status.OK).entity(respObj.toString()).build()                    ;
         }
         
         if( _template == null || _template.equalsIgnoreCase("undefined")) {
-           JsonObject respObj = Json.createObjectBuilder().add("Error", "Template Can't be Null. Select Template").build();
-           return Response.status(Response.Status.OK).entity(respObj.toString()).build();
+           JsonObject respObj = Json.createObjectBuilder().add("Error", "Template Can't be Null. Select Template").build() ;
+           return Response.status(Response.Status.OK).entity(respObj.toString()).build()                                   ;
         }
         
         if( db_host == null ) {
-           JsonObject respObj = Json.createObjectBuilder().add("Error", "DB Host Can't be Null").build();
-           return Response.status(Response.Status.OK).entity(respObj.toString()).build();
+           JsonObject respObj = Json.createObjectBuilder().add("Error", "DB Host Can't be Null").build() ;
+           return Response.status(Response.Status.OK).entity(respObj.toString()).build()                 ;
         }
         
         if( db_port == null ) {
-           JsonObject respObj = Json.createObjectBuilder().add("Error", "DB Port Can't be Null").build();
-           return Response.status(Response.Status.OK).entity(respObj.toString()).build();
+           JsonObject respObj = Json.createObjectBuilder().add("Error", "DB Port Can't be Null").build() ;
+           return Response.status(Response.Status.OK).entity(respObj.toString()).build()                 ;
         }
         
         if( db_name == null ) {
-           JsonObject respObj = Json.createObjectBuilder().add("Error", "DB NAME Can't be Null").build();
-           return Response.status(Response.Status.OK).entity(respObj.toString()).build();
+           JsonObject respObj = Json.createObjectBuilder().add("Error", "DB NAME Can't be Null").build() ;
+           return Response.status(Response.Status.OK).entity(respObj.toString()).build()                 ;
         }
         
         if( db_user == null ) {
-           JsonObject respObj = Json.createObjectBuilder().add("Error", "DB USER Can't be Null").build();
-           return Response.status(Response.Status.OK).entity(respObj.toString()).build();
+           JsonObject respObj = Json.createObjectBuilder().add("Error", "DB USER Can't be Null").build() ;
+           return Response.status(Response.Status.OK).entity(respObj.toString()).build()                 ;
         }
         
         if( db_password == null ) {
-           JsonObject respObj = Json.createObjectBuilder().add("Error", "DB PASSWORD Can't be Null").build();
-           return Response.status(Response.Status.OK).entity(respObj.toString()).build();
+           JsonObject respObj = Json.createObjectBuilder().add("Error", "DB PASSWORD Can't be Null").build() ;
+           return Response.status(Response.Status.OK).entity(respObj.toString()).build()                     ;
         }
         
         if( _sensorthings_endpoint_url == null ) {
-           JsonObject respObj = Json.createObjectBuilder().add("Error", "SensorThings Endpoint Can't be Null").build();
-           return Response.status(Response.Status.OK).entity(respObj.toString()).build();
+           JsonObject respObj = Json.createObjectBuilder().add("Error", "SensorThings Endpoint Can't be Null").build() ;
+           return Response.status(Response.Status.OK).entity(respObj.toString()).build()                               ;
         }
         
-        String sqlQuery                      = URLDecoder.decode( _sqlQuery, StandardCharsets.UTF_8.toString()) ;
+        String sqlQuery                      = URLDecoder.decode( _sqlQuery, StandardCharsets.UTF_8.toString())   ;
         
-        String template                      = URLDecoder.decode( _template, StandardCharsets.UTF_8.toString())     ;
+        String template                      = URLDecoder.decode( _template, StandardCharsets.UTF_8.toString())   ;
         String sensorType                    = URLDecoder.decode( _sensorType, StandardCharsets.UTF_8.toString()) ;
         
         String sensorthings_endpoint_url_dec =  URLDecoder.decode( _sensorthings_endpoint_url, StandardCharsets.UTF_8.toString()) ;
@@ -151,14 +151,14 @@ public class ServiceSensorThings /* extends Service*/ {
         System.out.println(" sensorthings_endpoint_url_dec : " + sensorthings_endpoint_url_dec ) ;
         System.out.println("                                             " ) ;
                 
-        PgPoolOptions option = getOptions( db_port, db_host, db_name, db_user, db_password ) ;
+        PgPoolOptions option = getOptions( db_port, db_host, db_name, db_user, db_password )     ;
 
-        CountDownLatch latch = new CountDownLatch(1 ) ;
+        CountDownLatch latch = new CountDownLatch(1 )              ;
         
         JsonObjectBuilder respBuilder = Json.createObjectBuilder() ;
          
         // Create the client pool
-        PgPool client = PgClient.pool(option ) ;
+        PgPool client = PgClient.pool(option )           ;
 
         String  login     = TokenManager.getLogin(token) ;
         String  path_logs = TokenManager.builPathLog( "logger" /*configuration.getLoggerFile()*/, login ) ;
@@ -171,9 +171,9 @@ public class ServiceSensorThings /* extends Service*/ {
 
             if (ar1.succeeded())    {
 
-                PgConnection connection = ar1.result() ;
+                PgConnection connection = ar1.result()  ;
 
-                connection.cancelRequest(  (cx) -> { 
+                connection.cancelRequest(  (cx) ->      { 
                    System.out.println(" Cancel The Current Request") ;
                 }) ;
                   
@@ -187,11 +187,11 @@ public class ServiceSensorThings /* extends Service*/ {
                              latch.countDown() ;
                              
                              exs.add("Exception : Url " + sensorthings_endpoint_url + " Not Reachable !! ") ;
-                             Writer.writeTextFile(exs, path_logs)             ;
-                             exs.clear();
+                             Writer.writeTextFile(exs, path_logs)                                           ;
+                             exs.clear()                                                                    ;
                         
-                             client.close()    ;                             
-                             return            ;
+                             client.close() ;                             
+                             return         ;
                         }
                         
                         exs.add("Sensor-map Start...    ID : " +  startedDate ) ;
@@ -206,12 +206,12 @@ public class ServiceSensorThings /* extends Service*/ {
                         PgTransaction tx = connection.begin() ;
 
                         // Fetch 2 rows at a time
-                        PgStream<Row> stream = pq.result().createStream(2, Tuple.tuple());
+                        PgStream<Row> stream = pq.result().createStream( 10000 , Tuple.tuple() ) ;
 
                         // Use the stream
                         stream.exceptionHandler((err) -> {
                             System.out.println("Error: " + err.getMessage()) ;
-                            tx.close() ;
+                            tx.close()                                       ;
                         });
 
                         stream.endHandler( v -> {
@@ -228,7 +228,7 @@ public class ServiceSensorThings /* extends Service*/ {
                             
                         stream.handler( (row) -> {
 
-                            if (count.getAndIncrement() == 0)      {
+                            if (count.getAndIncrement() == 0)              {
                                 for (int i = 0; i < row.size(); i++)       {
                                     columnsNames.add(row.getColumnName(i)) ;
                                 }
@@ -236,18 +236,18 @@ public class ServiceSensorThings /* extends Service*/ {
 
                             for (int colmnPos = 0; colmnPos < columnsNames.size(); colmnPos++) {
 
-                                String colmnName = columnsNames.get(colmnPos);
-                                String colmnValue = row.getValue(colmnName).toString();
+                                String colmnName = columnsNames.get(colmnPos)          ;
+                                String colmnValue = row.getValue(colmnName).toString() ;
                                 
-                                columnsValues.put( colmnName , colmnValue) ;
+                                columnsValues.put( colmnName , colmnValue)             ;
                             }
                             
-                            String outData = applyValue( columnsValues, template ) ;
+                            String outData = applyValue( columnsValues, template )     ;
                            
-                            StringWriter errors = new StringWriter()     ;
+                            StringWriter errors = new StringWriter()                   ;
                             
-                            List<String> data = new ArrayList<>();
-                            data.add(outData) ;
+                            List<String> data = new ArrayList<>()                      ;
+                            data.add(outData)                                          ;
                             
                             try {
                                
@@ -299,9 +299,9 @@ public class ServiceSensorThings /* extends Service*/ {
 
         });
         
-        latch.await() ;
+        latch.await()                                               ;
         
-        JsonObject respObj = respBuilder.build() ;
+        JsonObject respObj = respBuilder.build()                    ;
         
         if(respObj.isEmpty() ) {
            respObj = respBuilder.add("Status", "Processed").build() ;
@@ -350,15 +350,15 @@ public class ServiceSensorThings /* extends Service*/ {
         String sqlQuery = URLDecoder.decode( _sqlQuery, StandardCharsets.UTF_8.toString()) ;
 
         if (  sqlQuery == null || sqlQuery.trim().replaceAll("(?m)^[ \t]*\r?\n", "").isEmpty() ) {
-             JsonObject respObj = Json.createObjectBuilder().add("Error", "SQL Query Can't be Null").build();
-           return Response.status(Response.Status.OK).entity(respObj.toString()).build();
+              JsonObject respObj = Json.createObjectBuilder().add("Error", "SQL Query Can't be Null").build() ;
+              return Response.status(Response.Status.OK).entity(respObj.toString()).build()                   ;
         }
         
-         Query buildQueryObject = null ;
+         Query buildQueryObject = null                              ;
          JsonObjectBuilder jsonBuilder = Json.createObjectBuilder() ;
          
-         try (Connection connection = DriverManager.getConnection( "jdbc:postgresql://" + db_host +":" + db_port + "/" + db_name ,
-                                                                   db_user, db_password )) {
+         try ( Connection connection = DriverManager.getConnection( "jdbc:postgresql://" + db_host +":" + db_port + "/" + db_name ,
+                                                                    db_user, db_password )) {
               connection.setReadOnly(true) ;
              
               try {
@@ -376,12 +376,12 @@ public class ServiceSensorThings /* extends Service*/ {
         }
       
        buildQueryObject.getParameters().forEach((columneName, columnType) -> {
-           jsonBuilder.add(columneName, columnType.get("TYPE")) ;
-       });
+           jsonBuilder.add(columneName, columnType.get("TYPE"))              ;
+       } ) ;
               
        JsonObject sqlObj = jsonBuilder.build() ;
            
-       if( sqlObj.isEmpty())     {
+       if( sqlObj.isEmpty() )    {
            sqlObj.put("", null ) ;
        }
        
@@ -389,7 +389,7 @@ public class ServiceSensorThings /* extends Service*/ {
 
     }
     
-    private static String applyValue( final Map<String, String> map  , 
+    private static String applyValue( final Map<String, String> map , 
                                      final String template          ) {
         
         if( map == null || template == null ) return template ;
@@ -402,17 +402,17 @@ public class ServiceSensorThings /* extends Service*/ {
                                 v                                    ) ;
         }) ;
         
-        return templateInstance.toString() ;
+        return templateInstance.toString()                             ;
     }
     
-     private static void replaceAllPattern( StringBuilder sb          , 
-                                            Pattern       pattern     , 
-                                            String        replacement ) {
+     private static void replaceAllPattern( StringBuilder sb           , 
+                                            Pattern       pattern      , 
+                                            String        replacement  ) {
         Matcher m = pattern.matcher(sb) ;
         int start = 0                   ;
-        while (m.find(start)) {
-            sb.replace(m.start(), m.end(), replacement) ;
-            start = m.start() + replacement.length()    ;
+        while (m.find(start))  {
+            sb.replace(m.start() , m.end(), replacement) ;
+            start = m.start()    + replacement.length()  ;
         }
     }
 
