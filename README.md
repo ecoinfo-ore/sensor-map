@@ -44,4 +44,7 @@
    02_deploy.sh
 ```
 
+#### 3. SensorThings UML Model :
+
+<img width="720" alt="SensorThings_API_Part_I_UML" src="https://user-images.githubusercontent.com/37690220/78402076-464dd080-75fa-11ea-857e-a8f4b8462349.png">
 
