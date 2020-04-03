@@ -30,8 +30,8 @@
  - Schema :
  
          - Database Name                          :  sensorusers
-         - Table Name                             :  users
-         - Postgres User Acces ( LOGIN/PASSWORD ) : postgres/postgres 
+         - Table    Name                          :  users
+         - Postgres User Acces ( LOGIN/PASSWORD ) :  postgres/postgres 
  
  - Note : Passwords in the table users are stored in MD5 Hash.
 
