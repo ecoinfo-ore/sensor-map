@@ -1,4 +1,4 @@
-# sensor-map ( DEV )
+# sensor-map ( v 0.9 )
 ### *Database to SensorThings Mapper Tool*
 
 **Requirements :**
