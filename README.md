@@ -53,7 +53,13 @@
 
 -------
 
-#### 3. SensorThings UML Model :
+#### 3. SensorMap UI :
+
+![sensorMap-Ui](https://user-images.githubusercontent.com/37690220/78403329-79915f00-75fc-11ea-8d14-c5c01fe3ef23.jpg)
+
+-------
+
+#### 4. SensorThings UML Model :
 
 <img width="720" alt="SensorThings_API_Part_I_UML" src="https://user-images.githubusercontent.com/37690220/78402076-464dd080-75fa-11ea-857e-a8f4b8462349.png">
 
