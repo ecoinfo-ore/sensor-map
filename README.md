@@ -29,12 +29,12 @@
 
  - Schema :
  
-         - Database Name  :  sensorusers
-         - Table Name     :  users
-         - LOGIN/PASSWORD :  postgres/postgres
-         - ALOG           :  Password Stored using MD5 Hash
+         - Database Name                          :  sensorusers
+         - Table Name                             :  users
+         - Postgres User Acces ( LOGIN/PASSWORD ) : postgres/postgres 
  
- 
+ - Note : Passwords in the table users are stored in MD5 Hash.
+
  ![SensorMap-DB](https://user-images.githubusercontent.com/37690220/78401513-32ee3580-75f9-11ea-8c52-b5211d24d4a8.png)
     
     
