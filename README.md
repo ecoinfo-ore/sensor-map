@@ -13,17 +13,28 @@
 
 ---
 
-#### 1. Compile Jaxy 
+#### 1. Compile SensorMap Server 
+
 ```
    01_compile.sh
 ```
-#### 2. Deploys SensorThings ( FROST + GOST Dashboard ) + Jaxy W.S 
 
-###### 2.1 Deploy Database ( used by sensor-map to secure user access )
+#### 2. Deploy :
+
+###### 2.1 Postgres Database ( used by sensorMap server to secure user access ) :
 
 ```
    docker run --rm --name sensor-auth -p 2345:5432 rac021/sensor-auth 
 ```
+
+    - Schema 
+    
+    
+    - Infos : Database Name  :
+              Table Name     :
+              LOGIN/PASSWORD : postgres/postgres
+              ALOG           : password Hashed using MD5 
+
 ###### 2.2 Deploy services : SensorThings ( Frost + Postgres Database ) + Gost ( Dashboard ) + Sensor-map
 
 ```  
