@@ -27,14 +27,17 @@
    docker run --rm --name sensor-auth -p 2345:5432 rac021/sensor-auth 
 ```
 
-    - Schema 
+ - Schema :
+ 
+         - Database Name  :  sensorusers
+         - Table Name     :  users
+         - LOGIN/PASSWORD :  postgres/postgres
+         - ALOG           :  Password Stored using MD5 Hash
+ 
+ 
+ ![SensorMap-DB](https://user-images.githubusercontent.com/37690220/78401513-32ee3580-75f9-11ea-8c52-b5211d24d4a8.png)
     
     
-    - Infos : Database Name  :
-              Table Name     :
-              LOGIN/PASSWORD : postgres/postgres
-              ALOG           : password Hashed using MD5 
-
 ###### 2.2 Deploy services : SensorThings ( Frost + Postgres Database ) + Gost ( Dashboard ) + Sensor-map
 
 ```  
