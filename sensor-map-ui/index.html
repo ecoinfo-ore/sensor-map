@@ -43,7 +43,7 @@
                <div>
                   <label for="sensor-map-id" style="color:white;"> SensorMap :</label>
                   <input id="sensor-map-id" type="text"  name="sensor-map"  placeholder="sensor-map Endpoint"
-                     style="min-width: 25em; background: chartreuse;padding: 0.2em; padding-left: 1em;" value="http://localhost:8443/rest/resources" />
+                     style="min-width: 25em; background: chartreuse;padding: 0.2em; padding-left: 1em;" value="http://localhost:8080/rest/resources" />
                </div>
             </div>
          </sensor-header>
@@ -51,13 +51,11 @@
          <article>
             <sql-builder-container>
                <div style="border-top: 1px solid green; border-bottom: 1px solid green; caret-color: white; background: #dddddd; border-radius: 10px; ">
-                  <textarea id="code" cols="120" rows="50" >
-                  
- SELECT *  FROM spatial_ref_sys limit 10  ; 
- -- SELECT pg_sleep(10);
- -- INSERT INTO public.aircraft( model, total_passengers, distance_km, speed_km_h, cost_euro) VALUES ('1111', 11, 11, 11, 11);
- -- WITH tmp_table AS ( SELECT model as mod  FROM aircraft limit 10 )
- -- SELECT * FROM tmp_table ;
+                  <textarea id="code" cols="120" rows="50" >                  
+
+ -- Aviation Database
+
+ SELECT *  FROM aircraft limit 10  ; 
  
                   </textarea>
                </div>
