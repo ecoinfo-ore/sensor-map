@@ -59,15 +59,15 @@
 
 ### **3. U.I**
 
-+ #### *3.1 Frost Server*
+#### *3.1 Frost Server*
 
 <img width="500" alt="FROST_SERVER" src="https://user-images.githubusercontent.com/37690220/78457856-9cc81700-76ad-11ea-8af8-475b8227c4a9.jpg">
 
-+ #### *3.2 GOST Dashboard*
+#### *3.2 GOST Dashboard*
 
 ![GOST](https://user-images.githubusercontent.com/37690220/78457327-b0717e80-76a9-11ea-863c-495550e9818e.jpg)
 
-+ #### *3.3 SensorMap UI*
+#### *3.3 SensorMap UI*
 
 ![sensorMap-Ui](https://user-images.githubusercontent.com/37690220/78455300-caa55f80-769d-11ea-81cf-f655738bfa2f.jpg)
 
