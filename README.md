@@ -13,11 +13,13 @@
 
 ---
 
-#### 1. Compile SensorMap Server 
+#### 1. [Compile SensorMap Server](https://github.com/ecoinfo-ore/sensor-map/blob/master/01_compile.sh)  
 
 ```
    ./01_compile.sh
 ```
+###### *The command will launch the script [compile.sh](https://github.com/ecoinfo-ore/sensor-map/blob/master/sensor-map-server/compile.sh) that will compile the project [SensorMap-Server](https://github.com/ecoinfo-ore/sensor-map/tree/master/sensor-map-server/sensor-map)*
+-------
 
 #### 2. Deploy :
 
