@@ -69,11 +69,17 @@
 
 -------
 
-#### 5. [SensorThings UML Model](https://developers.sensorup.com/docs/#introduction) :
+#### 5. GOST Dashboard :
+
+![GOST](https://user-images.githubusercontent.com/37690220/78457327-b0717e80-76a9-11ea-863c-495550e9818e.jpg)
+
+-------
+
+#### 6. [SensorThings UML Model](https://developers.sensorup.com/docs/#introduction) :
 
 <img width="720" alt="SensorThings_API_Part_I_UML" src="https://user-images.githubusercontent.com/37690220/78402076-464dd080-75fa-11ea-857e-a8f4b8462349.png">
 
-#### 6. Improvement + Upcoming features
+#### 7. Improvement + Upcoming features
 
    - Migrate SensorMap-Ui + Gost Dashboeard    ( AngularJS ) to Web components 
    - Integrate Keycloak   ( for Authentication )
