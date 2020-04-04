@@ -1,5 +1,5 @@
 # sensorMap ( v 0.9 )
-### *Database to SensorThings Mapper Tool*
+### *Database to SensorThings Mapping Tool*
 
 **Requirements :**
 
