@@ -61,7 +61,7 @@
 
 ##### 3.1 Frost Server
 
-<img width="500" alt="FROST_SERVER" src="https://user-images.githubusercontent.com/37690220/78457179-94211200-76a8-11ea-8cbb-a67e7c9f6d6b.jpg">
+<img width="500" alt="FROST_SERVER" src="https://user-images.githubusercontent.com/37690220/78457856-9cc81700-76ad-11ea-8af8-475b8227c4a9.jpg">
 
 ##### 3.2 GOST Dashboard
 
