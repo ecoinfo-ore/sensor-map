@@ -59,7 +59,6 @@
 
 #### 3. UI 
 
-
 ##### 3.1 Frost Server
 
 <img width="500" alt="FROST_SERVER" src="https://user-images.githubusercontent.com/37690220/78457179-94211200-76a8-11ea-8cbb-a67e7c9f6d6b.jpg">
