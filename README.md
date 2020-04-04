@@ -33,7 +33,7 @@
          - Table    Name                           :  users
          - Postgres User Access ( LOGIN/PASSWORD ) :  postgres/postgres 
  
- - Note : Passwords in the table users are stored in MD5 Hash.
+ - Note : **Passwords** in the table **users** are stored in **MD5 Hash** ( **admin/admin** - **public/public** - **stg01/stg01** )
 
  ![SensorMap-DB](https://user-images.githubusercontent.com/37690220/78401513-32ee3580-75f9-11ea-8c52-b5211d24d4a8.png)
     
