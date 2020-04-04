@@ -16,7 +16,7 @@
 #### 1. Compile SensorMap Server 
 
 ```
-   01_compile.sh
+   ./01_compile.sh
 ```
 
 #### 2. Deploy :
@@ -41,7 +41,7 @@
 ###### 2.2 Deploy services : SensorThings ( Frost + Postgres Database ) + Gost ( Dashboard ) + Sensor-map
 
 ```  
-   02_deploy.sh
+   ./02_deploy.sh
 ```
 
 ###### 2.3 List Services :
