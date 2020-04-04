@@ -40,7 +40,7 @@
  ![SensorMap-DB](https://user-images.githubusercontent.com/37690220/78401513-32ee3580-75f9-11ea-8c52-b5211d24d4a8.png)
     
     
-###### 2.2 [Deploy services](https://github.com/ecoinfo-ore/sensor-map/blob/master/02_deploy.sh) : [SensorThings ( Frost + Postgres Database ) + Gost ( Dashboard ) + SensorMap Server](https://github.com/ecoinfo-ore/sensor-map/blob/master/sensorThings-impl/FROST/docker-compose.yaml)
+###### 2.2 [Services](https://github.com/ecoinfo-ore/sensor-map/blob/master/02_deploy.sh) : [SensorThings ( Frost + Postgres Database ) + Gost ( Dashboard ) + SensorMap Server](https://github.com/ecoinfo-ore/sensor-map/blob/master/sensorThings-impl/FROST/docker-compose.yaml)
 
 ```  
    ./02_deploy.sh
