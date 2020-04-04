@@ -57,29 +57,31 @@
          
 -------
 
-#### 3. Frost Server :
+#### 3. UI 
+
+##### 3.1 Frost Server
 
 <img width="500" alt="FROST_SERVER" src="https://user-images.githubusercontent.com/37690220/78457179-94211200-76a8-11ea-8cbb-a67e7c9f6d6b.jpg">
 
 -------
 
-#### 4. GOST Dashboard :
+##### 3.2 GOST Dashboard
 
 ![GOST](https://user-images.githubusercontent.com/37690220/78457327-b0717e80-76a9-11ea-863c-495550e9818e.jpg)
 
 -------
 
-#### 5. SensorMap UI :
+##### 3.3 SensorMap UI
 
 ![sensorMap-Ui](https://user-images.githubusercontent.com/37690220/78455300-caa55f80-769d-11ea-81cf-f655738bfa2f.jpg)
 
 -------
 
-#### 6. [SensorThings UML Model](https://developers.sensorup.com/docs/#introduction) :
+#### 4. [SensorThings UML Model](https://developers.sensorup.com/docs/#introduction) :
 
 <img width="720" alt="SensorThings_API_Part_I_UML" src="https://user-images.githubusercontent.com/37690220/78402076-464dd080-75fa-11ea-857e-a8f4b8462349.png">
 
-#### 7. Improvement + Upcoming features
+#### 5. Improvement + Upcoming features
 
    - Migrate SensorMap-Ui + Gost Dashboeard    ( AngularJS ) to Web components 
    - Integrate Keycloak   ( for Authentication )
