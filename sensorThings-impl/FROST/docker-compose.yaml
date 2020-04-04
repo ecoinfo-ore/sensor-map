@@ -31,7 +31,7 @@ services:
     environment:
       - POSTGRES_DB=sensorthings
       - POSTGRES_USER=sensorthings
-      - POSTGRES_PASSWORD=ChangeMe
+      - POSTGRES_PASSWORD=sensorthings
     volumes:
       - postgis_volume:/var/lib/postgresql/data
     ports:
