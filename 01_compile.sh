@@ -5,3 +5,4 @@
  cd $CURRENT_PATH
  
  ./sensor-map-server/compile.sh
+
