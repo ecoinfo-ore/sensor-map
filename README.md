@@ -50,10 +50,10 @@
  
      - SensorThings Server ( FROST     )  :  http://localhost:8181/FROST-Server 
      - SensorThings Postgres Database     :  jdbc:postgresql://localhost:2345/sensorthings ( postgres/postgres )
-     - PgAdmin4                           :  http://localhost:8383/ ( Email/Pwd : admin@admin.com / admin )
+     - PgAdmin4                           :  http://localhost:8383/  (  Email/Pwd : admin@admin.com / admin    )
      - Gost         ( Dashboard )         :  http://localhost:8282/
-     - SensorMap-Server                   :  http://localhost:8080/rest/resources ( Login/Pwd : admin/admin )
-     - SensorMap-Ui                       :  sensor-map-ui/index.html ( Just launch on browser ) 
+     - SensorMap-Server                   :  http://localhost:8080/rest/resources (  Login/Pwd  :  admin/admin )
+     - SensorMap-Ui                       :  Just launch the file << sensor-map-ui/index.html >> on browser 
          
 -------
 
