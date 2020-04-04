@@ -59,17 +59,14 @@
 
 #### 3. UI 
 
+
 ##### 3.1 Frost Server
 
 <img width="500" alt="FROST_SERVER" src="https://user-images.githubusercontent.com/37690220/78457179-94211200-76a8-11ea-8cbb-a67e7c9f6d6b.jpg">
 
--------
-
 ##### 3.2 GOST Dashboard
 
 ![GOST](https://user-images.githubusercontent.com/37690220/78457327-b0717e80-76a9-11ea-863c-495550e9818e.jpg)
-
--------
 
 ##### 3.3 SensorMap UI
 
