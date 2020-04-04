@@ -7,4 +7,5 @@
  
   mv target/sensormap-quarkus-0.9-runner.jar ./sensor-map-0.9.jar
  
- mvn clean 
+  mvn clean 
+  
