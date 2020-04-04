@@ -59,7 +59,7 @@
 
 #### 3. SensorMap UI :
 
-![sensorMap-Ui](https://user-images.githubusercontent.com/37690220/78403329-79915f00-75fc-11ea-8d14-c5c01fe3ef23.jpg)
+![sensorMap-Ui](https://user-images.githubusercontent.com/37690220/78454798-97ad9c80-769a-11ea-8804-3d712131f60e.jpg)
 
 -------
 
