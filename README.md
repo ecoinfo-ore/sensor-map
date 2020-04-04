@@ -23,7 +23,7 @@
 
 #### 2. Deploy :
 
-###### 2.1 Postgres Database ( used by sensorMap server to secure user access ) :
+###### 2.1 [Dockerized Postgres Database](https://hub.docker.com/repository/docker/rac021/sensor-auth) ( used by sensorMap server to secure user access ) :
 
 ```
    docker run --rm --name sensor-auth -p 2345:5432 rac021/sensor-auth 
