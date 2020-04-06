@@ -10,12 +10,10 @@ import javax.ws.rs.GET ;
 import javax.json.Json ;
 import javax.ws.rs.Path ;
 import java.util.HashMap ;
-import java.io.PrintWriter ;
 import java.net.URLDecoder ;
 import java.sql.Connection ;
 import java.util.ArrayList ;
 import javax.ws.rs.OPTIONS ;
-import java.io.StringWriter ;
 import javax.ws.rs.Produces ;
 import javax.json.JsonObject ;
 import javax.inject.Singleton ;
@@ -135,14 +133,16 @@ public class ServiceSensorThings /* extends Service*/ {
         }
         
         String sqlQuery                      = URLDecoder.decode( _sqlQuery, StandardCharsets.UTF_8.toString())   ;
-        
-        String template                      = URLDecoder.decode( _template, StandardCharsets.UTF_8.toString())   ;
+       
         String sensorType                    = URLDecoder.decode( _sensorType, StandardCharsets.UTF_8.toString()) ;
         
         String sensorthings_endpoint_url_dec =  URLDecoder.decode( _sensorthings_endpoint_url, StandardCharsets.UTF_8.toString()) ;
 
         String sensorthings_endpoint_url     = (( sensorthings_endpoint_url_dec != null && sensorthings_endpoint_url_dec.endsWith("/") ) ?
-                                                  sensorthings_endpoint_url_dec + sensorType : sensorthings_endpoint_url_dec + "/" + sensorType ).trim()  ;
+                                                  sensorthings_endpoint_url_dec + sensorType                 :
+                                                  sensorthings_endpoint_url_dec + "/" + sensorType ).trim()  ;
+        
+        String template                      = removeDoubleQuotesIfNumber( URLDecoder.decode( _template, StandardCharsets.UTF_8.toString()) ) ;
         
         System.out.println("                                             " ) ;
         System.out.println(" sqlQuery                      : " + sqlQuery  ) ;
@@ -417,6 +417,23 @@ public class ServiceSensorThings /* extends Service*/ {
             start = m.start()    + replacement.length()  ;
         }
     }
-
+    
+    public static String removeDoubleQuotesIfNumber(String argTemplate ) {
+        
+        String template = argTemplate                                                    ;
+            
+        Pattern pattern = Pattern.compile( "\"\\{\\{.*?\\}\\}\\^Num\"", Pattern.DOTALL ) ;
+        Matcher matcher = pattern.matcher( template )                                    ;
+        
+        while (matcher.find())  {
+            String oldNumberVal = matcher.group( 0 )
+                                         .replace("\"{{", "{{")
+                                         .replace("}}^Num\"", "}}")     ;
+            template = template.replace(matcher.group(0), oldNumberVal) ;
+        }
+          
+        return template ;
+    }
+    
 }
 
