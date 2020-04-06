@@ -15,7 +15,7 @@
 
 #### 1. [Compile SensorMap Server](https://github.com/ecoinfo-ore/sensor-map/blob/master/01_compile.sh)  
 
-```
+```java
    ./01_compile.sh
 ```
 ###### *The command will launch the script [compile.sh](https://github.com/ecoinfo-ore/sensor-map/blob/master/sensor-map-server/compile.sh) that will compile the project [SensorMap-Server](https://github.com/ecoinfo-ore/sensor-map/tree/master/sensor-map-server/sensor-map)*
@@ -25,7 +25,7 @@
 
 ###### 2.1 [Sensor-Auth](https://github.com/ecoinfo-ore/sensor-map/blob/master/02_deploy_sensor_auth.sh) : Postgres DB used by sensorMap server to secure user access ( [Dockerized Postgres Database](https://hub.docker.com/repository/docker/rac021/sensor-auth) ) :
 
-```
+```java
    ./02_deploy_sensor_auth.sh
 ```
 
@@ -43,7 +43,7 @@
     
 ###### 2.2 [Sensor_Infra](https://github.com/ecoinfo-ore/sensor-map/blob/master/03_deploy_infra.sh) : SensorThings ( Frost + Postgres Database ) + Gost ( Dashboard ) + SensorMap Server  ( [docker-compose.yaml](https://github.com/ecoinfo-ore/sensor-map/blob/master/sensorThings-impl/FROST/docker-compose.yaml) )
 
-```  
+```java 
    ./03_deploy_infra.sh
 ```
 
