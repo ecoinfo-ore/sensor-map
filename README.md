@@ -50,12 +50,15 @@
 ###### 2.3 List Services :
  
     - SensorThings FROST Server   :  http://localhost:8181/FROST-Server 
-    - SensorThings FROST DB       :  jdbc:postgresql://localhost:2345/sensorthings ( sensorthings/sensorthings )
-    - SensorMap-Server            :  http://localhost:8080/rest/resources (  Login/Pwd  :  admin/admin         )
-    - SensorMap-DB Auth           :  jdbc:postgresql://localhost:2346/sensorusers (  postgres/postgres         )
-    - PgAdmin4                    :  http://localhost:8383/  (  Email/Pwd : admin@admin.com / admin            )
+    - SensorThings FROST DB       :  jdbc:postgresql://localhost:2345/sensorthings ( sensorthings/ChangeMe )
+    
+    - SensorMap-Server            :  http://localhost:8080/rest/resources (  Login/Pwd  :  admin/admin     )
+    - SensorMap-DB Auth           :  jdbc:postgresql://localhost:2346/sensorusers (  postgres/postgres     )
+    
     - Gost         ( Dashboard )  :  http://localhost:8282/
     - SensorMap-Ui                :  Just launch the file << sensor-map-ui/index.html >> on browser 
+        
+    - PgAdmin4                    :  http://localhost:8383/  (  Email/Pwd : admin@admin.com / admin        )    
     
 -------
 
