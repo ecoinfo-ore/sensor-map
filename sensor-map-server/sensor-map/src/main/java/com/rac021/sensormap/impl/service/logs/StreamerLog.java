@@ -16,7 +16,7 @@ import java.util.logging.Level ;
 import java.util.logging.Logger ;
 import java.io.OutputStreamWriter ;
 import java.util.concurrent.Future ;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeUnit ;
 import io.quarkus.scheduler.Scheduled ;
 import java.util.concurrent.Executors ;
 import org.apache.commons.io.FileUtils ;
@@ -98,7 +98,7 @@ public class StreamerLog  implements StreamingOutput , LoggerTask {
        System.out.println(" Service LOG Closed ")         ;
     }
 
-    @Scheduled(every="15s")
+    @Scheduled(every="20s")
     public void checkTaskLogger() throws Exception        {
         
         System.out.println("Check task logger..." )       ;
@@ -112,7 +112,7 @@ public class StreamerLog  implements StreamingOutput , LoggerTask {
               FileUtils.writeStringToFile ( logFile.toFile() ,
                                             "\n"             ,
                                             StandardCharsets.UTF_8, true ) ;
-            } else {
+            } else              {
               iterator.remove() ;
             }
         }
