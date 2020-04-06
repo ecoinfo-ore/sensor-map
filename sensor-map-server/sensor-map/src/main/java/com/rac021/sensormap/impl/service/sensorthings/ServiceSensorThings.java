@@ -134,17 +134,20 @@ public class ServiceSensorThings              {
            return Response.status(Response.Status.OK).entity(respObj.toString()).build()                               ;
         }
         
-        String sqlQuery                      = URLDecoder.decode( _sqlQuery, StandardCharsets.UTF_8.toString())   ;
+        String sqlQuery                      = URLDecoder.decode( _sqlQuery, StandardCharsets.UTF_8.toString())        ;
        
-        String sensorType                    = URLDecoder.decode( _sensorType, StandardCharsets.UTF_8.toString()) ;
+        String sensorType                    = URLDecoder.decode( _sensorType, StandardCharsets.UTF_8.toString())      ;
         
-        String sensorthings_endpoint_url_dec =  URLDecoder.decode( _sensorthings_endpoint_url, StandardCharsets.UTF_8.toString()) ;
+        String sensorthings_endpoint_url_dec = URLDecoder.decode( _sensorthings_endpoint_url       ,
+                                                                  StandardCharsets.UTF_8.toString())                   ;
 
-        String sensorthings_endpoint_url     = (( sensorthings_endpoint_url_dec != null && sensorthings_endpoint_url_dec.endsWith("/") ) ?
-                                                  sensorthings_endpoint_url_dec + sensorType                 :
-                                                  sensorthings_endpoint_url_dec + "/" + sensorType ).trim()  ;
+        String sensorthings_endpoint_url     = (( sensorthings_endpoint_url_dec != null && 
+                                                  sensorthings_endpoint_url_dec.endsWith("/") ) ?
+                                                  sensorthings_endpoint_url_dec + sensorType                           :
+                                                  sensorthings_endpoint_url_dec + "/" + sensorType ).trim()            ;
         
-        String template                      = removeDoubleQuotesIfNumber( URLDecoder.decode( _template, StandardCharsets.UTF_8.toString()) ) ;
+        String template                      = removeDoubleQuotesIfNumber ( 
+                                                   URLDecoder.decode( _template, StandardCharsets.UTF_8.toString()) ) ;
         
         System.out.println("                                             " ) ;
         System.out.println(" sqlQuery                      : " + sqlQuery  ) ;
@@ -359,13 +362,15 @@ public class ServiceSensorThings              {
          Query buildQueryObject = null                              ;
          JsonObjectBuilder jsonBuilder = Json.createObjectBuilder() ;
          
-         try ( Connection connection = DriverManager.getConnection( "jdbc:postgresql://" + db_host +":" + db_port + "/" + db_name ,
-                                                                    db_user, db_password )) {
+         try ( Connection connection = DriverManager.getConnection ( "jdbc:postgresql://" + db_host +":" + 
+                                                                     db_port + "/" + db_name ,
+                                                                     db_user, db_password )) {
               connection.setReadOnly(true) ;
              
               try {
                     buildQueryObject = SqlAnalyzer.buildQueryObject( connection, 
-                                                                     URLDecoder.decode( _sqlQuery, StandardCharsets.UTF_8.toString()) ) ;
+                                                                     URLDecoder.decode ( _sqlQuery , 
+                                                                                 StandardCharsets.UTF_8.toString()) ) ;
               } catch( Exception ex )   {
                    ex.printStackTrace() ;
                    jsonBuilder.add("Exception",ex.getMessage()) ;
@@ -374,7 +379,7 @@ public class ServiceSensorThings              {
         } catch( Exception ex )   {
              ex.printStackTrace() ;
              jsonBuilder.add("Exception",ex.getMessage()) ;
-             return Response.status(Response.Status.BAD_REQUEST).entity(jsonBuilder.build().toString()).build() ;
+             return Response.status(Response.Status.BAD_REQUEST).entity(jsonBuilder.build().toString()).build()       ;
         }
       
        buildQueryObject.getParameters().forEach((columneName, columnType) -> {
