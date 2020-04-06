@@ -93,5 +93,6 @@
    - Add Endpoint to automate playing multiple mapping files
    - Add Support MySQL 
    - Integrate @iot.id ( Supported by FROST Implementation )
-    
-    
+   - Manage LOGS properly
+
+
