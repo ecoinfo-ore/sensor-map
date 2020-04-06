@@ -34,6 +34,7 @@
          - Database Name                           :  sensorusers
          - Table    Name                           :  users
          - Postgres User Access ( LOGIN/PASSWORD ) :  postgres/postgres 
+         - URL                                     :  jdbc:postgresql://localhost:2346/sensorusers
  
  - Note : **Passwords** in the table **users** are stored in **MD5 Hash** ( **admin/admin** , **public/public** , **stg01/stg01** )
 
