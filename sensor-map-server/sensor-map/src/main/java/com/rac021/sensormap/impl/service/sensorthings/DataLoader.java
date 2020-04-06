@@ -1,16 +1,16 @@
 
-package com.rac021.sensormap.impl.service.sensorthings;
+package com.rac021.sensormap.impl.service.sensorthings ;
 
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.MediaType;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.List;
-import okhttp3.OkHttpClient;
-import java.util.concurrent.TimeUnit;
-import okhttp3.RequestBody;
+import java.net.URL ;
+import java.util.List ;
+import okhttp3.Request ;
+import okhttp3.Response ;
+import okhttp3.MediaType ;
+import okhttp3.RequestBody ;
+import java.io.IOException ;
+import okhttp3.OkHttpClient ;
+import java.net.HttpURLConnection ;
+import java.util.concurrent.TimeUnit ;
 
 /**
  *
@@ -59,13 +59,15 @@ public class DataLoader {
                                      .url(url)
                                      .post(body)
                                      .addHeader("content-type", "application/json")
-                                     .build();
+                                     .build() ;
 
 
-        try ( Response res = client.newCall(request).execute() ) {
-            
-            if ( !res.isSuccessful()) throw new IOException("Unexpected code " + res) ;
-            System.out.println( "    " + res.body().string() + "\n" ) ;
+        try ( Response res = client.newCall(request).execute() )                {
+            	   
+            if ( !res.isSuccessful()) throw new IOException( "Unexpected code " +
+                                                             res                +
+                                                             "    "             +
+                                                             ( res.body() != null ? res.body().string() : res.body() ) ) ;
             
         } catch ( Exception ex ) {
             throw ex ;
@@ -76,20 +78,20 @@ public class DataLoader {
     public static boolean isReachable(String url) {
  
 		try {
-			URL urlObj = new URL(url);
-			HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
-			con.setRequestMethod( "GET" ) ;
+			URL urlObj            = new URL(url)                                ;
+			HttpURLConnection con = (HttpURLConnection) urlObj.openConnection() ;
+			con.setRequestMethod( "GET" )    ;
                         // Set connection timeout
-			con.setConnectTimeout( 2500 ) ;
-			con.connect();
+			con.setConnectTimeout( 2500 )    ;
+			con.connect()                    ;
  
-			int code = con.getResponseCode();
-			if (code == 200) {
+			int code = con.getResponseCode() ;
+			if (code == 200)    {
 				return true ;
 			}
-		} catch (IOException e ) {
-			return false     ;
+		} catch (IOException e )    {
+			return false        ;
 		}
-                return false ;
+                return false                ;
     }
 }
