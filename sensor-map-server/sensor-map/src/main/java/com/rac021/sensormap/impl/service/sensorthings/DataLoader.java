@@ -62,14 +62,14 @@ public class DataLoader {
                                      .build() ;
 
 
-        try ( Response res = client.newCall(request).execute() )                {
-            	   
-            if ( !res.isSuccessful()) throw new IOException( "Unexpected code " +
-                                                             res                +
-                                                             " \n             " +
-                                                             ( res.body() != null ? res.body().string() : res.body() ) ) ;
+        try ( Response res = client.newCall( request ).execute() )     {
             
-        } catch ( Exception ex ) {
+		if ( !res.isSuccessful()) throw new IOException( ""    +
+                                                             ( res.body() != null ? 
+                                                               res.body().string().replace("\\\"", "\"") : 
+                                                               res.body() ) )                            ;
+            
+        } catch ( Exception ex )   {
             throw ex ;
            // ex.printStackTrace() ;
         }
