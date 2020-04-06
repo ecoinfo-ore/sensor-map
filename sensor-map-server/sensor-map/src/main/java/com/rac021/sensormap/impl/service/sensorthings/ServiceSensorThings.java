@@ -244,7 +244,7 @@ public class ServiceSensorThings /* extends Service*/ {
                             
                             String outData = applyValue( columnsValues, template )     ;
                            
-                            StringWriter errors = new StringWriter()                   ;
+                            // StringWriter errors = new StringWriter()                ;
                             
                             List<String> data = new ArrayList<>()                      ;
                             data.add(outData)                                          ;
@@ -263,22 +263,24 @@ public class ServiceSensorThings /* extends Service*/ {
                                 
                                  Logger.getLogger(ServiceSensorThings.class.getName()).log(Level.SEVERE, null, ex) ;
                                  
-                                 respBuilder.add("Exception", ex.getMessage() ) ;
+                                 respBuilder.add( "Exception", ex.getMessage() ) ;
                                  
-                                 ex.printStackTrace( new PrintWriter(errors))   ;
-                                 exs.add( "\nERROR : ID : " +
-                                          startedDate       + 
-                                          " [[ \n\n "       +
-                                          errors.toString() +
-                                         "\n ]]\n")         ;
-                                 
-                                 Writer.writeTextFile(exs, path_logs)           ;
-                                 exs.clear()                                    ;
-                                 
-                                 connection.close()                             ;
-                                 stream.close()                                 ;
+                                 // ex.printStackTrace( new PrintWriter(errors)) ;
                                 
-                                 throw new RuntimeException(ex)                 ;
+                                 exs.add( "\nERROR : ID : "   +
+                                          startedDate         +
+                                          " [[ \n\n "         +
+                                         ex.getMessage()      +
+                                         // errors.toString() +
+                                         "\n ]]\n")           ;
+                                 
+                                 Writer.writeTextFile(exs, path_logs)            ;
+                                 exs.clear()                                     ;
+                                 
+                                 connection.close()                              ;
+                                 stream.close()                                  ;
+                                
+                                 throw new RuntimeException(ex)                  ;
                                 
                             }
                         }) ;
