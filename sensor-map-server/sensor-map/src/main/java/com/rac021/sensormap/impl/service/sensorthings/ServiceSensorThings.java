@@ -423,18 +423,16 @@ public class ServiceSensorThings              {
         }
     }
     
-    public static String removeDoubleQuotesIfNumber(String argTemplate ) {
+    public static String removeDoubleQuotesIfNumber(String argTemplate )       {
         
-        String template = argTemplate                                                    ;
+        String template = argTemplate                                          ;
             
-        Pattern pattern = Pattern.compile( "\"\\{\\{.*?\\}\\}\\^Num\"", Pattern.DOTALL ) ;
-        Matcher matcher = pattern.matcher( template )                                    ;
+        Pattern pattern = Pattern.compile( "\\{\\{.*?\\}\\}", Pattern.DOTALL ) ;
+        Matcher matcher = pattern.matcher( template )                          ;
         
         while (matcher.find())  {
-            String oldNumberVal = matcher.group( 0 )
-                                         .replace("\"{{", "{{")
-                                         .replace("}}^Num\"", "}}")     ;
-            template = template.replace(matcher.group(0), oldNumberVal) ;
+            template = template.replace( "\"" + matcher.group( 0 ) + "^Num\""  ,
+                                         matcher.group( 0 ) )                  ;
         }
           
         return template ;
