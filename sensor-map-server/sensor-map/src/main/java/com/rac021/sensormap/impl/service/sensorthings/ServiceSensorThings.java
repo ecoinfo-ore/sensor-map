@@ -268,9 +268,9 @@ public class ServiceSensorThings /* extends Service*/ {
                                  ex.printStackTrace( new PrintWriter(errors))   ;
                                  exs.add( "\nERROR : ID : " +
                                           startedDate       + 
-                                          " [[ \n"          +
+                                          " [[ \n\n "       +
                                           errors.toString() +
-                                         "\n]]\n")          ;
+                                         "\n ]]\n")         ;
                                  
                                  Writer.writeTextFile(exs, path_logs)           ;
                                  exs.clear()                                    ;
