@@ -62,8 +62,10 @@ import static com.rac021.sensormap.impl.service.sensorthings.DataLoader.isReacha
 @Secured(policy = Policy.CustomSignOn )
 @Unremovable
 
-public class ServiceSensorThings /* extends Service*/ {
+public class ServiceSensorThings              {
 
+    private PgPoolOptions options             ;
+   
     void onStart(@Observes StartupEvent ev) { }
 
     @PostConstruct
@@ -73,17 +75,17 @@ public class ServiceSensorThings /* extends Service*/ {
 
     @GET
     @OPTIONS
-    @Produces({"json/plain", "json/encrypted"})
-    public Response getResourceASTemplateEncrypted( @HeaderParam("sensorType")    String _sensorType  ,
-                                                    @HeaderParam("sqlQuery")      String _sqlQuery    ,
-                                                    @HeaderParam("templateQuery") String _template    ,
-                                                    @HeaderParam("db_host")       String db_host      ,
-                                                    @HeaderParam("db_port")       String db_port      ,
-                                                    @HeaderParam("db_name")       String db_name      ,
-                                                    @HeaderParam("db_user")       String db_user      ,
-                                                    @HeaderParam("db_password")   String db_password  ,
-                                                    @HeaderParam("sensorthings_endpoint_url") String _sensorthings_endpoint_url ,
-                                                    @HeaderParam("API-key-Token") String  token ) throws Exception              {
+    @Produces({"xml/plain","json/plain", "xml/encrypted","json/encrypted"} )
+    public Response fromDbToSensoThings( @HeaderParam("sensorType")    String _sensorType  ,
+                                         @HeaderParam("sqlQuery")      String _sqlQuery    ,
+                                         @HeaderParam("templateQuery") String _template    ,
+                                         @HeaderParam("db_host")       String db_host      ,
+                                         @HeaderParam("db_port")       String db_port      ,
+                                         @HeaderParam("db_name")       String db_name      ,
+                                         @HeaderParam("db_user")       String db_user      ,
+                                         @HeaderParam("db_password")   String db_password  ,
+                                         @HeaderParam("sensorthings_endpoint_url") String _sensorthings_endpoint_url ,
+                                         @HeaderParam("API-key-Token") String  token ) throws Exception              {
         
         System.out.println(" Call : ServiceSensorThings... ") ;
       
@@ -205,7 +207,7 @@ public class ServiceSensorThings /* extends Service*/ {
                         // Streams require to run within a transaction
                         PgTransaction tx = connection.begin() ;
 
-                        // Fetch 2 rows at a time
+                        // Fetch 10000 rows at a time
                         PgStream<Row> stream = pq.result().createStream( 10000 , Tuple.tuple() ) ;
 
                         // Use the stream
@@ -314,9 +316,7 @@ public class ServiceSensorThings /* extends Service*/ {
                        .build() ;
 
     }
-
-    private PgPoolOptions options ;
-     
+  
     private PgPoolOptions getOptions( String db_port   , 
                                       String db_host   , 
                                       String db_name   , 
@@ -340,7 +340,7 @@ public class ServiceSensorThings /* extends Service*/ {
     @GET
     @OPTIONS
     @Path("/headers")
-    @Produces({ "json/plain", "json/encrypted"})
+    @Produces( { "xml/plaon", "json/plain", "xml/encrypted","json/encrypted" } )
     public Response getHeaders( @HeaderParam("sqlQuery")    String _sqlQuery   ,
                                 @HeaderParam("db_host")     String db_host     ,
                                 @HeaderParam("db_port")     String db_port     ,
