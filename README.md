@@ -23,7 +23,7 @@
 
 #### 2. Deploy :
 
-###### 2.1 [Sensor-Auth](https://github.com/ecoinfo-ore/sensor-map/blob/master/02_deploy_sensor_auth.sh) : used by sensorMap server to secure user access ( [Dockerized Postgres Database](https://hub.docker.com/repository/docker/rac021/sensor-auth) ) :
+###### 2.1 [Sensor-Auth](https://github.com/ecoinfo-ore/sensor-map/blob/master/02_deploy_sensor_auth.sh) : Postgres DB used by sensorMap server to secure user access ( [Dockerized Postgres Database](https://hub.docker.com/repository/docker/rac021/sensor-auth) ) :
 
 ```
    ./02_deploy_sensor_auth.sh
