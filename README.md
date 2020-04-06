@@ -23,10 +23,10 @@
 
 #### 2. Deploy :
 
-###### 2.1 [Dockerized Postgres Database](https://hub.docker.com/repository/docker/rac021/sensor-auth) ( used by sensorMap server to secure user access ) :
+###### 2.1 [Sensor-Auth](https://github.com/ecoinfo-ore/sensor-map/blob/master/02_deploy_sensor_auth.sh) : used by sensorMap server to secure user access ( [Dockerized Postgres Database](https://hub.docker.com/repository/docker/rac021/sensor-auth) ) :
 
 ```
-   docker run -d --rm --name sensor-auth -p 2346:5432 rac021/sensor-auth 
+   ./02_deploy_sensor_auth.sh
 ```
 
  - Schema :
@@ -40,10 +40,10 @@
  ![SensorMap-DB](https://user-images.githubusercontent.com/37690220/78401513-32ee3580-75f9-11ea-8c52-b5211d24d4a8.png)
     
     
-###### 2.2 [Services](https://github.com/ecoinfo-ore/sensor-map/blob/master/02_deploy.sh) : [SensorThings ( Frost + Postgres Database ) + Gost ( Dashboard ) + SensorMap Server](https://github.com/ecoinfo-ore/sensor-map/blob/master/sensorThings-impl/FROST/docker-compose.yaml)
+###### 2.2 [Sensor_Infra](https://github.com/ecoinfo-ore/sensor-map/blob/master/02_deploy.sh) : [SensorThings ( Frost + Postgres Database ) + Gost ( Dashboard ) + SensorMap Server](https://github.com/ecoinfo-ore/sensor-map/blob/master/sensorThings-impl/FROST/docker-compose.yaml)
 
 ```  
-   ./02_deploy.sh
+   ./03_deploy_infra.sh
 ```
 
 ###### 2.3 List Services :
