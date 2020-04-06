@@ -7,7 +7,7 @@
  # java -jar sensor-map/sensor-map-0.9.jar &
  
   java -Dquarkus.datasource.driver=org.postgresql.Driver                     \
-       -Dquarkus.datasource.url=jdbc:postgresql://localhost:2345/sensorusers \
+       -Dquarkus.datasource.url=jdbc:postgresql://localhost:2346/sensorusers \
        -Dquarkus.hibernate-orm.database.generation=none                      \
        -Dquarkus.datasource.username=postgres                                \
        -Dquarkus.datasource.password=postgres                                \
