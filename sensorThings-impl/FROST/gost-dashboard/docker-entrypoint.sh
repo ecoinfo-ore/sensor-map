@@ -139,6 +139,12 @@ if [ "$SENSORTHINGS_IDS" = "STRING" ]; then
    find /var/www/html/ -iname "*.js" -type f -exec \
    sed -i "s|$ENTITY|$WRAPPED_ENTITY|g" {} +
 
+   SENSOR_ENTITY="sensor\[\"@iot.id\"\]" ;
+   WRAPPED_SENSOR_ENTITY=" \"'\" + $SENSOR_ENTITY + \"'\" " 
+   
+   find /var/www/html/ -iname "*.js" -type f -exec \
+   sed -i "s|$SENSOR_ENTITY|$WRAPPED_SENSOR_ENTITY|g" {} +
+   
 fi
 
 exec "$@"
