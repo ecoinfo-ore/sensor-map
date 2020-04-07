@@ -152,6 +152,11 @@ if [ "$SENSORTHINGS_IDS" = "STRING" ]; then
    WRAPPED_ENTITY="Things(\" + \"'\" + \$scope.id + \"'\" + \")"
    find /var/www/html/ -iname "*.js" -type f -exec \
    sed -i "s|$ENTITY|$WRAPPED_ENTITY|g" {} +
+  
+   ENTITY_DATASTREAM="Datastreams(\" + \$scope.id + \""
+   WRAPPED_ENTITY_DATASTREAM="Datastreams(\" + \"'\" + \$scope.id + \"'\" + \""
+   find /var/www/html/ -iname "*.js" -type f -exec \
+   sed -i "s|$ENTITY_DATASTREAM|$WRAPPED_ENTITY_DATASTREAM|g" {} +
    
 fi
 
