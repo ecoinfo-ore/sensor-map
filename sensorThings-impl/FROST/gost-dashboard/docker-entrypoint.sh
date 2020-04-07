@@ -160,6 +160,4 @@ if [ "$SENSORTHINGS_IDS" = "STRING" ]; then
    
 fi
 
-sleep 0.5
-
 exec "$@"
