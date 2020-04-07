@@ -18,6 +18,7 @@ services:
       - http.cors.allowed.headers=*
       - http.cors.allowed.methods=HEAD,POST,GET,OPTIONS,DELETE
       - persistence.idGenerationMode=ServerAndClientGenerated
+      - persistence.persistenceManagerImplementationClass=de.fraunhofer.iosb.ilt.sta.persistence.pgjooq.imp.PostgresPersistenceManagerString
     ports:
       - 8181:8080
       - 1883:1883
