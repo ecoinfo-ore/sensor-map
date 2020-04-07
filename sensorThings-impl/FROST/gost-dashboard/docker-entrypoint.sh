@@ -135,7 +135,9 @@ if [ "$SENSORTHINGS_IDS" = "STRING" ]; then
   WRAPPED_ENTITY=" \"'\" $ENTITY \"'\" " 
 
   echo " + Update SensorThings IDS to STRING "
-  sed -i "s|$DEFAULT_SENSORTHINGS_URL|$SENSORTHINGS_URL|g" /var/www/html/js/*.js
+   
+  find /var/www/html/ -iname "*.js" -type f -exec \
+  sed -i "s|$ENTITY|$WRAPPED_ENTITY|g" {} +
 
 fi
 
