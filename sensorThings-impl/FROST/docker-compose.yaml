@@ -49,6 +49,7 @@ services:
       - sensorthings
     environment:
       - SENSORTHINGS_URL=http://localhost:8181/
+      - SENSORTHINGS_IDS=STRING
     networks:
       - sensor_net
       
