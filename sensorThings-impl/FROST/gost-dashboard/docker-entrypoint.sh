@@ -135,15 +135,23 @@ if [ "$SENSORTHINGS_IDS" = "STRING" ]; then
    WRAPPED_ENTITY=" \"'\" + $ENTITY + \"'\" " 
 
    echo " + Update SensorThings IDS to STRING "
-  
    find /var/www/html/ -iname "*.js" -type f -exec \
    sed -i "s|$ENTITY|$WRAPPED_ENTITY|g" {} +
 
    SENSOR_ENTITY="sensor\[\"@iot.id\"\]" ;
    WRAPPED_SENSOR_ENTITY=" \"'\" + $SENSOR_ENTITY + \"'\" " 
-   
    find /var/www/html/ -iname "*.js" -type f -exec \
-   sed -i "s|$SENSOR_ENTITY|$WRAPPED_SENSOR_ENTITY|g" {} +
+   sed -i "s|$SENSOR_ENTITY|$WRAPPED_SENSOR_ENTITY|g" {} +   
+   
+   ENTITY="\$scope.Page.selectedThing\[\"@iot.id\"\]"
+   WRAPPED_ENTITY=" \"'\" + $ENTITY + \"'\" " 
+   find /var/www/html/ -iname "*.js" -type f -exec \
+   sed -i "s|$ENTITY|$WRAPPED_ENTITY|g" {} +
+   
+   ENTITY="Things(\" + \$scope.id + \")"
+   WRAPPED_ENTITY="Things(\" + \"'\" + \$scope.id + \"'\" + \")"
+   find /var/www/html/ -iname "*.js" -type f -exec \
+   sed -i "s|$ENTITY|$WRAPPED_ENTITY|g" {} +
    
 fi
 
