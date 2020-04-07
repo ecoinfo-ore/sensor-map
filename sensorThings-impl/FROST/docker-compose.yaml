@@ -27,19 +27,20 @@ services:
     networks:
       - sensor_net
 
-  database:
-    image: mdillon/postgis:latest    
+  database:   
+    image: mongkok/postgres:10 
     environment:
-      - POSTGRES_DB=sensorthings
-      - POSTGRES_USER=sensorthings
-      - POSTGRES_PASSWORD=sensorthings
+      - POSTGRES_DB_NAME=sensorthings
+      - POSTGRES_DB_USER=sensorthings
+      - POSTGRES_DB_PASS=sensorthings
+      - POSTGRES_DB_EXTENSION=postgis,uuid-ossp
     volumes:
       - postgis_volume:/var/lib/postgresql/data
     ports:
       - 2345:5432
     networks:
       - sensor_net
-  
+     
   gost-ui:
     hostname: gost-ui
     build:    ./gost-dashboard/
