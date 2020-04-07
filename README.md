@@ -64,7 +64,7 @@
 
 ### **3. U.I**
 
-#### *3.1 [Frost Server](https://github.com/FraunhoferIOSB/FROST-Server)* : ( [Settings](https://github.com/FraunhoferIOSB/FROST-Server/blob/master/docs/settings.md) ) - ( [Documentation](https://github.com/FraunhoferIOSB/FROST-Server/tree/master/docs) )
+#### *3.1 [Frost Server](https://github.com/FraunhoferIOSB/FROST-Server)* : ( [Settings](https://github.com/FraunhoferIOSB/FROST-Server/blob/master/docs/settings.md) ) - ( [Documentation](https://github.com/FraunhoferIOSB/FROST-Server/tree/master/docs) ) - ( [context.xml](https://github.com/FraunhoferIOSB/FROST-Server/blob/master/FROST-Server.HTTP/src/main/webapp/META-INF/context.xml) )
 
 <img width="500" alt="FROST_SERVER" src="https://user-images.githubusercontent.com/37690220/78457856-9cc81700-76ad-11ea-8af8-475b8227c4a9.jpg">
 
