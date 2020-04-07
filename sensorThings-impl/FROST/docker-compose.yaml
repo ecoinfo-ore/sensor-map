@@ -11,7 +11,7 @@ services:
       - persistence_db_driver=org.postgresql.Driver
       - persistence_db_url=jdbc:postgresql://database:5432/sensorthings
       - persistence_db_username=sensorthings
-      - persistence_db_password=ChangeMe
+      - persistence_db_password=sensorthings
       - persistence_autoUpdateDatabase=true
       - http.cors.enable=true
       - http.cors.allowed.origins=*
