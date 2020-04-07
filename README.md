@@ -95,4 +95,11 @@
    - Integrate @iot.id ( Supported by FROST Implementation )
    - Manage LOGS properly
 
+-------
+
+#### 6. Links : 
+
+   - https://developers.sensorup.com/docs/#sensors_get
+   - https://github.com/tum-gis/iot-frost-ecosystem/blob/master/FROST-Server/FROST.md
+   - https://docs.opengeospatial.org/is/15-078r6/15-078r6.html
 
