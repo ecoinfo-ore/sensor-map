@@ -22,13 +22,13 @@ client_max_body_size 			8m;
 large_client_header_buffers 	2 1k;
 client_body_timeout 			12;
 client_header_timeout 			12;
-send_timeout 	 				10;
-gzip             				on;
-gzip_comp_level  				2;
-gzip_min_length  				1000;
-gzip_proxied     				expired no-cache no-store private auth;
-gzip_types       				text/plain application/x-javascript text/xml text/css application/xml application/json;
-access_log 					off;
+send_timeout 	 			10;
+gzip             			on;
+gzip_comp_level  			2;
+gzip_min_length  			1000;
+gzip_proxied     			expired no-cache no-store private auth;
+gzip_types       			text/plain application/x-javascript text/xml text/css application/xml application/json;
+access_log 				off;
 " > /etc/nginx/conf.d/default.conf
 
 echo "server {" >> /etc/nginx/conf.d/default.conf
@@ -129,7 +129,7 @@ if [ "$SENSORTHINGS_URL" != "" ]; then
 fi
 
 
-if [ "$SENSORTHINGS_IDS" != "STRING" ]; then 
+if [ "$SENSORTHINGS_IDS" = "STRING" ]; then 
  
   ENTITY="entity\[\"@iot.id\"\]" ;
   WRAPPED_ENTITY=" \"'\" $ENTITY \"'\" " 
