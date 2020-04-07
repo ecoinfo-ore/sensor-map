@@ -131,13 +131,13 @@ fi
 
 if [ "$SENSORTHINGS_IDS" = "STRING" ]; then 
  
-  ENTITY="entity\[\"@iot.id\"\]" ;
-  WRAPPED_ENTITY=" \"'\" $ENTITY \"'\" " 
+   ENTITY="entity\[\"@iot.id\"\]" ;
+   WRAPPED_ENTITY=" \"'\" + $ENTITY + \"'\" " 
 
-  echo " + Update SensorThings IDS to STRING "
-   
-  find /var/www/html/ -iname "*.js" -type f -exec \
-  sed -i "s|$ENTITY|$WRAPPED_ENTITY|g" {} +
+   echo " + Update SensorThings IDS to STRING "
+  
+   find /var/www/html/ -iname "*.js" -type f -exec \
+   sed -i "s|$ENTITY|$WRAPPED_ENTITY|g" {} +
 
 fi
 
