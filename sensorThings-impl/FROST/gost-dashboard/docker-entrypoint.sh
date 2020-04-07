@@ -28,7 +28,7 @@ gzip_comp_level  				2;
 gzip_min_length  				1000;
 gzip_proxied     				expired no-cache no-store private auth;
 gzip_types       				text/plain application/x-javascript text/xml text/css application/xml application/json;
-access_log 						off;
+access_log 					off;
 " > /etc/nginx/conf.d/default.conf
 
 echo "server {" >> /etc/nginx/conf.d/default.conf
@@ -126,6 +126,17 @@ SENSORTHINGS_URL="$SENSORTHINGS_URL"
 if [ "$SENSORTHINGS_URL" != "" ]; then 
   echo " + Update SensorThings Server URL : $SENSORTHINGS_URL"
   sed -i "s|$DEFAULT_SENSORTHINGS_URL|$SENSORTHINGS_URL|g" /var/www/html/js/app.js
+fi
+
+
+if [ "$SENSORTHINGS_IDS" != "STRING" ]; then 
+ 
+  ENTITY="entity\[\"@iot.id\"\]" ;
+  WRAPPED_ENTITY=" \"'\" $ENTITY \"'\" " 
+
+  echo " + Update SensorThings IDS to STRING "
+  sed -i "s|$DEFAULT_SENSORTHINGS_URL|$SENSORTHINGS_URL|g" /var/www/html/js/*.js
+
 fi
 
 exec "$@"
