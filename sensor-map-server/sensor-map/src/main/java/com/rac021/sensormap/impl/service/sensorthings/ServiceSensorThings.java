@@ -241,7 +241,7 @@ public class ServiceSensorThings              {
 
                             for (int colmnPos = 0; colmnPos < columnsNames.size(); colmnPos++) {
 
-                                String colmnName = columnsNames.get(colmnPos)          ;
+                                String colmnName  = columnsNames.get(colmnPos)         ;
                                 String colmnValue = row.getValue(colmnName).toString() ;
                                 
                                 columnsValues.put( colmnName , colmnValue)             ;
@@ -401,12 +401,12 @@ public class ServiceSensorThings              {
         
         if( map == null || template == null ) return template ;
         
-        StringBuilder templateInstance = new StringBuilder(template) ;
+        StringBuilder templateInstance = new StringBuilder(template)  ;
         
         map.forEach(( k, v) -> {
-            replaceAllPattern ( templateInstance                     , 
-                                Pattern.compile("\\{\\{"+k+"\\}\\}") ,
-                                v                                    ) ;
+            replaceAllPattern ( templateInstance                         , 
+                                Pattern.compile("(?i)\\{\\{"+k+"\\}\\}") ,
+                                v                                      ) ;
         }) ;
         
         return templateInstance.toString()                             ;
