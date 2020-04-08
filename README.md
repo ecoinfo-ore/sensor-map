@@ -99,7 +99,10 @@
 
 #### 6. Links : 
 
+   - https://github.com/GeoSensorWebLab/sensorthings-reference/blob/master/versions/0.9.4/reference.markdown
    - https://developers.sensorup.com/docs/#sensors_get
+   - https://gost1.docs.apiary.io
+   - https://github.com/INSIDE-information-systems/SensorThingsAPI/tree/master/presentations
    - https://github.com/tum-gis/iot-frost-ecosystem/blob/master/FROST-Server/FROST.md
    - https://docs.opengeospatial.org/is/15-078r6/15-078r6.html
 
