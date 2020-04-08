@@ -241,30 +241,32 @@ public class ServiceSensorThings              {
 
                             for (int colmnPos = 0; colmnPos < columnsNames.size(); colmnPos++) {
 
-                                String colmnName  = columnsNames.get(colmnPos)         ;
-                                String colmnValue = row.getValue(colmnName).toString() ;
+                                String colmnName  = columnsNames.get(colmnPos)           ;
                                 
-                                columnsValues.put( colmnName , colmnValue)             ;
+                                String colmnValue = row.getValue(colmnName) == null ? "" :
+                                                    row.getValue(colmnName).toString()   ;
+                                
+                                columnsValues.put( colmnName , colmnValue )              ;
                             }
                             
-                            String outData = applyValue( columnsValues, template )     ;
+                            String outData = applyValue( columnsValues, template )       ;
                            
-                            // StringWriter errors = new StringWriter()                ;
+                            // StringWriter errors = new StringWriter()                  ;
                             
-                            List<String> data = new ArrayList<>()                      ;
-                            data.add(outData)                                          ;
+                            List<String> data = new ArrayList<>()                        ;
+                            data.add( outData )                                          ;
                             
                             try {
                                
                                 DataLoader.postDatas( sensorthings_endpoint_url ,
-                                                      data              ,
-                                                      "application/json",
-                                                      500               ,
-                                                      500               ,
-                                                      500               ,
-                                                      true            ) ;
+                                                      data                      ,
+                                                      "application/json"        ,
+                                                      500                       ,
+                                                      500                       ,
+                                                      500                       ,
+                                                      true                    ) ;
                                 
-                            } catch (Exception ex) {
+                            } catch (Exception ex )  {
                                 
                                  Logger.getLogger(ServiceSensorThings.class.getName()).log(Level.SEVERE, null, ex) ;
                                  
@@ -328,12 +330,12 @@ public class ServiceSensorThings              {
        
         if( options == null ) {
             
-           options = new PgPoolOptions().setPort(Integer.parseInt(db_port))
-                                        .setHost(db_host)
-                                        .setDatabase(db_name)
-                                        .setUser(db_user)
-                                        .setPassword(db_password)
-                                        .setMaxSize(1)  ;
+           options = new PgPoolOptions().setPort( Integer.parseInt(db_port) )
+                                        .setHost( db_host )
+                                        .setDatabase( db_name )
+                                        .setUser( db_user )
+                                        .setPassword( db_password )
+                                        .setMaxSize( 2 ) ;
            return options ;   
         }
         
