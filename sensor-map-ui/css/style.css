@@ -28,9 +28,10 @@ h1 {
    /*height: 80%;*/
    font-family: Arial, sans-serif;
    line-height: 1.5;
-   margin: 0.3em auto;
-   padding: 0 1em;
-   max-width: 95% ;
+   /*margin: 0.3em auto;*/
+   margin: 0em 0em ;
+   padding: 0 0    ;
+   max-width: 100% ;
    /* background: #656fbf ;*/
    /* background: linear-gradient(#7979e8fc, #a3a1ac, #1414e8fc) ; */
    Background: linear-gradient(#7979e8fc, #525254, #5656cffc, #525254);
