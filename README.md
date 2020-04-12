@@ -106,4 +106,5 @@
    - https://github.com/tum-gis/iot-frost-ecosystem/blob/master/FROST-Server/FROST.md
    - https://docs.opengeospatial.org/is/15-078r6/15-078r6.html
    - https://www.geonovum.nl/uploads/documents/SensorThings-Tutorial-20140924%20Masterclass%20Steve%20Liang.pdf
+   - http://afigeo.asso.fr/phocadownload/PoleEntreprise/OGC_OPENDATA/afigeo_gtopendata_api_linked_data_ogc_13052019.pdf
 
