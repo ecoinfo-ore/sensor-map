@@ -30,10 +30,7 @@ if [ -f $KEYSTORE_FILE ]; then
 ######################################
 
  # java -jar sensor-map/sensor-map-0.9.jar &
- 
- # For Only HTTPS :
- # -Dquarkus.http.insecure-requests=redirect
- 
+
  java  -Dquarkus.http.port=$HTTP_PORT                                        \
        -Dquarkus.http.ssl-port=$HTTPS_PORT                                   \
        -Dquarkus.http.ssl.certificate.key-store-file=$KEYSTORE_FILE          \
@@ -48,6 +45,9 @@ if [ -f $KEYSTORE_FILE ]; then
        -Dquarkus.datasource.jdbc.max-size=16                                 \
        -jar sensor-map/sensor-map-0.9.jar  &
 
+ # For Only HTTPS :
+ # -Dquarkus.http.insecure-requests=redirect
+ 
 # FOR DEBUG :
 # -Xdebug -Xrunjdwp:transport=dt_socket,address=11555,server=y,suspend=y \
  
