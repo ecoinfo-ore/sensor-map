@@ -4,9 +4,42 @@
  
  cd $CURRENT_PATH
 
+######################################
+##### SERVER CONFIG ##################
+######################################
+
+ HTTP_PORT="8080"
+ HTTPS_PORT="8585"
+ 
+ KEYSTORE_FILE="server.keystore"
+ 
+ RAND_PASSWORD=`date +%s | sha256sum | base64 | head -c 32 ; echo`
+
+if [ -f $KEYSTORE_FILE ]; then 
+   rm -f $KEYSTORE_FILE
+ fi
+ 
+ echo ; echo
+ 
+ keytool -genkeypair   -storepass $RAND_PASSWORD -keyalg RSA    \
+         -keysize 2048 -dname "CN=server"        -alias server  \
+         -ext "SAN:c=DNS:localhost,IP:127.0.0.1" -keystore $KEYSTORE_FILE
+
+ echo
+
+######################################
+
  # java -jar sensor-map/sensor-map-0.9.jar &
  
- java  -Dquarkus.datasource.driver=org.postgresql.Driver                     \
+ # For Only HTTPS :
+ # -Dquarkus.http.insecure-requests=redirect
+ 
+ java  -Dquarkus.http.port=$HTTP_PORT                                        \
+       -Dquarkus.http.ssl-port=$HTTPS_PORT                                   \
+       -Dquarkus.http.ssl.certificate.key-store-file=$KEYSTORE_FILE          \
+       -Dquarkus.http.ssl.certificate.key-store-password=$RAND_PASSWORD      \     
+                                                                             \
+       -Dquarkus.datasource.driver=org.postgresql.Driver                     \
        -Dquarkus.datasource.url=jdbc:postgresql://localhost:2346/sensorusers \
        -Dquarkus.hibernate-orm.database.generation=none                      \
        -Dquarkus.datasource.username=postgres                                \
