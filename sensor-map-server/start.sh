@@ -34,7 +34,7 @@ if [ -f $KEYSTORE_FILE ]; then
  java  -Dquarkus.http.port=$HTTP_PORT                                        \
        -Dquarkus.http.ssl-port=$HTTPS_PORT                                   \
        -Dquarkus.http.ssl.certificate.key-store-file=$KEYSTORE_FILE          \
-       -Dquarkus.http.ssl.certificate.key-store-password=$RAND_PASSWORD      \     
+       -Dquarkus.http.ssl.certificate.key-store-password=$RAND_PASSWORD      \
                                                                              \
        -Dquarkus.datasource.driver=org.postgresql.Driver                     \
        -Dquarkus.datasource.url=jdbc:postgresql://localhost:2346/sensorusers \
