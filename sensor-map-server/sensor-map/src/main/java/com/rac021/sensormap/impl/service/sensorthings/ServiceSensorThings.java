@@ -327,7 +327,14 @@ public class ServiceSensorThings              {
                                       String db_name   , 
                                       String db_user   , 
                                       String db_password ) throws NumberFormatException {
-       
+        
+        return new PgPoolOptions().setPort( Integer.parseInt(db_port) )
+                                 .setHost( db_host )
+                                 .setDatabase( db_name )
+                                 .setUser( db_user )
+                                 .setPassword( db_password )
+                                 .setMaxSize( 1 ) ;
+        /*
         if( options == null ) {
             
            options = new PgPoolOptions().setPort( Integer.parseInt(db_port) )
@@ -340,6 +347,7 @@ public class ServiceSensorThings              {
         }
         
         return options    ;
+        */
     }
 
     @GET
