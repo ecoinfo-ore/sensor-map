@@ -10,6 +10,10 @@
       <script src="js/sensor.js"     type="text/javascript"></script>
       <script src="js/cloudflare-jsoneditor-minimalist.min.js" type="text/javascript"></script>
       
+       <script  src="js/components/xml/index_xml.js" type="module"></script>
+       
+       <script  src="js/components/button-on-off/button-on-off.js"></script>
+       
    </head>
    
    <body style="padding: 20px;">
@@ -117,10 +121,18 @@
                          placeholder="Logs..." readOnly ></textarea>
             </sql-builder-container>
             
-            <sql-builder-container style="background:#adb7e6">
-               <div id="mainselection" style="margin:0.5em; width:76%; height: 2em; ">
+           <sql-builder-container style="background:#adb7e6">
+           
+           <div style="float: left;">
+              <button-on-off></button-on-off>
+            </div> 
+                      
+             <div id="mainselection" style="margin:0.5em; width:64%; height: 2em; margin-left: 13em;  ">
+             
                   <div style="float:left; color:white;padding-right: 0.5em;margin-top:0.3em;padding-left: 0.3em;">SELECT</div>
+                  
                   <select id="sensorTemplateId" onchange="getComboA(this.options[this.selectedIndex].value);" >
+                  
                      <option>~ Sensor-Templates ~</option>
                      <option>Things</option>
                      <option>Thing with new Location</option>
@@ -129,10 +141,23 @@
                      <option>Observation linked to an existing Sensor</option>
                      <option>Location</option>
                   </select>
-               </div>
+                  
+             </div>
+             
+            
 
-               <div id="jsoneditor" style="width:37em; margin:0.5em; height: 32em;"></div>
+<!--                <div id="jsoneditor" style="width:37em; margin:0.5em; height: 32em;"></div> -->
+               
+            <div  style="width:37em; margin:0.5em; height: 32em;" >
+                <xml-editor id="xml-editor"></xml-editor>
+            </div>
+            
+            
+            
+            
+            
                <div style="margin:1em" >
+               
                   <table class="my-table" style="border:hidden; border-top: hidden; border-bottom: hidden; color: antiquewhite; " >
                      <tr class="table-tr" >
                         <td class="table-td" style="border: hidden;" > <b>S-Things Endpoint</b> </button> </td>
