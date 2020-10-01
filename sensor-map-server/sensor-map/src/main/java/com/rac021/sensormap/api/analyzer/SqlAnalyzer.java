@@ -12,9 +12,7 @@ import java.util.logging.Level ;
 import java.util.logging.Logger ;
 import java.sql.ResultSetMetaData ;
 import java.sql.PreparedStatement ;
-import java.util.stream.Collectors ;
 import net.sf.jsqlparser.schema.Column ;
-import javax.ws.rs.core.MultivaluedMap ;
 import com.rac021.sensormap.api.pojos.Query ;
 import net.sf.jsqlparser.expression.Function ;
 import net.sf.jsqlparser.JSQLParserException ;
@@ -31,6 +29,7 @@ import net.sf.jsqlparser.statement.select.PlainSelect ;
 import net.sf.jsqlparser.statement.select.OrderByElement ;
 import net.sf.jsqlparser.statement.select.SelectExpressionItem ;
 import static com.rac021.sensormap.api.logger.LoggerFactory.getLogger ;
+import net.sf.jsqlparser.expression.StringValue;
 
 /**
  *
@@ -111,7 +110,7 @@ public class SqlAnalyzer {
           }
     }
    
-    private static boolean containsAggregationFuntion( String query )             {
+    private static boolean containsAggregationFuntion( String query )            {
     
       try {
            CCJSqlParserManager parserManager = new CCJSqlParserManager()         ;
@@ -136,77 +135,12 @@ public class SqlAnalyzer {
            
        return false ;
     }
-           
-       
-    private static String generateQueryWithFiledsFilters( Query query , List<String> fieldsFilters ) {
-          
-        if( query == null || fieldsFilters == null ) return null ;
 
-        String joinedParams  = "( " + fieldsFilters.stream()
-                                                   .collect( Collectors
-                                                   .joining(" ) AND ( ") ) + " ) " ;
-          
-        try {
+    private static String generateQueryApplyingFiledsFiltersIncludingLimitOffset ( final Query query ) {
             
-            CCJSqlParserManager parserManager = new CCJSqlParserManager() ;
-            Select select  = (Select) parserManager.parse(new StringReader(query.getQuery())) ;
-            PlainSelect ps = (PlainSelect) select.getSelectBody();
-            
-            if(joinedParams.replaceAll(" +", "").trim().equals("()")) {
-                return select.toString() ;
-            }
-            
-            String newQ ;
-
-            if( query.isContainsAggregationFunction()) {
-                
-                Expression having = ps.getHaving()     ;
-
-               if( having != null ) {
-                 newQ = query.getQuery().replace( having.toString() , 
-                                                 having.toString() + " AND " + joinedParams ) ;
-               }
-               else  {
-                 String hav      =  joinedParams                             ;
-                 Expression expr = CCJSqlParserUtil.parseCondExpression(hav) ;
-                 ((PlainSelect) select.getSelectBody()).setHaving(expr)      ;
-                 newQ =  select.toString()                                   ;
-               }
-           
-            } else {
-          
-                Expression wher = ps.getWhere() ;
-
-                if( wher != null ) {
-                     newQ = query.getQuery().replace( wher.toString() , 
-                                                      wher.toString() + " AND " + joinedParams ) ;
-                }
-                else  {       
-                       try {
-                            Expression expr = CCJSqlParserUtil.parseCondExpression(joinedParams) ;
-                            ((PlainSelect) select.getSelectBody()).setWhere(expr) ; 
-                            newQ = select.toString()      ;
-                       } catch( JSQLParserException ex )  {
-                           throw new RuntimeException(ex) ;
-                       }
-               }
-           }
-         
-           return newQ ;
-           
-        } catch( JSQLParserException ex ) {
-             throw  new RuntimeException(ex) ;
-        }
-    }
-
-    private static String generateQueryApplyingFiledsFiltersIncludingLimitOffset ( final Query query   , 
-                                                                                   List<String> fields ) {
-            
-        String queryApplyedFilters     = generateQueryWithFiledsFilters( query, fields )  ;
-        String queryApplyedLimitOffset = appendLimitOffsetPaattern( queryApplyedFilters ) ;
+        String queryApplyedLimitOffset = appendLimitOffsetPaattern( query.getQuery() ) ;
           
         LOGGER.log(Level.CONFIG , " Query  --> {0}", query  ) ;
-        LOGGER.log(Level.CONFIG , " Fields --> {0}", fields ) ;
         return /*collect */ queryApplyedLimitOffset           ;
     }
 
@@ -240,15 +174,9 @@ public class SqlAnalyzer {
 
     }
    
-    public static String generateQueryAccordingFieldsFilters ( Query query , 
-                                                               MultivaluedMap<String, String> filedsFilters ) {
+    public static String generateQueryAccordingFieldsFilters ( Query query ) {
         
-        if(filedsFilters.isEmpty() ) return appendLimitOffsetPaattern(query.getQuery()) ;
-        
-        List<String> cleanedFilters = Lexer.cleanFieldsFilters( query, filedsFilters ) ;
-        
-        return SqlAnalyzer.generateQueryApplyingFiledsFiltersIncludingLimitOffset( query , 
-                                                                                   cleanedFilters) ;
+        return SqlAnalyzer.generateQueryApplyingFiledsFiltersIncludingLimitOffset( query ) ;
     }
 
     private static String getFullNameSqlParamAt ( String sql, int index ) {
@@ -274,13 +202,35 @@ public class SqlAnalyzer {
                                                          .get(index)).getExpression()) != null ) {
   
                    return ((Function) ((SelectExpressionItem) ps.getSelectItems()
-                                                                .get(index)).getExpression()).toString() ;
+                                                                .get(index)).getExpression())
+                                                                .toString() ;
                } 
+               
+               return null ;
            }
-             
-           return ((Column) ((SelectExpressionItem) ps.getSelectItems()
-                                                      .get(index)).getExpression())
-                                                      .getFullyQualifiedName() ;
+           
+           if (expression instanceof StringValue) {
+                 
+               if( ((StringValue) ((SelectExpressionItem) ps.getSelectItems()
+                                                         .get(index)).getExpression()) != null ) {
+  
+                   return ((SelectExpressionItem) ps.getSelectItems()
+                                                    .get(index)).getExpression()
+                                                    .toString() ;
+               } 
+               
+               return null ;
+           }
+           
+           if (expression instanceof Column) {
+               
+                return ((Column) ((SelectExpressionItem) ps.getSelectItems()
+                                                           .get(index)).getExpression())
+                                                           .getFullyQualifiedName()    ;
+           }
+           
+           return null;
+           
        } catch( JSQLParserException ex )  {
            throw new RuntimeException(ex) ;
          }

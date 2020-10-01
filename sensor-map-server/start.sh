@@ -30,14 +30,15 @@ if [ -f $KEYSTORE_FILE ]; then
 ######################################
 
  # java -jar sensor-map/sensor-map-0.9.jar &
-
+ # -Xdebug -Xrunjdwp:transport=dt_socket,address=11555,server=y,suspend=y 
+ 
  java  -Dquarkus.http.port=$HTTP_PORT                                        \
        -Dquarkus.http.ssl-port=$HTTPS_PORT                                   \
        -Dquarkus.http.ssl.certificate.key-store-file=$KEYSTORE_FILE          \
        -Dquarkus.http.ssl.certificate.key-store-password=$RAND_PASSWORD      \
                                                                              \
        -Dquarkus.datasource.driver=org.postgresql.Driver                     \
-       -Dquarkus.datasource.url=jdbc:postgresql://localhost:2346/sensorusers \
+       -Dquarkus.datasource.url=jdbc:postgresql://localhost:2345/sensorusers \
        -Dquarkus.hibernate-orm.database.generation=none                      \
        -Dquarkus.datasource.username=postgres                                \
        -Dquarkus.datasource.password=postgres                                \

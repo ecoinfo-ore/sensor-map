@@ -42,6 +42,7 @@ import java.time.format.DateTimeFormatter ;
 import com.rac021.sensormap.impl.io.Writer ;
 import java.util.concurrent.CountDownLatch ;
 import com.rac021.sensormap.api.pojos.Query ;
+import java.io.UnsupportedEncodingException ;
 import io.reactiverse.pgclient.PgConnection ;
 import io.reactiverse.pgclient.PgPoolOptions ;
 import io.reactiverse.pgclient.PgTransaction ;
@@ -157,7 +158,11 @@ public class ServiceSensorThings              {
         System.out.println(" sensorthings_endpoint_url_dec : " + sensorthings_endpoint_url_dec ) ;
         System.out.println("                                             " ) ;
                 
-        PgPoolOptions option = getOptions( db_port, db_host, db_name, db_user, db_password )     ;
+        PgPoolOptions option = getOptions( URLDecoder.decode( db_port     , "UTF-8" ) , 
+                                           URLDecoder.decode( db_host     , "UTF-8" ) , 
+                                           URLDecoder.decode( db_name     , "UTF-8" ) , 
+                                           URLDecoder.decode( db_user     , "UTF-8" ) , 
+                                           URLDecoder.decode( db_password , "UTF-8" ) ) ;
 
         CountDownLatch latch = new CountDownLatch(1 )              ;
         
@@ -188,6 +193,7 @@ public class ServiceSensorThings              {
                     if (res.succeeded()) {
 
                         if( ! isReachable(sensorthings_endpoint_url) ) {
+
                              respBuilder.add("Exception", "Url " + sensorthings_endpoint_url + " Not Reachable !! ") ;
                              
                              latch.countDown() ;
@@ -330,12 +336,13 @@ public class ServiceSensorThings              {
                                       String db_password ) throws NumberFormatException {
         
         return new PgPoolOptions().setPort( Integer.parseInt(db_port) )
-                                 .setHost( db_host )
-                                 .setDatabase( db_name )
-                                 .setUser( db_user )
-                                 .setPassword( db_password )
-                                 .setMaxSize( 1 ) ;
+                                  .setHost( db_host )
+                                  .setDatabase( db_name )
+                                  .setUser( db_user )
+                                  .setPassword( db_password )
+                                  .setMaxSize( 1 ) ;
         /*
+        
         if( options == null ) {
             
            options = new PgPoolOptions().setPort( Integer.parseInt(db_port) )
@@ -348,6 +355,7 @@ public class ServiceSensorThings              {
         }
         
         return options    ;
+        
         */
     }
 
@@ -362,7 +370,6 @@ public class ServiceSensorThings              {
                                 @HeaderParam("db_user")     String db_user     ,
                                 @HeaderParam("db_password") String db_password ) throws Exception {
         
-            
         String sqlQuery = URLDecoder.decode( _sqlQuery, StandardCharsets.UTF_8.toString()) ;
 
         if (  sqlQuery == null || sqlQuery.trim().replaceAll("(?m)^[ \t]*\r?\n", "").isEmpty() ) {
@@ -373,16 +380,19 @@ public class ServiceSensorThings              {
          Query buildQueryObject = null                              ;
          JsonObjectBuilder jsonBuilder = Json.createObjectBuilder() ;
          
-         try ( Connection connection = DriverManager.getConnection ( "jdbc:postgresql://" + db_host +":" + 
-                                                                     db_port + "/" + db_name ,
-                                                                     db_user, db_password )) {
+         try ( Connection connection = DriverManager.getConnection ( "jdbc:postgresql://"                 +  
+                                                                     URLDecoder.decode( db_host, "UTF-8") + ":"   + 
+                                                                     db_port                              +  "/"  + 
+                                                                     URLDecoder.decode( db_name     , "UTF-8")    ,
+                                                                     URLDecoder.decode( db_user     , "UTF-8")    ,
+                                                                     URLDecoder.decode( db_password , "UTF-8") )) {
               connection.setReadOnly(true) ;
              
               try {
                     buildQueryObject = SqlAnalyzer.buildQueryObject( connection, 
                                                                      URLDecoder.decode ( _sqlQuery , 
                                                                                  StandardCharsets.UTF_8.toString()) ) ;
-              } catch( Exception ex )   {
+              } catch( UnsupportedEncodingException ex )   {
                    ex.printStackTrace() ;
                    jsonBuilder.add("Exception",ex.getMessage()) ;
                    return Response.status(Response.Status.BAD_REQUEST).entity(jsonBuilder.build().toString()).build() ;

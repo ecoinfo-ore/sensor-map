@@ -159,9 +159,10 @@
                                                onclick="closeLogs()" >Close Log Connection</button> </td>
                         
                         <td > &nbsp; Gost Ui : <a style=" margin-right:0em;" 
-                                          target="_blank" 
-                                          rel="noopener noreferrer" 
-                                          href="http://localhost:8282"> http://localhost:8282</a> 
+                                                  target="_blank" 
+                                                  id="gost_ui_id"
+                                                  rel="noopener noreferrer" 
+                                                  href="http://localhost:8282"> http://localhost:8282 </a> 
                         </td>
                      </tr>
                   </table>
@@ -179,6 +180,12 @@
          
          var currentTemplate = "" ;
          
+         document.getElementById("sensorthings_endpoint_url").value  = getUrl()
+         
+         document.getElementById("gost_ui_id").setAttribute("href", getUrlGostUI() )
+         document.getElementById("gost_ui_id").text = getUrlGostUI() 
+         alert(' getUrlGostUI() --> ' + getUrlGostUI() )
+         
          var codeMirrorEditor = CodeMirror.fromTextArea('code', {
            height: "27.5em",
            parserfile: "parsesql.js",
@@ -191,7 +198,7 @@
            
          });
          
-         var reader ;
+         let reader = null ;
          
          // JSON
          // create the editor
@@ -287,19 +294,94 @@
                });
          }
          
-         function getLogs() {
+//          function getLogs() {
+//            
+//                closeLogs() ;
+//                
+//                document.getElementById("logs-id").value = "" ;
+//             
+//                var myHeaders = new Headers() ;
+//          
+//                var token = getAuthHeader()   ;
+//                
+//                myHeaders.append( "API-key-Token", token ) ;
+//               
+//                var myInit = { method: 'GET',
+//                               headers: myHeaders  ,
+//                               cache:  'default' } ;
+//               
+//               var myRequest = new Request( getSensorEndPoint() + '/logs' , myInit ) ;
+//           
+//               const decoder = new TextDecoder('utf-8')   ;
+//          
+//               fetch(myRequest).then( function(response ) {
+//                 
+//                 if (response.status !== 200 ) {
+// 
+//                     var statusCode = response.status 
+//                 
+//                     response.text().then((response) => {
+// 
+//                         document.getElementById("logs-id").value     += " statusCode ( " + statusCode + " ) " + response 
+//                     })  ;
+//                 
+//                 return ;
+//                 }
+//             
+//           
+//                    reader = response.body.getReader()    ;
+//                    function read() {
+//                    
+//                        return reader.read()
+//                                     .then(({ value, done })=> {
+// 
+//                             document.getElementById("logs-id").value     += decoder.decode(value) ;
+//                             document.getElementById("logs-id").scrollTop  = document.getElementById("logs-id").scrollHeight ;
+//                             
+//                        if (done)               {
+//                            console.log('done') ;
+//                            return ;
+//                        }
+//                        read() ;
+//                        }) ;
+//                    }
+//                    read() ;
+//               }).catch(function(err) {
+//                  document.getElementById("logs-id").value = " " + err ;
+//               });
+//          }
+         
+         function closeLogs()   {
+          
+           if( reader != null ) {
+              try {
+                reader.cancel() ;
+                reader = null   ;
+              } catch( err )    {
+                  document.getElementById("logs-id").value = " " + err ;
+              }
+           }
            
-               closeLogs() ;
-               
-               document.getElementById("logs-id").value = "" ;
-            
+           document.getElementById("logs-id").value = "" ;
+         }
+         
+         
+         
+         
+         
+         
+         
+       function getLogs() {
+             
+            closeLogs() ;
+              
                var myHeaders = new Headers() ;
          
                var token = getAuthHeader()   ;
                
                myHeaders.append( "API-key-Token", token ) ;
               
-               var myInit = { method: 'GET',
+               var myInit = { method: 'GET'       ,
                               headers: myHeaders  ,
                               cache:  'default' } ;
               
@@ -307,42 +389,84 @@
           
               const decoder = new TextDecoder('utf-8')   ;
          
-              fetch(myRequest).then( function(response ) {
-          
-                   reader = response.body.getReader()    ;
-                   function read() {
-                   
-                       return reader.read()
-                                    .then(({ value, done })=> {
-                      
-                            document.getElementById("logs-id").value     += decoder.decode(value) ;
-                            document.getElementById("logs-id").scrollTop =  document.getElementById("logs-id").scrollHeight ;
+
+        fetch(myRequest).then(function(response)   {
+
+            if (response.status !== 200 )          {
+
+                var statusCode = response.status 
+               
+                response.text().then((response) => {
+
+                    
+                    document.getElementById("logs-id").value = "\n Error ( " +  statusCode    + " ) " +  response
+                     
+               }  )  ;       
+               
+               return ;
+            }
+
+            reader = response.body.getReader()
+
+            function read() {
+            
+                if ( reader == null ) reader = response.body.getReader()
+
+                return reader.read()
+                
+                       .then( ( { value, done } ) => {
+
+                           var data   = decoder.decode( value )
+                           
+                           if ( data != " " ) {  // PING SERVER -> IGNORE 
+
+                               document.getElementById("logs-id").value     += data ;
+                               document.getElementById("logs-id").scrollTop  = document.getElementById("logs-id").scrollHeight ;                               
+                           }
+
+                           if ( done ) {
+
+                                console.log('Service Log Done')
+                               // bacause The Current Connection is Closed,
+                               // update READER
                             
-                       if (done)               {
-                           console.log('done') ;
-                           return ;
-                       }
-                       read() ;
-                       }) ;
-                   }
-                   read() ;
-              }).catch(function(err) {
-                 document.getElementById("logs-id").value = " " + err ;
-              });
-         }
+                               if ( reader != null ) {
+            
+                                 try {
+                                       reader.cancel()
+                                       reader = null
+                                       
+                                       document.getElementById("logs-id").scrollTop  += "Logs Connection Closed ! " ;
+                                            
+                                 } catch (err) {
+                                   alert(err)
+                                 }
+                              }
+                   
+                            return 
+                           }
+                        
+                           read() ;
+                        
+                } ) ;
+            }
+
+            read() ;
+
+        }).catch(function(err) {
+
+            document.getElementById("logs-id").value = " " + err ;
+        });
+        
+    }
          
-         function closeLogs()   {
+
          
-           if( reader != null ) {
-              try {
-                reader.cancel();
-              } catch( err ) {
-                  document.getElementById("logs-id").value = " " + err ;
-              }
-           }
-           
-           document.getElementById("logs-id").value = "" ;
-         }
+         
+         
+         
+         
+         
          
          
          function setTemplate( type, templateInJsonValue) {
@@ -476,13 +600,13 @@
          
          function getAuthHeader() {
            
-            var login    = document.getElementById("sensor-login-id").value ;
-            var password = document.getElementById("sensor-password-id").value ;
-            
-            return hash( login , password, "SHA2" , "PLAIN" , "MD5", "PLAIN" )  ;
+            var login     = document.getElementById("sensor-login-id").value    ;
+            var password  = document.getElementById("sensor-password-id").value ;
+            var timeStamp = ~~(+new Date() / 1000)
+
+            return hash( login, password, "SHA2", "PLAIN", "MD5", "PLAIN", timeStamp )
          }
-          
-          
+                   
          function getSensorEndPoint() {
          
             return document.getElementById("sensor-map-id").value ;
@@ -511,16 +635,16 @@
            var element = document.createElement('a');
            
            element.setAttribute('href', 'data:text/plain;charset=utf-8,' +
-                                   encodeURIComponent( "##LOGIN##                     : " + login                   + "\n\n" + 
-                                                       "##SensorMapEndPoint##         : " + getSensorEndPoint()     + "\n\n" + 
-                                                       "##DB_HOST##                   : " + db_host                 + "\n\n" + 
-                                                       "##DB_PORT##                   : " + db_port                 + "\n\n" + 
-                                                       "##DB_NAME##                   : " + db_name                 + "\n\n" + 
-                                                       "##DB_USER##                   : " + db_user                 + "\n\n" + 
-                                                       "##SensorType##                : " + sensorType              + "\n\n" + 
-                                                       "##SensorThingsEndpointUrl##   : " + sensorThingsEndpointUrl + "\n\n" + 
-                                                       "##SensorTemplate##            : " + sensorTemplate          + "\n\n" + 
-                                                       "##SqlQuery##                  : " + "\n" + sqlQuery         + "\n\n" + "##SqlQueryEnd## \n" 
+                                         encodeURIComponent( "##LOGIN##                     : " + login                   + "\n\n" + 
+                                                             "##SensorMapEndPoint##         : " + getSensorEndPoint()     + "\n\n" + 
+                                                             "##DB_HOST##                   : " + db_host                 + "\n\n" + 
+                                                             "##DB_PORT##                   : " + db_port                 + "\n\n" + 
+                                                             "##DB_NAME##                   : " + db_name                 + "\n\n" + 
+                                                             "##DB_USER##                   : " + db_user                 + "\n\n" + 
+                                                             "##SensorType##                : " + sensorType              + "\n\n" + 
+                                                             "##SensorThingsEndpointUrl##   : " + sensorThingsEndpointUrl + "\n\n" + 
+                                                             "##SensorTemplate##            : " + sensorTemplate          + "\n\n" + 
+                                                             "##SqlQuery##                  : " + "\n" + sqlQuery         + "\n\n" + "##SqlQueryEnd## \n" 
                                                    ));
                                                    
            element.setAttribute('download', sensorType ) ;
@@ -609,6 +733,31 @@
                return match[1].trim()                       ;
            else
                return "NULL";
+         }
+         
+         function getUrl() { // http://localhost:8181/FROST-Server/v1.0/
+            
+            var endPoint = location.protocol + '//' + location.hostname + ":8181/FROST-Server/v1.0/" ;
+             
+            if( endPoint.startsWith("file://" ) ) {
+            
+               return "http://localhost:8181/FROST-Server/v1.0/"
+            }
+            
+            return endPoint 
+            
+         }
+         
+         function getUrlGostUI() { // http://localhost:8282
+            
+            var endPoint = location.protocol+'//'+location.hostname + ":8282" ;
+
+            if( endPoint.startsWith("file://" ) ) {
+            
+               return "http://localhost:8282"
+            }
+            
+            return endPoint
          }
          
       </script>

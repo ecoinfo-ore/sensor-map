@@ -37,7 +37,7 @@ services:
     volumes:
       - postgis_volume:/var/lib/postgresql/data
     ports:
-      - 2345:5432
+      - 2346:5432
     networks:
       - sensor_net
      

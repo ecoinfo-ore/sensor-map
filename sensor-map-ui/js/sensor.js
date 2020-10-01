@@ -20,17 +20,20 @@ function hash(  login              ,
                 algoSigneture      ,
                 loginSignature     ,
                 passwordSignature  ,
-                timeStampSignature )                          {
+                timeStampSignature ,
+                timestamp          )                          {
 
-    var timestamp = ~~(+new Date() / 1000);
+    // var timestamp = ~~(+new Date() / 1000);
     var _login     = hashData(login, loginSignature)          ;
     var _password  = hashData(password, passwordSignature)    ;
     var _timestamp = hashData(timestamp, timeStampSignature)  ;
     var Plaintoken = _login.concat(_password, _timestamp)     ;
 
     var sign       = hashData(Plaintoken, algoSigneture)      ;
+        sign       = sign.replace(/^0+/, '')                  ;
     return         login + " " +  _timestamp + " " + sign     ;
 }
+
 
 function SHA256(ascii) {
     
@@ -261,7 +264,6 @@ function SHA1(str) {
     return hex(H0) + hex(H1) + hex(H2) + hex(H3) + hex(H4)
 
 }
-
 
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
@@ -517,36 +519,6 @@ function login( login , password  ) {
     loginChecker ( hashedLoginPassword , timestamp  )                                  ;
     
 }
-
-// $(function() {
-//     
-//         // greeb : rgb(0, 128, 0)
-//         // white : rgb(255, 255, 255)
-//         $('.changeColor').click(function() {
-//             var reponse = $(this).attr('id').split('_')[1] ;
-//             
-//             var color = $( this ).css( "backgroundColor" ) ;
-//             if( color === 'rgb(255, 255, 255)')            {
-//                 $(this).css('backgroundColor', 'green')    ;
-//                 try {
-//                 sendMyResponse( reponse, "YES")            ;
-//                 }catch( e) {
-//                   console.error(e);
-//                 }
-//             } else if ( color === 'rgb(0, 128, 0)')        {
-//                 
-//                $(this).css('backgroundColor', 'white')     ;
-//                 
-//                try {
-//                       sendMyResponse( reponse, "NO")       ;
-//               } catch(e) {
-//                   console.error(e) ;
-//               }
-//             }
-//            
-//         } ) ;
-//} ) ;
-
 
 function openPage(link)                   {
    var win = window.open(link, '_blank')  ;

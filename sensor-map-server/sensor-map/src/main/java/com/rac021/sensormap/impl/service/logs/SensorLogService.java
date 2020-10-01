@@ -17,6 +17,7 @@ import javax.ws.rs.HeaderParam ;
 import javax.ws.rs.core.UriInfo ;
 import javax.ws.rs.core.Context ;
 import javax.ws.rs.core.Response ;
+import io.quarkus.runtime.Startup ;
 import io.quarkus.arc.Unremovable ;
 import com.rac021.sensormap.impl.io.Writer ;
 import com.rac021.sensormap.api.security.Policy ;
@@ -31,6 +32,7 @@ import com.rac021.sensormap.impl.utils.checker.TokenManager ;
 @ServiceRegistry("logs")
 @Secured(policy = Policy.CustomSignOn )
 @Singleton
+@Startup
 @Unremovable
 public class SensorLogService  {
    

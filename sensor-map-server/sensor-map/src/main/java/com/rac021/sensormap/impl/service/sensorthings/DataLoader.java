@@ -30,9 +30,9 @@ public class DataLoader {
         MediaType mediaType= MediaType.parse(mdiaType) ;
                  
         OkHttpClient client =  new OkHttpClient.Builder()
-                                               .connectTimeout( connectTimeOut , TimeUnit.SECONDS)
-                                               .writeTimeout( writeTimeOut , TimeUnit.SECONDS)
-                                               .readTimeout( readTimeOut , TimeUnit.SECONDS)
+                                               .connectTimeout( connectTimeOut , TimeUnit.SECONDS )
+                                               .writeTimeout  ( writeTimeOut   , TimeUnit.SECONDS )
+                                               .readTimeout   ( readTimeOut    , TimeUnit.SECONDS )
                                                .build() ;
        
         if( datas != null && ! datas.isEmpty() ) { 
@@ -53,7 +53,7 @@ public class DataLoader {
                                    OkHttpClient client      ,
                                    boolean      verbose     ) throws Exception  {
 
-        RequestBody body = RequestBody.create(data, mediaType );
+        RequestBody body = RequestBody.create(mediaType , data ) ;
 
         Request request = new Request.Builder()
                                      .url(url)

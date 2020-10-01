@@ -49,11 +49,37 @@ function getWebSocketPort() {
 }
 
 function getUrl() {
-    var path = window.location.pathname;
-    path = path.substring(0, path.lastIndexOf('/Dashboard'));
-    // SensorThings is Running on 8181 ( port on the host Machine ) 
-    return "http://localhost:8181/" ;
+
+   // var path = window.location.pathname;
+   // path = path.substring(0, path.lastIndexOf('/Dashboard'));
+   // // SensorThings is Running on 8181 ( port on the host Machine ) 
+   // return "http://localhost:8181/" ;
+    
+   var endPoint = location.protocol + '//' + location.hostname + ":8181/" ;
+
+   if( endPoint.startsWith("file://" ) ) {
+            
+      return "http://localhost:8181/"
+   }
+   
+   return endPoint + "/" 
+
 }
+
+ //  getEndPoint() {
+   //    
+   //       var url       = window.location.href
+   //       var arr       = url.split("/")
+   //       var domain    = arr[0] + "//" + arr[2]
+   //       
+   //       var endPoint  = domain + "/rest/resources"
+   //       
+   //       if ( ! endPoint.startsWith( "file://" ) ) {
+   //       
+   //           this.shadowRoot.getElementById(this.endpointID).value = endPoint
+   //       }
+   //  }
+
 
 var olMap;
 var geoJSONLayer;
