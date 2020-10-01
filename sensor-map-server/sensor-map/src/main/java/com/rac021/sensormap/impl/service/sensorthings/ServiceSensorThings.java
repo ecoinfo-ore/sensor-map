@@ -5,6 +5,7 @@ package com.rac021.sensormap.impl.service.sensorthings ;
  *
  * @author ryahiaoui
  */
+
 import java.util.Map ;
 import java.util.List ;
 import javax.ws.rs.GET ;
@@ -19,34 +20,34 @@ import javax.ws.rs.Produces ;
 import javax.json.JsonObject ;
 import javax.inject.Singleton ;
 import java.sql.DriverManager ;
+import io.vertx.sqlclient.Row ;
 import java.util.logging.Level ;
 import java.util.regex.Matcher ;
 import java.util.regex.Pattern ;
 import javax.ws.rs.HeaderParam ;
 import java.time.LocalDateTime ;
 import java.util.logging.Logger ;
+import io.vertx.sqlclient.Tuple ;
+import io.vertx.pgclient.PgPool ;
 import io.vertx.core.AsyncResult ;
 import javax.ws.rs.core.Response ;
 import io.quarkus.arc.Unremovable ;
-import io.reactiverse.pgclient.Row ;
 import javax.json.JsonObjectBuilder ;
-import io.reactiverse.pgclient.Tuple ;
+import io.vertx.sqlclient.RowStream ;
 import javax.annotation.PostConstruct ;
-import io.reactiverse.pgclient.PgPool ;
+import io.vertx.sqlclient.PoolOptions ;
+import io.vertx.sqlclient.Transaction ;
 import io.quarkus.runtime.StartupEvent ;
 import javax.enterprise.event.Observes ;
-import io.reactiverse.pgclient.PgStream ;
-import io.reactiverse.pgclient.PgClient ;
+import io.vertx.sqlclient.SqlConnection ;
 import java.nio.charset.StandardCharsets ;
 import java.time.format.DateTimeFormatter ;
+import io.vertx.pgclient.PgConnectOptions ;
 import com.rac021.sensormap.impl.io.Writer ;
 import java.util.concurrent.CountDownLatch ;
+import io.vertx.sqlclient.PreparedStatement ;
 import com.rac021.sensormap.api.pojos.Query ;
 import java.io.UnsupportedEncodingException ;
-import io.reactiverse.pgclient.PgConnection ;
-import io.reactiverse.pgclient.PgPoolOptions ;
-import io.reactiverse.pgclient.PgTransaction ;
-import io.reactiverse.pgclient.PgPreparedQuery ;
 import com.rac021.sensormap.api.security.Policy ;
 import com.rac021.sensormap.api.security.Secured ;
 import java.util.concurrent.atomic.AtomicInteger ;
@@ -54,6 +55,7 @@ import com.rac021.sensormap.api.analyzer.SqlAnalyzer ;
 import com.rac021.sensormap.api.qualifiers.ServiceRegistry ;
 import com.rac021.sensormap.impl.utils.checker.TokenManager ;
 import static com.rac021.sensormap.impl.service.sensorthings.DataLoader.isReachable ;
+
 
 /**
  *
@@ -66,7 +68,7 @@ import static com.rac021.sensormap.impl.service.sensorthings.DataLoader.isReacha
 
 public class ServiceSensorThings              {
 
-    private PgPoolOptions options             ;
+    private  PoolOptions options              ;
    
     void onStart(@Observes StartupEvent ev) { }
 
@@ -84,6 +86,7 @@ public class ServiceSensorThings              {
                                          @HeaderParam("db_host")       String db_host      ,
                                          @HeaderParam("db_port")       String db_port      ,
                                          @HeaderParam("db_name")       String db_name      ,
+                                         @HeaderParam("db_schema")     String db_schema    ,
                                          @HeaderParam("db_user")       String db_user      ,
                                          @HeaderParam("db_password")   String db_password  ,
                                          @HeaderParam("sensorthings_endpoint_url") String _sensorthings_endpoint_url ,
@@ -151,6 +154,8 @@ public class ServiceSensorThings              {
         String template                      = removeDoubleQuotesIfNumber ( 
                                                    URLDecoder.decode( _template, StandardCharsets.UTF_8.toString()) ) ;
         
+        String dbSchema  = db_schema == null ? "public" : db_schema          ; 
+        
         System.out.println("                                             " ) ;
         System.out.println(" sqlQuery                      : " + sqlQuery  ) ;
         System.out.println(" template                      : " + template  ) ;
@@ -158,18 +163,22 @@ public class ServiceSensorThings              {
         System.out.println(" sensorthings_endpoint_url_dec : " + sensorthings_endpoint_url_dec ) ;
         System.out.println("                                             " ) ;
                 
-        PgPoolOptions option = getOptions( URLDecoder.decode( db_port     , "UTF-8" ) , 
-                                           URLDecoder.decode( db_host     , "UTF-8" ) , 
-                                           URLDecoder.decode( db_name     , "UTF-8" ) , 
-                                           URLDecoder.decode( db_user     , "UTF-8" ) , 
-                                           URLDecoder.decode( db_password , "UTF-8" ) ) ;
+        PgConnectOptions connectOption = getOptions( URLDecoder.decode( db_port     , "UTF-8" ) , 
+                                                     URLDecoder.decode( db_host     , "UTF-8" ) , 
+                                                     URLDecoder.decode( db_name     , "UTF-8" ) , 
+                                                     URLDecoder.decode( db_user     , "UTF-8" ) , 
+                                                     URLDecoder.decode( db_password , "UTF-8" ) ) ;
 
+        connectOption.addProperty( "search_path", dbSchema )       ;
+        
+        PoolOptions poolOptions = new PoolOptions().setMaxSize(1)  ;
+        
         CountDownLatch latch = new CountDownLatch(1 )              ;
         
         JsonObjectBuilder respBuilder = Json.createObjectBuilder() ;
          
         // Create the client pool
-        PgPool client = PgClient.pool(option )           ;
+        PgPool client = PgPool.pool( connectOption , poolOptions ) ;
 
         String  login     = TokenManager.getLogin(token) ;
         String  path_logs = TokenManager.builPathLog( "logger" /*configuration.getLoggerFile()*/, login ) ;
@@ -182,9 +191,9 @@ public class ServiceSensorThings              {
 
             if (ar1.succeeded())    {
 
-                PgConnection connection = ar1.result()  ;
+                SqlConnection connection = ar1.result() ;
 
-                connection.cancelRequest(  (cx) ->      { 
+                connection.closeHandler( ( cx ) ->      { 
                    System.out.println(" Cancel The Current Request") ;
                 }) ;
                   
@@ -212,13 +221,13 @@ public class ServiceSensorThings              {
                               
                         latch.countDown()                                       ;
                          
-                        AsyncResult<PgPreparedQuery> pq = res ;
+                        AsyncResult<PreparedStatement> pq = res ;
 
                         // Streams require to run within a transaction
-                        PgTransaction tx = connection.begin() ;
+                        Transaction tx = connection.begin() ;
 
                         // Fetch 10000 rows at a time
-                        PgStream<Row> stream = pq.result().createStream( 10000 , Tuple.tuple() ) ;
+                        RowStream<Row> stream = pq.result().createStream( 10000 , Tuple.tuple() );
 
                         // Use the stream
                         stream.exceptionHandler((err) -> {
@@ -258,8 +267,6 @@ public class ServiceSensorThings              {
                             
                             String outData = applyValue( columnsValues, template )       ;
                            
-                            // StringWriter errors = new StringWriter()                  ;
-                            
                             List<String> data = new ArrayList<>()                        ;
                             data.add( outData )                                          ;
                             
@@ -326,21 +333,19 @@ public class ServiceSensorThings              {
         return Response.status(Response.Status.OK)
                        .entity(respObj.toString())
                        .build() ;
-
     }
   
-    private PgPoolOptions getOptions( String db_port   , 
-                                      String db_host   , 
-                                      String db_name   , 
-                                      String db_user   , 
-                                      String db_password ) throws NumberFormatException {
-        
-        return new PgPoolOptions().setPort( Integer.parseInt(db_port) )
-                                  .setHost( db_host )
-                                  .setDatabase( db_name )
-                                  .setUser( db_user )
-                                  .setPassword( db_password )
-                                  .setMaxSize( 1 ) ;
+    private PgConnectOptions getOptions( String db_port   , 
+                                         String db_host   , 
+                                         String db_name   , 
+                                         String db_user   , 
+                                         String db_password ) throws NumberFormatException {
+
+        return new PgConnectOptions().setPort( Integer.parseInt(db_port) )
+                                     .setHost( db_host )
+                                     .setDatabase( db_name )
+                                     .setUser( db_user )
+                                     .setPassword( db_password ) ;
         /*
         
         if( options == null ) {
